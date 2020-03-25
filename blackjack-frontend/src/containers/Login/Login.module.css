@@ -1,0 +1,37 @@
+.Background {
+    display: flex;
+    height: 100vh;
+    background-image: url("http://cheerspokernh.com/wp-content/uploads/2018/02/bigstock-poker-table-background-26587844-2-1.jpg");
+    background-size: cover;
+}
+
+.Login {
+    display: flex;
+    flex-direction: column;
+    width: 25vw;
+    height: 50vh;
+    margin: auto;
+    margin-top: 10%;
+    align-items: center;
+}
+
+.Login h1 {
+    color: white;
+}
+
+.Login input {
+    height: 10%;
+    width: 80%;
+    margin: 1rem;
+    font-size: 24px;
+    border-radius: 10px;
+    border-color: white;
+    padding-left: 5px;
+}
+
+.Login button {
+    height: 10%;
+    width: 80%;
+    margin: 1rem;
+    border-radius: 10px;
+}
