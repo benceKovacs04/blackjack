@@ -29,6 +29,7 @@
       "mysql": "^2.14.1",
       "passport": "^0.4.1",
       "passport-local": "^1.0.0",
+      "pg": "^7.18.2",
       "reflect-metadata": "^0.1.10",
       "rimraf": "^3.0.2",
       "rxjs": "^6.5.4",
