@@ -1,4 +1,5 @@
-import { Controller, Post, Body } from "@nestjs/common";
+import { Controller, Post, Body, Res, HttpException, HttpStatus } from "@nestjs/common";
+import { Response } from 'express'
 import { AuthService } from "./auth.service";
 
 @Controller("auth")
@@ -9,9 +10,11 @@ export class AuthController {
 
     @Post("/signUp")
     signUp(
+        @Res() res: Response,
         @Body("username") username: string,
         @Body("password") password: string
     ) {
-        this.authService.signUp(username, password)
+
+        return this.authService.signUp(username, password)
     }
 }
