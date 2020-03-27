@@ -1,13 +1,13 @@
 import { Injectable, HttpException, HttpStatus, BadRequestException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UserRepository } from "./auth.repository";
-import { User } from "./user.entity";
+import { UsersRepository } from "../users/users.repository";
+import { User } from "../users/users.entity";
 
 @Injectable()
 export class AuthService {
     constructor(
-        @InjectRepository(UserRepository)
-        private userRepository: UserRepository
+        @InjectRepository(UsersRepository)
+        private userRepository: UsersRepository
     ) { }
 
     async signUp(username: string, password: string) {
