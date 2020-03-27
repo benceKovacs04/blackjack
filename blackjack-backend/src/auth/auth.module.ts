@@ -8,7 +8,7 @@ import { UsersRepository } from "../users/users.repository";
 @Module(
     {
         providers: [AuthService],
-        imports: [TypeOrmModule.forFeature([UsersRepository])],
+        imports: [UsersModule],
         controllers: [AuthController]
     }
 )
