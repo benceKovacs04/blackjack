@@ -18,4 +18,12 @@ export class AuthController {
 
         return this.authService.signUp(username, password)
     }
+
+    @Post("/signIn")
+    signIn(
+        @Body("username") username: string,
+        @Body("password") password: string
+    ) {
+        return this.authService.signIn(username, password)
+    }
 }

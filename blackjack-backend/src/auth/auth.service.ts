@@ -3,12 +3,14 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UsersRepository } from "../users/users.repository";
 import { User } from "../users/users.entity";
 import { IAuthService } from './IAuthService'
+import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
 export class AuthService implements IAuthService {
     constructor(
         @InjectRepository(UsersRepository)
-        private userRepository: UsersRepository
+        private readonly userRepository: UsersRepository,
+        private readonly jwtService: JwtService
     ) { }
 
     async signUp(username: string, password: string) {
@@ -29,6 +31,23 @@ export class AuthService implements IAuthService {
     }
 
     async signIn(username: string, password: string) {
-        throw new Error("Method not implemented.");
+
+        const bcrypt = require('bcrypt')
+
+        const user: User = await this.userRepository.findOne({ username: username })
+        if (user) {
+            const match = await bcrypt.compare(password, user.password)
+            if (match) {
+                const payLoad = { username: username, sub: user.id }
+                return { access_token: this.jwtService.sign(payLoad) };
+            }
+            else {
+                throw new BadRequestException("Username or password is wrong")
+            }
+        }
+        else {
+            throw new BadRequestException("Username or password is wrong")
+        }
+
     }
 }
