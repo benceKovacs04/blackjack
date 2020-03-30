@@ -2,9 +2,10 @@ import { Injectable, HttpException, HttpStatus, BadRequestException } from "@nes
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersRepository } from "../users/users.repository";
 import { User } from "../users/users.entity";
+import { IAuthService } from './IAuthService'
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IAuthService {
     constructor(
         @InjectRepository(UsersRepository)
         private userRepository: UsersRepository
@@ -25,5 +26,9 @@ export class AuthService {
         user.password = bcrypt.hashSync(password, saltRounds)
 
         this.userRepository.save(user);
+    }
+
+    async signIn(username: string, password: string) {
+        throw new Error("Method not implemented.");
     }
 }
