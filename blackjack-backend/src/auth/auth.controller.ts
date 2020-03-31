@@ -1,6 +1,7 @@
-import { Controller, Post, Body, Res, HttpException, HttpStatus, Inject } from "@nestjs/common";
+import { Controller, Post, Body, Res, HttpException, HttpStatus, Inject, Header, HttpCode } from "@nestjs/common";
 import { Response } from 'express'
 import { IAuthService } from './IAuthService'
+import { AuthService } from "./auth.service";
 
 @Controller("auth")
 export class AuthController {
@@ -19,11 +20,15 @@ export class AuthController {
         return this.authService.signUp(username, password)
     }
 
-    @Post("/signIn")
-    signIn(
+    @Post("/login")
+    @HttpCode(200)
+    async signIn(
+        @Res() res: Response,
         @Body("username") username: string,
         @Body("password") password: string
     ) {
-        return this.authService.signIn(username, password)
+        const token: string = await this.authService.signIn(username, password)
+        res.set("Set-Cookie", `access_token=${token}; Domain=localhost; Path=/; expires=${new Date(new Date().getTime() + 86409000).toUTCString()}`)
+        res.send()
     }
 }

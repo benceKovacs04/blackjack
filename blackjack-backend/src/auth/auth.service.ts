@@ -39,7 +39,7 @@ export class AuthService implements IAuthService {
             const match = await bcrypt.compare(password, user.password)
             if (match) {
                 const payLoad = { username: username, sub: user.id }
-                return { access_token: this.jwtService.sign(payLoad) };
+                return this.jwtService.sign(payLoad);
             }
             else {
                 throw new BadRequestException("Username or password is wrong")
