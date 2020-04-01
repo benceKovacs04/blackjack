@@ -1,14 +1,14 @@
-import { Controller, Post, Body, Res, HttpException, HttpStatus, Inject, Header, HttpCode } from "@nestjs/common";
+import { Controller, Post, Body, Res, HttpException, HttpStatus, Inject, Header, HttpCode, Get, UseGuards } from "@nestjs/common";
 import { Response } from 'express'
 import { IAuthService } from './IAuthService'
 import { AuthService } from "./auth.service";
+import { JwtAuthGuard } from "./jwt-auth.guard";
 
 @Controller("auth")
 export class AuthController {
     constructor(
         @Inject('IAuthService') private readonly authService: IAuthService
     ) { }
-
 
     @Post("/signUp")
     signUp(

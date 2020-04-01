@@ -4,10 +4,11 @@ import { AppModule } from './app.module';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const whitelist = ["http://localhost:3000"]
+    const blacklist = []
     const corsOptions = {
         credentials: true,
         origin: (origin, callback) => {
-            if (whitelist.includes(origin)) {
+            if (!blacklist.includes(origin)) {
                 return callback(null, true)
             }
             callback(new Error("Not allowed by CORS"))

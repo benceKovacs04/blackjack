@@ -6,6 +6,7 @@ export default function Login() {
 
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [error, setError] = useState<string>("");
 
     const usernameOnChange = (e: any) => {
         setUsername(e.target.value);
@@ -16,7 +17,7 @@ export default function Login() {
     }
 
     const logIn = () => {
-
+        setError("")
         axios.post(
             "http://localhost:5000/auth/login",
             {
@@ -24,7 +25,9 @@ export default function Login() {
                 password: password
             },
             { withCredentials: true }
-        ).then(resp => console.log(resp))
+        )
+            .then(() => window.location.href = "/game")
+            .catch(error => setError("Something went wrong! Please try again!"))
     }
 
     return (
@@ -35,6 +38,7 @@ export default function Login() {
                 <input type="password" onChange={passwordOnChange} placeholder="Password"></input>
                 <button onClick={logIn}>Log me in!</button>
                 <span>Don't have an account? <a href="/signup">Sign up!</a></span>
+                <span>{error}</span>
             </div>
         </div>
     )
