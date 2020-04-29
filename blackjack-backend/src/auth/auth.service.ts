@@ -13,7 +13,7 @@ export class AuthService implements IAuthService {
         private readonly jwtService: JwtService
     ) { }
 
-    async signUp(username: string, password: string) {
+    async signUp(username: string, password: string): Promise<boolean> {
 
         let user: User = await this.userRepository.findOne({ username: username })
         if (user) {
@@ -27,7 +27,12 @@ export class AuthService implements IAuthService {
         user.username = username;
         user.password = bcrypt.hashSync(password, saltRounds)
 
-        this.userRepository.save(user);
+        let success = await this.userRepository.save(user);
+        if (success) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     async signIn(username: string, password: string) {

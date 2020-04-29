@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import classes from "./Login.module.css";
 import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 
 export default function Login() {
 
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
+
+    const [toGame, setToGame] = useState<boolean>(false);
+    const [toSignUp, setToSignUp] = useState<boolean>(false);
 
     const usernameOnChange = (e: any) => {
         setUsername(e.target.value);
@@ -26,18 +30,20 @@ export default function Login() {
             },
             { withCredentials: true }
         )
-            .then(() => window.location.href = "/game")
+            .then(() => setToGame(true))
             .catch(error => setError("Something went wrong! Please try again!"))
     }
 
     return (
         <div className={classes.Background}>
+            {toGame ? <Redirect to="/game" /> : null}
+            {toSignUp ? <Redirect to="/signUp" /> : null}
             <div className={classes.Login}>
                 <h1>BBBBBBBlackJack - Log in</h1>
                 <input onChange={usernameOnChange} placeholder="Username"></input>
                 <input type="password" onChange={passwordOnChange} placeholder="Password"></input>
                 <button onClick={logIn}>Log me in!</button>
-                <span>Don't have an account? <a href="/signup">Sign up!</a></span>
+                <span>Don't have an account? <span className={classes.SignUp} onClick={() => setToSignUp(true)} >Sign UP!</span></span>
                 <span>{error}</span>
             </div>
         </div>

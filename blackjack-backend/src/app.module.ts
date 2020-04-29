@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeOrmConfig';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { GameModule } from './game/game.module';
 
 @Module({
     imports: [
@@ -10,7 +11,8 @@ import { UsersModule } from './users/users.module';
             typeOrmConfig,
         ),
         AuthModule,
-        UsersModule
+        UsersModule,
+        GameModule
     ],
 
 })

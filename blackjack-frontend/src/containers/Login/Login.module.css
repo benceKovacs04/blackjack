@@ -39,3 +39,11 @@
 .Login span {
     font-weight: 700;
 }
+
+.SignUp {
+    color: blue;
+}
+
+.SignUp:hover {
+    cursor: pointer;
+}

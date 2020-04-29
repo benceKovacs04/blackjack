@@ -3,6 +3,7 @@ import { Response } from 'express'
 import { IAuthService } from './IAuthService'
 import { AuthService } from "./auth.service";
 import { JwtAuthGuard } from "./jwt-auth.guard";
+import { STATUS_CODES } from "http";
 
 @Controller("auth")
 export class AuthController {
@@ -17,7 +18,12 @@ export class AuthController {
         @Body("password") password: string
     ) {
 
-        return this.authService.signUp(username, password)
+        const success = this.authService.signUp(username, password)
+        if (success) {
+            res.status(201).send();
+        } else {
+            res.status(404).send();
+        }
     }
 
     @Post("/login")
@@ -28,7 +34,8 @@ export class AuthController {
         @Body("password") password: string
     ) {
         const token: string = await this.authService.signIn(username, password)
-        res.set("Set-Cookie", `access_token=${token}; Domain=localhost; Path=/; expires=${new Date(new Date().getTime() + 86409000).toUTCString()}`)
+        res.cookie("access-token", token, { expires: new Date(Date.now() + 86409000), path: "/", httpOnly: true, domain: "localhost" })
+        res.cookie("loggedIn", true, { path: "/" })
         res.send()
     }
 }

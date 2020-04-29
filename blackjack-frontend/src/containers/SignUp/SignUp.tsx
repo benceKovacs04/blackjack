@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import classes from "./Signup.module.css";
 import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 
 export default function Login() {
 
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [passwordTwo, setPasswordTwo] = useState<string>("");
+
+    const [toLogin, setToLogin] = useState<boolean>(false);
 
     const usernameOnChange = (e: any) => {
         setUsername(e.target.value);
@@ -23,25 +26,30 @@ export default function Login() {
     const signUp = () => {
         if (password === passwordTwo) {
             axios.post(
-                "http://localhost:5000/signup",
+                "http://localhost:5000/auth/signUp",
                 {
                     username: username,
                     password: password
                 }
-            ).then(resp => console.log(resp))
+            ).then(resp => {
+                if (resp.status === 201) {
+                    setToLogin(true);
+                }
+            })
         }
 
     }
 
     return (
         <div className={classes.Background}>
+            {toLogin ? <Redirect to="/" /> : null}
             <div className={classes.Login}>
                 <h1>BBBBBBBlackJack - Log in</h1>
                 <input onChange={usernameOnChange} placeholder="Username"></input>
                 <input type="password" onChange={passwordOnChange} placeholder="Password"></input>
-                <input type="password" onChange={passwordOnChange} placeholder="Password again"></input>
+                <input type="password" onChange={passwordTwoOnChange} placeholder="Password again"></input>
                 <button onClick={signUp}>Sign up!</button>
-                <button onClick={() => window.location.href = "/"}>Back</button>
+                <button onClick={() => setToLogin(true)}>Back</button>
             </div>
         </div>
     )

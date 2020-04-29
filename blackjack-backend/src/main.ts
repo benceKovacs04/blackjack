@@ -8,7 +8,7 @@ async function bootstrap() {
     const corsOptions = {
         credentials: true,
         origin: (origin, callback) => {
-            if (!blacklist.includes(origin)) {
+            if (whitelist.includes(origin)) {
                 return callback(null, true)
             }
             callback(new Error("Not allowed by CORS"))
