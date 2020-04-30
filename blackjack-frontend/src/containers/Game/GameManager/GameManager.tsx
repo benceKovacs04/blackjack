@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import classes from './GameManager.module.css'
 import axios from 'axios'
 
+import GameCard from '../../../components/GameCard/GameCard'
+
 export default function GameManager() {
 
     const [lobbies, setLobbies] = useState<string[]>([])
@@ -17,7 +19,6 @@ export default function GameManager() {
     }, [])
 
     const addLobby = () => {
-        console.log(name)
         axios.post(
             "http://localhost:5000/gameManager/newGame",
             { name: name },
@@ -29,11 +30,16 @@ export default function GameManager() {
 
     return (
         <div className={classes.Background}>
-            <button onClick={addLobby}>Add</button>
-            <input onChange={e => setName(e.target.value)}></input>
+            <div className={classes.Header}>
+                <h1>Tables</h1>
+                <div className={classes.Inputs}>
+                    <button onClick={addLobby}>Add new game</button>
+                    <input onChange={e => setName(e.target.value)}></input>
+                </div>
+            </div>
             <div className={classes.LobbyList}>
                 {lobbies.map(lobby => {
-                    return <p>{lobby}</p>
+                    return <GameCard name={lobby} seats={"2 / 4"} />
                 })}
             </div>
         </div>

@@ -1,0 +1,14 @@
+.Card {
+    display:flex;
+    background-color: lightgray;
+    border: 2px black solid;
+    border-radius: 10px;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 2%;
+}
+
+.Card p {
+    font-weight: bold;
+}
