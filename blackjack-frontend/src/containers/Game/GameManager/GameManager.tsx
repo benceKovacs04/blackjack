@@ -9,10 +9,9 @@ export default function GameManager() {
 
     useEffect(() => {
         axios.get(
-            "http://localhost:5000/gameManager/getLobbies",
+            "http://localhost:5000/gameManager/getGameNames",
             { withCredentials: true }
         ).then(resp => {
-            console.log(resp)
             setLobbies(lobbies => lobbies.concat(resp.data))
         })
     }, [])
@@ -20,7 +19,7 @@ export default function GameManager() {
     const addLobby = () => {
         console.log(name)
         axios.post(
-            "http://localhost:5000/gameManager/newLobby",
+            "http://localhost:5000/gameManager/newGame",
             { name: name },
             { withCredentials: true }
         ).then(resp => {

@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeOrmConfig';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { GameModule } from './game/game.module';
 import { JwtCookieToHeader } from './middlewares/jwtCookieToHeader.middleware';
 import { AuthController } from './auth/auth.controller';
 import { GameManagerModule } from './GameManager/gamemanager.module';

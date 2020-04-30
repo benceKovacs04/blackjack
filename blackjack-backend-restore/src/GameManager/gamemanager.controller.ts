@@ -11,15 +11,15 @@ export class GameManagerController {
     ) { }
 
     @UseGuards(JwtAuthGuard)
-    @Post("/newLobby")
+    @Post("/newgame")
     createNewLobby(@Res() res: Response, @Body("name") name: string) {
-        res.send(this.gameManagerService.addNewLobby(name))
+        res.send(this.gameManagerService.addNewGame(name))
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get("/getLobbies")
-    getLobbies(@Res() res: Response) {
-        res.send(this.gameManagerService.getLobbies())
+    @Get("/getGameNames")
+    getGameNames(@Res() res: Response) {
+        res.send(this.gameManagerService.getGameNames())
     }
 
 }
