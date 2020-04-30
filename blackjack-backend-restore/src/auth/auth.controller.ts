@@ -38,10 +38,4 @@ export class AuthController {
         res.cookie("loggedIn", true, { path: "/" })
         res.send()
     }
-
-    @UseGuards(JwtAuthGuard)
-    @Get("/test")
-    test(@Res() res: Response) {
-        res.send("This is the test data that is returned part 2 electric boogalo")
-    }
 }

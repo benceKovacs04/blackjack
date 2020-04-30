@@ -6,6 +6,8 @@ import { UsersModule } from './users/users.module';
 import { GameModule } from './game/game.module';
 import { JwtCookieToHeader } from './middlewares/jwtCookieToHeader.middleware';
 import { AuthController } from './auth/auth.controller';
+import { GameManagerModule } from './GameManager/gamemanager.module';
+import { GameManagerController } from './GameManager/gamemanager.controller';
 
 @Module({
     imports: [
@@ -14,12 +16,12 @@ import { AuthController } from './auth/auth.controller';
         ),
         AuthModule,
         UsersModule,
-        GameModule
+        GameManagerModule
     ],
 
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(JwtCookieToHeader).forRoutes(AuthController)
+        consumer.apply(JwtCookieToHeader).forRoutes(AuthController, GameManagerController)
     }
 }

@@ -4,22 +4,38 @@ import axios from 'axios'
 
 export default function GameManager() {
 
-    const [test, setTest] = useState<string>("")
+    const [lobbies, setLobbies] = useState<string[]>([])
+    const [name, setName] = useState<string>("")
 
     useEffect(() => {
         axios.get(
-            "http://localhost:5000/auth/test",
+            "http://localhost:5000/gameManager/getLobbies",
             { withCredentials: true }
         ).then(resp => {
             console.log(resp)
-            setTest(resp.data)
+            setLobbies(lobbies => lobbies.concat(resp.data))
         })
     }, [])
 
+    const addLobby = () => {
+        console.log(name)
+        axios.post(
+            "http://localhost:5000/gameManager/newLobby",
+            { name: name },
+            { withCredentials: true }
+        ).then(resp => {
+            setLobbies(lobbies => lobbies.concat(resp.data))
+        })
+    }
+
     return (
         <div className={classes.Background}>
+            <button onClick={addLobby}>Add</button>
+            <input onChange={e => setName(e.target.value)}></input>
             <div className={classes.LobbyList}>
-                <p>{test}</p>
+                {lobbies.map(lobby => {
+                    return <p>{lobby}</p>
+                })}
             </div>
         </div>
     )

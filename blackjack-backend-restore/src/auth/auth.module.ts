@@ -6,6 +6,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { jwtConstants } from "../constants/constants";
 import { JwtStrategy } from "./jwt.strategy";
 import { JwtCookieToHeader } from "src/middlewares/jwtCookieToHeader.middleware";
+import { JwtAuthGuard } from "./jwt-auth.guard";
 
 @Module(
     {
@@ -19,7 +20,7 @@ import { JwtCookieToHeader } from "src/middlewares/jwtCookieToHeader.middleware"
                 secret: jwtConstants.secret
             })
         ],
-        controllers: [AuthController]
+        controllers: [AuthController],
     }
 )
 
