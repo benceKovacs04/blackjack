@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import classes from "./Login.module.css";
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
+import LoggedInCpontext from '../../contexts/LoggedInContext'
 
 export default function Login() {
 
@@ -11,6 +12,8 @@ export default function Login() {
 
     const [toGame, setToGame] = useState<boolean>(false);
     const [toSignUp, setToSignUp] = useState<boolean>(false);
+
+    const { toggleLoggedIn, setUser } = useContext(LoggedInCpontext)
 
     const usernameOnChange = (e: any) => {
         setUsername(e.target.value);
@@ -30,7 +33,11 @@ export default function Login() {
             },
             { withCredentials: true }
         )
-            .then(() => setToGame(true))
+            .then(() => {
+                toggleLoggedIn()
+                setUser(username)
+                setToGame(true)
+            })
             .catch(error => setError("Something went wrong! Please try again!"))
     }
 

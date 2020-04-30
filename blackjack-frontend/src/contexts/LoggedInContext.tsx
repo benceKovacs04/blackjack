@@ -5,21 +5,21 @@ const loggedInContext = React.createContext({
     loggedIn: false,
     username: "",
     toggleLoggedIn: () => { },
-    setUsername: (username: string) => { }
+    setUser: (username: string) => { }
 })
 
 
 export const LoggedInContextWrapper = (props: any) => {
 
     const [loggedIn, setLoggedIn] = useState<boolean>(cookies.get('loggedIn') ? true : false);
-    const [username, setUser] = useState<string>("")
+    const [username, setUsername] = useState<string>("")
 
     const toggleLoggedIn = () => {
         setLoggedIn(!loggedIn)
     }
 
-    const setUsername = (username: string) {
-        setUser(username)
+    const setUser = (username: string) => {
+        setUsername(username)
     }
 
     return (
@@ -28,7 +28,7 @@ export const LoggedInContextWrapper = (props: any) => {
                 loggedIn,
                 username,
                 toggleLoggedIn,
-                setUsername
+                setUser
             }}
         >
             {props.children}
