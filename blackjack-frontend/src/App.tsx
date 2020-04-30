@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./containers/Login/Login"
 import SignUp from './containers/SignUp/SignUp'
-import Game from './containers/Game/Game'
+import GameManager from './containers/Game/GameManager/GameManager'
 
 function App() {
     return (
@@ -18,8 +18,8 @@ function App() {
                 render={() => <SignUp />}
             />
             <Route
-                path="/game"
-                render={() => <Game />}
+                path="/gameManager"
+                render={() => <GameManager />}
             />
         </BrowserRouter>
     );

@@ -36,7 +36,7 @@ export default function Login() {
 
     return (
         <div className={classes.Background}>
-            {toGame ? <Redirect to="/game" /> : null}
+            {toGame ? <Redirect to="/gameManager" /> : null}
             {toSignUp ? <Redirect to="/signUp" /> : null}
             <div className={classes.Login}>
                 <h1>BBBBBBBlackJack - Log in</h1>
