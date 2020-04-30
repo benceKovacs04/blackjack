@@ -12,3 +12,7 @@
 .Card p {
     font-weight: bold;
 }
+
+.Card:hover {
+    background-color: lightgreen;
+}

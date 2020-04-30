@@ -7,18 +7,19 @@ export class GameManagerService implements IGameManagerService {
 
     private readonly lobbies: Array<Game> = new Array<Game>()
 
-    addNewGame(name: string): string {
+    addNewGame(name: string): { name: string, seats: number } {
         if (!this.lobbies.find(game => game.name === name)) {
             const game: Game = new Game(name)
             this.lobbies.push(game)
-            return game.name
+            return { name: game.name, seats: game.getPlayerNum() }
         }
     }
 
-    getGameNames(): string[] {
+    getGamesData(): Array<{ name: string, seats: number }> {
         return this.lobbies.map(game => {
-            return game.name;
+            return { name: game.name, seats: game.getPlayerNum() }
         })
     }
+
 
 }

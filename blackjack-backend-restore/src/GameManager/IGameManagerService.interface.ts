@@ -1,4 +1,4 @@
 export interface IGameManagerService {
-    addNewGame(name: string): string
-    getGameNames(): Array<string>
+    addNewGame(name: string): { name: string, seats: number }
+    getGamesData(): Array<{ name: string, seats: number }>
 }

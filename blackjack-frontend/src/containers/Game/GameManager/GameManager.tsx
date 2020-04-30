@@ -6,26 +6,30 @@ import GameCard from '../../../components/GameCard/GameCard'
 
 export default function GameManager() {
 
-    const [lobbies, setLobbies] = useState<string[]>([])
+    const [games, setGames] = useState<Array<{ name: string, seats: number }>>([])
     const [name, setName] = useState<string>("")
 
     useEffect(() => {
         axios.get(
-            "http://localhost:5000/gameManager/getGameNames",
+            "http://localhost:5000/gameManager/getGamesData",
             { withCredentials: true }
         ).then(resp => {
-            setLobbies(lobbies => lobbies.concat(resp.data))
+            setGames(games => games.concat(resp.data))
         })
     }, [])
 
     const addLobby = () => {
-        axios.post(
-            "http://localhost:5000/gameManager/newGame",
-            { name: name },
-            { withCredentials: true }
-        ).then(resp => {
-            setLobbies(lobbies => lobbies.concat(resp.data))
-        })
+        if (name !== "") {
+            axios.post(
+                "http://localhost:5000/gameManager/newGame",
+                { name: name },
+                { withCredentials: true }
+            ).then(resp => {
+                if (resp.data !== "") {
+                    setGames(games => games.concat(resp.data))
+                }
+            })
+        }
     }
 
     return (
@@ -38,8 +42,8 @@ export default function GameManager() {
                 </div>
             </div>
             <div className={classes.LobbyList}>
-                {lobbies.map(lobby => {
-                    return <GameCard name={lobby} seats={"2 / 4"} />
+                {games.map(game => {
+                    return <GameCard name={game.name} seats={game.seats} />
                 })}
             </div>
         </div>

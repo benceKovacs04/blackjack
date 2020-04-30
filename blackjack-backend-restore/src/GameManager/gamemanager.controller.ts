@@ -17,9 +17,9 @@ export class GameManagerController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get("/getGameNames")
+    @Get("/getGamesData")
     getGameNames(@Res() res: Response) {
-        res.send(this.gameManagerService.getGameNames())
+        res.send(this.gameManagerService.getGamesData())
     }
 
 }
