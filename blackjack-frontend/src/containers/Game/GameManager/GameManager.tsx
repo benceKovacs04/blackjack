@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import classes from './GameManager.module.css'
 import axios from 'axios'
-
 import GameCard from '../../../components/GameCard/GameCard'
+import { Redirect } from 'react-router-dom'
 
 export default function GameManager() {
 
     const [games, setGames] = useState<Array<{ name: string, seats: number }>>([])
     const [name, setName] = useState<string>("")
+    const [redirectToGame, setRedirectToGame] = useState<boolean>(false)
+    const [roomName, setRoomName] = useState<string>("")
 
     useEffect(() => {
         axios.get(
@@ -32,8 +34,14 @@ export default function GameManager() {
         }
     }
 
+    const onCardClick = (roomname: string) => {
+        setRoomName(roomname);
+        setRedirectToGame(true)
+    }
+
     return (
         <div className={classes.Background}>
+            {redirectToGame ? <Redirect to={`/game/${roomName}`} /> : null}
             <div className={classes.Header}>
                 <h1>Tables</h1>
                 <div className={classes.Inputs}>
@@ -43,7 +51,7 @@ export default function GameManager() {
             </div>
             <div className={classes.LobbyList}>
                 {games.map(game => {
-                    return <GameCard name={game.name} seats={game.seats} />
+                    return <GameCard click={onCardClick} name={game.name} seats={game.seats} />
                 })}
             </div>
         </div>

@@ -4,6 +4,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./containers/Login/Login"
 import SignUp from './containers/SignUp/SignUp'
 import GameManager from './containers/Game/GameManager/GameManager'
+import Game from './containers/Game/Game'
 
 function App() {
     return (
@@ -20,6 +21,10 @@ function App() {
             <Route
                 path="/gameManager"
                 render={() => <GameManager />}
+            />
+            <Route
+                path="/game/:name"
+                render={(props) => <Game {...props} />}
             />
         </BrowserRouter>
     );
