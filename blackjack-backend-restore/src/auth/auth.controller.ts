@@ -35,7 +35,7 @@ export class AuthController {
     ) {
         const token: string = await this.authService.signIn(username, password)
         res.cookie("access-token", token, { expires: new Date(Date.now() + 86409000), path: "/", httpOnly: true, domain: "localhost" })
-        res.cookie("loggedIn", true, { path: "/" })
+        res.cookie("loggedIn", username, { path: "/" })
         res.send()
     }
 }

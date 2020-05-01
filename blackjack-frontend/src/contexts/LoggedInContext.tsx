@@ -12,7 +12,7 @@ const loggedInContext = React.createContext({
 export const LoggedInContextWrapper = (props: any) => {
 
     const [loggedIn, setLoggedIn] = useState<boolean>(cookies.get('loggedIn') ? true : false);
-    const [username, setUsername] = useState<string>("")
+    const [username, setUsername] = useState<any>(cookies.get('loggedIn') ? cookies.get('loggedIn') : "")
 
     const toggleLoggedIn = () => {
         setLoggedIn(!loggedIn)

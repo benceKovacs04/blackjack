@@ -6,14 +6,15 @@ import LoggedInCpontext from '../../contexts/LoggedInContext'
 
 export default function Login() {
 
+    const { loggedIn, toggleLoggedIn, setUser } = useContext(LoggedInCpontext)
+
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
 
-    const [toGame, setToGame] = useState<boolean>(false);
+    const [toGame, setToGame] = useState<boolean>(loggedIn ? true : false);
     const [toSignUp, setToSignUp] = useState<boolean>(false);
 
-    const { toggleLoggedIn, setUser } = useContext(LoggedInCpontext)
 
     const usernameOnChange = (e: any) => {
         setUsername(e.target.value);
