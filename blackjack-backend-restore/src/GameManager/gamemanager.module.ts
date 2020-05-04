@@ -11,7 +11,10 @@ import { GameManagerService } from "./gamemanager.service";
             { provide: 'IGameManagerService', useClass: GameManagerService }
         ],
         controllers: [GameManagerController],
-        imports: []
+        imports: [],
+        exports: [
+            { provide: "IGameManagerService", useClass: GameManagerService }
+        ]
     }
 )
 

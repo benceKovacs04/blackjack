@@ -7,6 +7,7 @@ import { JwtCookieToHeader } from './middlewares/jwtCookieToHeader.middleware';
 import { AuthController } from './auth/auth.controller';
 import { GameManagerModule } from './GameManager/gamemanager.module';
 import { GameManagerController } from './GameManager/gamemanager.controller';
+import { GameModule } from './GameManager/game/game.module';
 
 @Module({
     imports: [
@@ -15,7 +16,8 @@ import { GameManagerController } from './GameManager/gamemanager.controller';
         ),
         AuthModule,
         UsersModule,
-        GameManagerModule
+        GameManagerModule,
+        GameModule
     ],
 
 })
