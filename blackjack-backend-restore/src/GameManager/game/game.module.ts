@@ -3,7 +3,10 @@ import { GameGateway } from "./game.gateway";
 import { GameManagerModule } from "../gamemanager.module";
 
 @Module({
-    providers: [GameGateway],
+    providers: [
+        GameGateway,
+        { provide: "IWebSocketConnection", useClass: GameGateway }
+    ],
     imports: [GameManagerModule]
 })
 

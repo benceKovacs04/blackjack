@@ -1,10 +1,20 @@
+import IWebSocketConnection from "./IWebSocketConnection";
+
 export class Game {
 
-    constructor(name: string) {
+    constructor(name: string, socket: IWebSocketConnection) {
         this.name = name;
+        this.socketConnection = socket
+
     }
 
-    public name: string;
+    private name: string;
+    private readonly socketConnection: IWebSocketConnection
+
+    getName(): string {
+        return this.name;
+    }
+
     private players: string[] = new Array<string>()
 
     getPlayerNum(): number {

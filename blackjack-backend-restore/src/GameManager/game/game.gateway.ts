@@ -1,12 +1,14 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets'
 import { IGameManagerService } from '../IGameManagerService.interface';
 import { Socket } from 'socket.io';
-import { UseGuards, Logger, Inject } from '@nestjs/common';
+import { UseGuards, Logger, Inject, Injectable } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import IWebSocketConnection from './IWebSocketConnection';
 
 
 @WebSocketGateway({ namespace: "game" })
-export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
+@Injectable()
+export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, IWebSocketConnection {
 
     private _connections: Map<string, string> = new Map<string, string>();
 
