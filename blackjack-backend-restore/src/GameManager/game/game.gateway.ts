@@ -8,7 +8,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 @WebSocketGateway({ namespace: "game" })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
-    private _connections: Map<string, Set<string>> = new Map<string, Set<string>>();
+    private _connections: Map<string, string> = new Map<string, string>();
 
     constructor(
         @Inject('IGameManagerService') private readonly gameManager: IGameManagerService,
@@ -22,12 +22,20 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     handleDisconnect(client: Socket) {
-        console.log("disconnected")
+        let username;
+        for (let [key, value] of this._connections.entries()) {
+            if (value === client.id) {
+                username = key
+                break
+            }
+        }
+        this._connections.delete(username)
     }
 
     @SubscribeMessage("map_username")
     mapUsername(client: Socket, username: string): void {
-        console.log(username)
-        console.log(client.id)
+        if (!this._connections.get(username)) {
+            this._connections.set(username, client.id)
+        }
     }
 }
