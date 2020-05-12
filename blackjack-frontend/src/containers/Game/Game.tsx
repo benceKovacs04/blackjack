@@ -14,7 +14,7 @@ export default function Game(props: any) {
 
     useEffect(() => {
         if (loggedIn) {
-            connect();
+            connect(tableName);
         }
     })
 

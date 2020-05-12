@@ -16,7 +16,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @UseGuards(JwtAuthGuard)
     handleConnection(client: Socket, ...args: any[]) {
-        console.log(client.id)
         client.emit("connected")
 
     }
@@ -30,12 +29,21 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             }
         }
         this._connections.delete(username)
+        this.gameManager.removePlayerFromGame(username)
     }
 
     @SubscribeMessage("map_username")
     mapUsername(client: Socket, username: string): void {
         if (!this._connections.get(username)) {
             this._connections.set(username, client.id)
+            client.emit("username_mapped", true)
+            return
         }
+        client.emit("username_mapped", false)
+    }
+
+    @SubscribeMessage("sit_player_in")
+    sitPlayerIn(client: Socket, data: { username: string, tableName: string }): void {
+        this.gameManager.addPlayerToGame(data.username, data.tableName)
     }
 }

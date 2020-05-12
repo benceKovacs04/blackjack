@@ -10,4 +10,16 @@ export class Game {
     getPlayerNum(): number {
         return this.players.length
     }
+
+    addPlayer(username: string): Boolean {
+        if (this.players.length <= 4) {
+            this.players.push(username)
+            return true;
+        }
+        return false;
+    }
+
+    removePlayer(username: string): void {
+        this.players.splice(this.players.indexOf(username), 1)
+    }
 }
