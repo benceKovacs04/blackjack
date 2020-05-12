@@ -1,22 +1,22 @@
 import React, { useState, useContext, useEffect, useRef } from 'react'
 import classes from './Game.module.css'
 import loggedInContext from '../../contexts/LoggedInContext'
+import webSocketContext from '../../contexts/WebSocketContext'
 
-import socketIO from "socket.io-client"
 export default function Game(props: any) {
 
-    const { username } = useContext(loggedInContext)
+    const { username, loggedIn } = useContext(loggedInContext)
+    const { connect } = useContext(webSocketContext)
+
     const [tableName, setTableName] = useState<string>(props.match.params.name)
 
     const [test, setTest] = useState("")
 
-
-    const connection = socketIO("http://localhost:5000/game")
-
-    connection.on("asd", (data: any) => {
-        setTest(data)
+    useEffect(() => {
+        if (loggedIn) {
+            connect();
+        }
     })
-
 
     return (
         <div className={classes.Background}>
