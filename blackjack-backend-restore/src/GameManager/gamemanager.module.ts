@@ -8,14 +8,12 @@ import { GameGateway } from "./game/game.gateway";
 @Module(
     {
         providers: [
-            { provide: 'IGameManagerService', useClass: GameManagerService },
             GameGateway,
+            { provide: 'IGameManagerService', useClass: GameManagerService },
         ],
         controllers: [GameManagerController],
         imports: [],
-        exports: [
-            { provide: "IGameManagerService", useClass: GameManagerService }
-        ]
+        exports: []
     }
 )
 

@@ -22,6 +22,7 @@ export function WebSocketContextWrapper(props: any) {
             connection.current = socketIO("http://localhost:5000/game")
             connection.current.on("connected", sendUsername)
             connection.current.on("username_mapped", sitPlayerIn)
+            connection.current.on("alert", () => { console.log("works") })
         }
 
     }

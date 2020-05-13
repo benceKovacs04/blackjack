@@ -2,27 +2,26 @@ import IWebSocketConnection from "./IWebSocketConnection";
 
 export class Game {
 
-    constructor(name: string) {
+    constructor(name: string, socketConnection: IWebSocketConnection) {
         this.name = name;
-
-
+        this.connection = socketConnection
     }
 
     private name: string;
-
+    private readonly connection: IWebSocketConnection
+    private players: string[] = new Array<string>()
 
     getName(): string {
         return this.name;
     }
-
-    private players: string[] = new Array<string>()
 
     getPlayerNum(): number {
         return this.players.length
     }
 
     addPlayer(username: string): Boolean {
-        if (this.players.length <= 4) {
+        this.connection.alert(username)
+        if (this.players.length <= 3) {
             this.players.push(username)
             return true;
         }
