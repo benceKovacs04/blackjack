@@ -9,7 +9,7 @@ import IWebSocketConnection from "./game/IWebSocketConnection";
 export class GameManagerService implements IGameManagerService {
 
     constructor(
-        @Inject("IWebSocketConnection") private readonly socketConnection: IWebSocketConnection
+        //@Inject("IWebSocketConnection") private readonly socketConnection: IWebSocketConnection
     ) { }
 
     private readonly games: Array<Game> = new Array<Game>()
@@ -17,7 +17,8 @@ export class GameManagerService implements IGameManagerService {
 
     addNewGame(name: string): { name: string, seats: number } {
         if (!this.games.find(game => game.getName() === name)) {
-            const game: Game = new Game(name, this.socketConnection)
+            //const game: Game = new Game(name, this.socketConnection)
+            const game: Game = new Game(name)
             this.games.push(game)
             return { name: game.getName(), seats: game.getPlayerNum() }
         }
@@ -38,6 +39,8 @@ export class GameManagerService implements IGameManagerService {
 
     removePlayerFromGame(player: string): void {
         const game = this.playersAtGames.find(p => p.player === player).game
+        const playerMap = this.playersAtGames.find(p => p.player === player)
+        this.playersAtGames.splice(this.playersAtGames.indexOf(playerMap), 1)
         game.removePlayer(player);
     }
 

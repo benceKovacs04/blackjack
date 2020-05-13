@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards, Res, Inject, Post, Body } from "@nestjs/common";
 import { Response } from 'express';
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { IGameManagerService } from "./IGameManagerService.interface";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 
 @Controller("gameManager")

@@ -16,7 +16,7 @@ export default function GameManager() {
             "http://localhost:5000/gameManager/getGamesData",
             { withCredentials: true }
         ).then(resp => {
-            setGames(games => games.concat(resp.data))
+            setGames(resp.data)
         })
     }, [])
 

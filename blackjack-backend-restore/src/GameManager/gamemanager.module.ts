@@ -1,14 +1,15 @@
 import { Module } from "@nestjs/common";
 import { GameManagerController } from './gamemanager.controller'
-import { AuthModule } from '../auth/auth.module'
 import { GameManagerService } from "./gamemanager.service";
+import { GameGateway } from "./game/game.gateway";
 
 
 
 @Module(
     {
         providers: [
-            { provide: 'IGameManagerService', useClass: GameManagerService }
+            { provide: 'IGameManagerService', useClass: GameManagerService },
+            GameGateway,
         ],
         controllers: [GameManagerController],
         imports: [],

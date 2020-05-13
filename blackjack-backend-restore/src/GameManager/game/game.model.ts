@@ -2,14 +2,14 @@ import IWebSocketConnection from "./IWebSocketConnection";
 
 export class Game {
 
-    constructor(name: string, socket: IWebSocketConnection) {
+    constructor(name: string) {
         this.name = name;
-        this.socketConnection = socket
+
 
     }
 
     private name: string;
-    private readonly socketConnection: IWebSocketConnection
+
 
     getName(): string {
         return this.name;
