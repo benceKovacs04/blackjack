@@ -38,10 +38,9 @@ export class GameManagerService implements IGameManagerService {
     }
 
     removePlayerFromGame(player: string): void {
-        const game = this.playersAtGames.find(p => p.player === player).game
         const playerMap = this.playersAtGames.find(p => p.player === player)
         this.playersAtGames.splice(this.playersAtGames.indexOf(playerMap), 1)
-        game.removePlayer(player);
+        playerMap.game.removePlayer(player);
     }
 
 
