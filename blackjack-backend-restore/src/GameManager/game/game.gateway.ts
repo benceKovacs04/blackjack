@@ -23,8 +23,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, IW
     @UseGuards(JwtAuthGuard)
     handleConnection(client: Socket, ...args: any[]) {
         client.emit("connected")
-        console.log("connected")
-
     }
 
     handleDisconnect(client: Socket) {

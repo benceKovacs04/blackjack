@@ -15,7 +15,7 @@ export class GameManagerService implements IGameManagerService {
 
     }
     private readonly games: Array<Game> = new Array<Game>()
-    private readonly playersAtGames: Array<{ player: string, game: Game }> = new Array<{ player: string, game: Game }>();
+    private readonly usersAtGames: Array<{ user: string, game: Game }> = new Array<{ user: string, game: Game }>();
 
     addNewGame(name: string): { name: string, seats: number } {
         if (!this.games.find(game => game.getName() === name)) {
@@ -33,14 +33,14 @@ export class GameManagerService implements IGameManagerService {
 
     addPlayerToGame(player: string, gameName: string): Boolean {
         const game = this.games.find(game => game.getName() === gameName)
-        this.playersAtGames.push({ player: player, game: game })
+        this.usersAtGames.push({ user: player, game: game })
         return game.addPlayer(player)
 
     }
 
     removePlayerFromGame(player: string): void {
-        const playerMap = this.playersAtGames.find(p => p.player === player)
-        this.playersAtGames.splice(this.playersAtGames.indexOf(playerMap), 1)
+        const playerMap = this.usersAtGames.find(p => p.user === player)
+        this.usersAtGames.splice(this.usersAtGames.indexOf(playerMap), 1)
         playerMap.game.removePlayer(player);
     }
 

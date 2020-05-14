@@ -1,4 +1,5 @@
 import IWebSocketConnection from "./IWebSocketConnection";
+import Player from "./player.model";
 
 export class Game {
 
@@ -9,7 +10,7 @@ export class Game {
 
     private name: string;
     private readonly connection: IWebSocketConnection
-    private players: string[] = new Array<string>()
+    private players: Player[] = new Array<Player>()
 
     getName(): string {
         return this.name;
@@ -22,13 +23,13 @@ export class Game {
     addPlayer(username: string): Boolean {
         this.connection.alert(username)
         if (this.players.length <= 3) {
-            this.players.push(username)
+            this.players.push(new Player(username))
             return true;
         }
         return false;
     }
 
     removePlayer(username: string): void {
-        this.players.splice(this.players.indexOf(username), 1)
+        this.players.splice(this.players.indexOf(this.players.find(p => p.getName() === username)), 1)
     }
 }
