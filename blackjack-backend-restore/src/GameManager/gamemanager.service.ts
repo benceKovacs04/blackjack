@@ -30,7 +30,6 @@ export class GameManagerService implements IGameManagerService {
             return game.addPlayer(player)
         }
         return false;
-
     }
 
     removePlayerFromGame(player: IPlayer): void {
