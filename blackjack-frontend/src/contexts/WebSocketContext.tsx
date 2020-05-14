@@ -21,11 +21,14 @@ export function WebSocketContextWrapper(props: any) {
             tableName.current = tablename
             connection.current = socketIO("http://localhost:5000/game")
             connection.current.on("connected", sitPlayerIn)
+            connection.current.on("test", testMethod)
         }
 
     }
 
-
+    const testMethod = () => {
+        connection.current.emit("asd", "data")
+    }
 
     const sitPlayerIn = () => {
 

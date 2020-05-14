@@ -7,7 +7,7 @@ import IPlayer from "./player/IPlayer";
 export class GameManagerService implements IGameManagerService {
 
     private readonly games: Array<Game> = new Array<Game>()
-    private readonly playersAtGames: Array<{ player: IPlayer, game: Game }> = new Array<{ player: string, game: Game }>();
+    private readonly playersAtGames: Array<{ player: IPlayer, game: Game }> = new Array<{ player: IPlayer, game: Game }>();
 
     addNewGame(name: string): { name: string, seats: number } {
         if (!this.games.find(game => game.getName() === name)) {

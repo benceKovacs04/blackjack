@@ -20,6 +20,7 @@ export class Game {
     }
 
     addPlayer(player: IPlayer): Boolean {
+        player.test()
         if (this.players.length <= 3) {
             this.players.push(player)
             return true;

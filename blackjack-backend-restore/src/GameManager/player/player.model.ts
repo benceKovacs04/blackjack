@@ -7,6 +7,12 @@ export default class Player implements IPlayer {
         this.socket = socket
         this.username = username
     }
+    async test(): Promise<any> {
+        const data = await this.socket.emit("test")
+        //console.log(data)
+        this.socket.on("asd", (data) => console.log(data + ` ${this.username}`))
+
+    }
 
     private readonly socket: Socket
     private readonly username: string
