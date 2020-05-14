@@ -20,25 +20,21 @@ export function WebSocketContextWrapper(props: any) {
         if (connection.current === undefined) {
             tableName.current = tablename
             connection.current = socketIO("http://localhost:5000/game")
-            connection.current.on("connected", sendUsername)
-            connection.current.on("username_mapped", sitPlayerIn)
-            connection.current.on("alert", () => { console.log("works") })
+            connection.current.on("connected", sitPlayerIn)
         }
 
     }
 
-    const sendUsername = () => {
-        connection.current.emit("map_username", username)
-    }
 
-    const sitPlayerIn = (didPlayerMap: Boolean) => {
-        if (didPlayerMap) {
-            connection.current.emit("sit_player_in",
-                {
-                    username: username,
-                    tableName: tableName.current
-                })
-        }
+
+    const sitPlayerIn = () => {
+
+        connection.current.emit("sit_player_in",
+            {
+                username: username,
+                tableName: tableName.current
+            })
+
     }
 
     return (
