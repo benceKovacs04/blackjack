@@ -1,15 +1,14 @@
 import IWebSocketConnection from "./IWebSocketConnection";
+import IPlayer from "../player/IPlayer";
 
 export class Game {
 
-    constructor(name: string, socketConnection: IWebSocketConnection) {
+    constructor(name: string) {
         this.name = name;
-        this.connection = socketConnection
     }
 
     private name: string;
-    private readonly connection: IWebSocketConnection
-    private players: string[] = new Array<string>()
+    private players: IPlayer[] = new Array<IPlayer>()
 
     getName(): string {
         return this.name;
@@ -19,16 +18,15 @@ export class Game {
         return this.players.length
     }
 
-    addPlayer(username: string): Boolean {
-        this.connection.alert(username)
+    addPlayer(player: IPlayer): Boolean {
         if (this.players.length <= 3) {
-            this.players.push(username)
+            this.players.push(player)
             return true;
         }
         return false;
     }
 
-    removePlayer(username: string): void {
-        this.players.splice(this.players.indexOf(username), 1)
+    removePlayer(player: IPlayer): void {
+        this.players.splice(this.players.indexOf(player), 1)
     }
 }
