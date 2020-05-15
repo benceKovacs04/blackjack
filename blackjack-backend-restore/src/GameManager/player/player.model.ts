@@ -7,13 +7,33 @@ export default class Player implements IPlayer {
         this.socket = socket
         this.username = username
     }
-    async test(): Promise<any> {
-        const data = await this.socket.emit("test")
-        //console.log(data)
-        this.socket.on("asd", (data) => console.log(data + ` ${this.username}`))
 
-    }
 
     private readonly socket: Socket
-    private readonly username: string
+    public readonly username: string
+
+    private action: Action = Action.Tentative;
+
+    initEvents(): void {
+        this.socket.on("action", (resp) => { resp == 0 ? this.action = Action.Fold : this.action = Action.Card })
+    }
+
+    setTurn(): void {
+        this.socket.emit("set_turn")
+    }
+
+    endTurn(): void {
+        this.setTurn();
+        this.action = Action.Tentative;
+    }
+
+    getAction(): Action {
+        return this.action
+    }
+}
+
+export enum Action {
+    Fold,
+    Card,
+    Tentative
 }
