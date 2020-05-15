@@ -15,7 +15,7 @@ export default class Player implements IPlayer {
     private action: Action = Action.Tentative;
 
     initEvents(): void {
-        this.socket.on("action", (resp) => { resp == 0 ? this.action = Action.Fold : this.action = Action.Card })
+        this.socket.on("action", (resp) => { this.action = Action[Action[resp]] })
     }
 
     setTurn(): void {
