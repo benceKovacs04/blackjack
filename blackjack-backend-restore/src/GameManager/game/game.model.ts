@@ -24,7 +24,7 @@ export class Game {
         return this.players.length
     }
 
-    addPlayer(player: IPlayer): Boolean {
+    addPlayer(player: IPlayer): boolean {
         if (this.players.length <= 3) {
             player.initEvents()
             this.players.push(player)

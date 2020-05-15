@@ -23,7 +23,7 @@ export class GameManagerService implements IGameManagerService {
         })
     }
 
-    addPlayerToGame(player: IPlayer, gameName: string): Boolean {
+    addPlayerToGame(player: IPlayer, gameName: string): boolean {
         const game = this.games.find(game => game.getName() === gameName)
         if (game) {
             this.playersAtGames.push({ player: player, game: game })
