@@ -30,6 +30,10 @@ export default class Shoe implements IShoe {
         }
     }
 
+    getShoeSize(): number {
+        return this.nrOfDeck;
+    }
+
     resetShoe(): void {
         this.initShoe(this.nrOfDeck)
     }

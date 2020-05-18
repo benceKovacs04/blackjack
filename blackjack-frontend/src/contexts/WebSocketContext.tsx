@@ -4,11 +4,10 @@ import loggedInContext from './LoggedInContext'
 
 const webSocketContext = React.createContext({
     myTurn: false,
+    myHand: [""],
     playerAction: (action: number) => { },
-    connect: (tablename: string) => { },
+    connect: (tablename: string) => { }
 })
-
-
 
 
 export function WebSocketContextWrapper(props: any) {
@@ -16,6 +15,7 @@ export function WebSocketContextWrapper(props: any) {
     const { username } = useContext(loggedInContext)
 
     const [myTurn, setMyTurn] = useState<boolean>(false)
+    const [myHand, setMyHand] = useState<string[]>([])
 
     const connection: any = useRef();
     const tableName: any = useRef();
@@ -26,6 +26,7 @@ export function WebSocketContextWrapper(props: any) {
             connection.current = socketIO("http://localhost:5000/game")
             connection.current.on("connected", sitPlayerIn)
             connection.current.on("set_turn", toggleMyTurn)
+            connection.current.on("initial_hand", setInitialHand)
         }
 
     }
@@ -48,10 +49,15 @@ export function WebSocketContextWrapper(props: any) {
         connection.current.emit("action", action)
     }
 
+    const setInitialHand = (data: []) => {
+        setMyHand(myHand => myHand.concat(data))
+    }
+
     return (
         <webSocketContext.Provider
             value={{
                 myTurn,
+                myHand,
                 playerAction,
                 connect
             }}
