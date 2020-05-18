@@ -2,6 +2,10 @@ import IShoe from "./IShoe";
 
 export default class Shoe implements IShoe {
 
+    constructor(nrOfDecks: number) {
+        this.initShoe(nrOfDecks)
+    }
+
     private readonly fullShoe: Map<string, number> = new Map<string, number>([
         ["CA", 0], ["C2", 0], ["C3", 0], ["C4", 0],
         ["C5", 0], ["C6", 0], ["C7", 0], ["C8", 0],
@@ -17,17 +21,18 @@ export default class Shoe implements IShoe {
         ["S9", 0], ["S10", 0], ["SJ", 0], ["SQ", 0], ["SK", 0],
     ])
 
-    initShoe(nrOfDecks: number): void {
+    private initShoe(nrOfDecks: number): void {
         for (let key of this.fullShoe.keys()) {
             this.fullShoe[key] = nrOfDecks
         }
     }
     getCard(): string {
-        let rndKey = this.fullShoe.keys[Math.floor(Math.random() * this.fullShoe.keys.length)]
+        const keys = Array.from(this.fullShoe.keys());
+        let rndKey = keys[Math.floor(Math.random() * keys.length)]
         while (this.fullShoe[rndKey] === 0) {
-            rndKey = this.fullShoe.keys[Math.floor(Math.random() * this.fullShoe.keys.length)]
+            rndKey = keys[Math.floor(Math.random() * keys.length)]
         }
-        this.fullShoe[rndKey] = this.fullShoe[rndKey]--
+        this.fullShoe[rndKey] = this.fullShoe[rndKey] - 1
         return rndKey
     }
 
