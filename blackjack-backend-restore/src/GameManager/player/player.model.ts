@@ -12,7 +12,7 @@ export default class Player implements IPlayer {
     private readonly socket: Socket
     public readonly username: string
 
-    private action: Action = Action.Tentative;
+    private action: Action = Action.Waiting;
 
     initEvents(): void {
         this.socket.on("action", (resp) => { this.action = Action[Action[resp]] })
@@ -24,16 +24,22 @@ export default class Player implements IPlayer {
 
     endTurn(): void {
         this.setTurn();
-        this.action = Action.Tentative;
+        this.action = Action.Waiting;
     }
 
     getAction(): Action {
         return this.action
+    }
+
+    sendInitialHand(cardOne: string, cardTwo: string): void {
+        this.socket.emit("initial_hand", [cardOne, cardTwo])
+        this.action = Action.Tentative
     }
 }
 
 export enum Action {
     Fold,
     Card,
-    Tentative
+    Tentative,
+    Waiting
 }

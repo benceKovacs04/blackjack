@@ -1,12 +1,15 @@
 import IPlayer from "../player/IPlayer";
 import { Action } from "../player/player.model";
 import { TreeChildren } from "typeorm";
+import IShoe from "../deck/IShoe";
+import Shoe from "../deck/shoe";
 
 
 export class Game {
 
-    constructor(name: string) {
+    constructor(name: string, shoe: IShoe) {
         this.name = name;
+        this.shoe = shoe
     }
 
     private name: string;
@@ -15,6 +18,9 @@ export class Game {
     private activePlayer: IPlayer;
 
     private timerID: any
+
+    private shoe: IShoe
+    private usedCards: number = 0;
 
     getName(): string {
         return this.name;
@@ -39,6 +45,9 @@ export class Game {
     }
 
     removePlayer(player: IPlayer): void {
+        if (player === this.activePlayer) {
+            this.nextPlayer();
+        }
         this.players.splice(this.players.indexOf(player), 1)
         if (this.players.length === 0) {
             clearInterval(this.timerID)
@@ -52,17 +61,34 @@ export class Game {
     nextPlayer() {
         this.activePlayer.endTurn()
         const activeIndex = this.players.indexOf(this.activePlayer)
-        if (activeIndex + 1 == this.players.length) {
-            this.activePlayer = this.players[0]
-        } else {
-            this.activePlayer = this.players[activeIndex + 1]
-        }
+
+        this.activePlayer = this.players[(activeIndex + 1) % this.players.length]
+
         this.activePlayer.setTurn()
         this.startSimulation()
     }
 
     simulate() {
+        if ((this.shoe.getShoeSize() * 52) * 0.25 < this.usedCards) {
+            this.shoe.resetShoe()
+        }
+
         const action = this.activePlayer.getAction();
+
+        switch (action) {
+            case Action.Waiting:
+                const cardOne = this.shoe.getCard()
+                const cardTwo = this.shoe.getCard()
+                this.activePlayer.sendInitialHand(cardOne, cardTwo)
+                break;
+            case Action.Card:
+                break;
+            case Action.Fold:
+                break;
+            case Action.Tentative:
+                break;
+        }
+
         if (action === Action.Card) {
             console.log(`${this.activePlayer.username} draw a card`)
         }

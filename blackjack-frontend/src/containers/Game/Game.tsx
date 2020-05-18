@@ -6,7 +6,7 @@ import webSocketContext from '../../contexts/WebSocketContext'
 export default function Game(props: any) {
 
     const { username, loggedIn } = useContext(loggedInContext)
-    const { connect, myTurn, playerAction } = useContext(webSocketContext)
+    const { connect, myTurn, playerAction, myHand } = useContext(webSocketContext)
 
     const [tableName, setTableName] = useState<string>(props.match.params.name)
 
@@ -33,6 +33,7 @@ export default function Game(props: any) {
                     <div>
                         <button onClick={getCard} >card</button>
                         <button onClick={fold} >fold</button>
+                        {myHand.map(card => <p>{card}</p>)}
                     </div> : null
             }
         </div>

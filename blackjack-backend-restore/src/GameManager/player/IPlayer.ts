@@ -5,5 +5,6 @@ export default interface IPlayer {
     setTurn(): void
     endTurn(): void
     getAction(): Action
+    sendInitialHand(cardOne: string, cardTwo: string): void
     username: string
 }

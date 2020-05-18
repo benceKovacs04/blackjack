@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { IGameManagerService } from "./IGameManagerService.interface";
 import { Game } from './game/game.model'
 import IPlayer from "./player/IPlayer";
+import IShoe from "./deck/IShoe";
+import Shoe from "./deck/shoe";
 
 @Injectable()
 export class GameManagerService implements IGameManagerService {
@@ -11,7 +13,8 @@ export class GameManagerService implements IGameManagerService {
 
     addNewGame(name: string): { name: string, seats: number } {
         if (!this.games.find(game => game.getName() === name)) {
-            const game: Game = new Game(name)
+            const shoe: IShoe = new Shoe(6)
+            const game: Game = new Game(name, shoe)
             this.games.push(game)
             return { name: game.getName(), seats: game.getPlayerNum() }
         }

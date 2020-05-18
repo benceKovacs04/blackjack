@@ -15,7 +15,7 @@ import { GameManagerController } from './GameManager/gamemanager.controller';
         ),
         AuthModule,
         UsersModule,
-        GameManagerModule,
+        GameManagerModule
     ],
 
 })

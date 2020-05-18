@@ -1,7 +1,8 @@
-import { Controller, Get, UseGuards, Res, Inject, Post, Body } from "@nestjs/common";
+import { Controller, Get, UseGuards, Res, Inject, Post, Body, Query } from "@nestjs/common";
 import { Response } from 'express';
 import { IGameManagerService } from "./IGameManagerService.interface";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { join } from "path";
 
 
 @Controller("gameManager")
@@ -20,6 +21,15 @@ export class GameManagerController {
     @Get("/getGamesData")
     getGameNames(@Res() res: Response) {
         res.send(this.gameManagerService.getGamesData())
+    }
+
+    //@UseGuards(JwtAuthGuard)
+    @Get("/card-image")
+    getCardImage(
+        @Res() res: Response,
+        @Query("cardId") cardId: string
+    ) {
+        res.sendFile(join(__dirname, '../../', "src", "assets", "cards", cardId))
     }
 
 }
