@@ -41,6 +41,7 @@ export default function Game(props: any) {
     }
 
     const setGameState = (data: { cards: string[], handValue: number }) => {
+        setTimeout("", 2000)
         setMyHand(data.cards)
         setMyHandValue(data.handValue)
     }
