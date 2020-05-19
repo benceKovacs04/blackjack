@@ -76,7 +76,7 @@ export default function Game(props: any) {
                             <div className={classes.Cards}>
                                 {myHand.map(card =>
 
-                                    <img src={`http://localhost:5000/gameManager/card-image?cardId=${card}.png`}></img>
+                                    <img className={classes.Card} src={`http://localhost:5000/gameManager/card-image?cardId=${card}.png`}></img>
 
                                 )}
                             </div>
