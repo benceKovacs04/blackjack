@@ -81,24 +81,12 @@ export class Game {
                 const cardTwo = this.shoe.getCard()
                 this.activePlayer.sendInitialHand(cardOne, cardTwo)
                 break;
-            case Action.Card:
+            case Action.Hit:
                 break;
             case Action.Fold:
                 break;
             case Action.Tentative:
                 break;
-        }
-
-        if (action === Action.Card) {
-            console.log(`${this.activePlayer.username} draw a card`)
-        }
-        else if (action === Action.Fold) {
-            clearInterval(this.timerID)
-            console.log(`${this.activePlayer.username} folded`)
-            this.nextPlayer()
-        }
-        else if (action === Action.Tentative) {
-            console.log(`${this.activePlayer.username} is tentative in ${this.name} room!`)
         }
     }
 }
