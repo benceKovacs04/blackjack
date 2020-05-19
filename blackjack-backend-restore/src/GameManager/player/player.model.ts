@@ -36,5 +36,4 @@ export enum Action {
     Hit = "Hit",
     Tentative = "Tentative",
     Waiting = "Waiting"
-git
 }
