@@ -27,7 +27,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const player = this._connections.get(client.id)
         this._connections.delete(client.id)
         this.gameManager.removePlayerFromGame(player)
-        console.log("disconnected")
     }
 
 
