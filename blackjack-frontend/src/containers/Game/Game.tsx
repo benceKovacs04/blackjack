@@ -1,27 +1,52 @@
 import React, { useState, useContext, useEffect, useRef } from 'react'
 import classes from './Game.module.css'
 import loggedInContext from '../../contexts/LoggedInContext'
-import webSocketContext from '../../contexts/WebSocketContext'
+import socketIO from "socket.io-client"
 
 export default function Game(props: any) {
 
     const { username, loggedIn } = useContext(loggedInContext)
-    const { connect, myTurn, playerAction, myHand } = useContext(webSocketContext)
-
     const [tableName, setTableName] = useState<string>(props.match.params.name)
+    const [myTurn, setMyTurn] = useState<boolean>(false)
+    const [myHand, setMyHand] = useState<string[]>([])
+
+    const connection: any = useRef();
 
     useEffect(() => {
         if (loggedIn) {
-            connect(tableName);
+            if (connection.current === undefined) {
+                connection.current = socketIO("http://localhost:5000/game")
+                connection.current.on("connected", sitPlayerIn)
+                connection.current.on("set_turn", toggleMyTurn)
+                connection.current.on("initial_hand", setInitialHand)
+            }
         }
     })
 
+    const toggleMyTurn = () => {
+        setMyTurn(myTurn => !myTurn)
+    }
+
+    const sitPlayerIn = () => {
+
+        connection.current.emit("sit_player_in",
+            {
+                username: username,
+                tableName: tableName
+            })
+
+    }
+
+    const setInitialHand = (data: []) => {
+        setMyHand(myHand => myHand.concat(data))
+    }
+
     const getCard = () => {
-        playerAction(1)
+        connection.current.emit("action", 1)
     }
 
     const fold = () => {
-        playerAction(0)
+        connection.current.emit("action", 0)
     }
 
     return (
