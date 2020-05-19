@@ -53,21 +53,39 @@ export default function Game(props: any) {
 
     return (
         <div className={classes.Background}>
-            <h1>{username}</h1>>
-            <h1>{tableName}</h1>>
-            {
-                myTurn ?
-                    <div>
-                        <button onClick={getCard} >card</button>
-                        <button onClick={fold} >fold</button>
-                        {myHand.map(card =>
-                            <div>
-                                <img src={`http://localhost:5000/gameManager/card-image?cardId=${card}.png`}></img>
-                            </div>
-                        )}
+            <div className={classes.Table}>
+                <h1>{tableName}</h1>
+                <div className={classes.Dealer}>
+
+                </div>
+                <div className={classes.Players}>
+                    <div className={classes.OtherPlayer}>
+
+                    </div>
+                    <div className={classes.Player}>
+                        <h1>{username}</h1>
                         <h1>{myHandValue}</h1>
-                    </div> : null
-            }
+                        {myTurn ? <div className={classes.Buttons}>
+                            <button onClick={getCard} >Hit</button>
+                            <button onClick={fold} >Stay</button>
+                        </div> : null
+                        }
+                        {myTurn ? <div>
+                            <div className={classes.Cards}>
+                                {myHand.map(card =>
+
+                                    <img src={`http://localhost:5000/gameManager/card-image?cardId=${card}.png`}></img>
+
+                                )}
+                            </div>
+                        </div> : null
+                        }
+                    </div>
+                    <div className={classes.OtherPlayer}>
+
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

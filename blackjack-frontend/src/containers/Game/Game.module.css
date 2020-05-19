@@ -3,4 +3,52 @@
     height: 100vh;
     background-image: url("http://cheerspokernh.com/wp-content/uploads/2018/02/bigstock-poker-table-background-26587844-2-1.jpg");
     background-size: cover;
+    background-attachment: fixed;
+}
+
+.Table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.Dealer {
+    height: 50%;
+}
+
+.Players {
+    height: 50%;
+    width: 100%;
+    display:flex;
+}
+
+.Player {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Player h1 {
+    margin: 5px;
+}
+
+.Player .Buttons {
+    margin: 10px;
+}
+
+.Player .Buttons button {
+    margin: 5px;
+    width: 150px;
+    height: 40px;
+    border-radius: 50px;
+    outline: none;
+}
+
+.OtherPlayer {
+    width: 25%;
+}
+
+.Cards {
+    display: flex;
 }

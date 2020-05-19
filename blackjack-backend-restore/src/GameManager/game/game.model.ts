@@ -91,6 +91,9 @@ export class Game {
                 this.activePlayer.sendGameState(this.gameState.getPlayerHand())
                 break;
             case Action.Hit:
+                const card = this.shoe.getCard()
+                this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
+                this.activePlayer.sendGameState(this.gameState.getPlayerHand())
                 break;
             case Action.Fold:
                 break;
