@@ -49,6 +49,7 @@ export class Game {
     removePlayer(player: IPlayer): void {
         if (this.players.length === 1) {
             this.activePlayer = null
+            this.gameState.resetGameState()
         }
         if (player === this.activePlayer) {
             this.nextPlayer();

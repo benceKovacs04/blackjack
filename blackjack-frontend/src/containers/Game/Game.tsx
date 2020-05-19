@@ -39,8 +39,8 @@ export default function Game(props: any) {
     }
 
     const setGameState = (data: { cards: string[], handValue: number }) => {
-        setMyHand(myHand => myHand.concat(data.cards))
-        setMyHandValue(myHandValue => myHandValue + data.handValue)
+        setMyHand(data.cards)
+        setMyHandValue(data.handValue)
     }
 
     const getCard = () => {
