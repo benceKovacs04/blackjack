@@ -23,11 +23,7 @@ export class GameManagerController {
         res.send(this.gameManagerService.getGamesData())
     }
 
-<<<<<<< HEAD
     @UseGuards(JwtAuthGuard)
-=======
-    //@UseGuards(JwtAuthGuard)
->>>>>>> 30a924b52ae4450ed90bbaa601700c48efe0910b
     @Get("/card-image")
     getCardImage(
         @Res() res: Response,

@@ -1,9 +1,6 @@
 import IPlayer from "../player/IPlayer";
 import { Action } from "../player/player.model";
-import { TreeChildren } from "typeorm";
 import IShoe from "../deck/IShoe";
-import Shoe from "../deck/shoe";
-
 
 export class Game {
 
