@@ -47,4 +47,10 @@ export default class Shoe implements IShoe {
         this.fullShoe[rndKey] = this.fullShoe[rndKey] - 1
         return rndKey
     }
+
+    getCardValue(card: string): number {
+        if (parseInt(card[1])) return parseInt(card[1])
+        if (card[1] === 'A') return 1
+        return 10
+    }
 }
