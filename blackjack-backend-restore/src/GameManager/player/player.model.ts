@@ -31,10 +31,11 @@ export default class Player implements IPlayer {
         return this.action
     }
 
-    sendInitialHand(cardOne: string, cardTwo: string): void {
-        this.socket.emit("initial_hand", [cardOne, cardTwo])
+    sendGameState(gameState: { cards: string[]; handValue: number; }) {
+        this.socket.emit("game-state", gameState)
         this.action = Action.Tentative
     }
+
 }
 
 export enum Action {

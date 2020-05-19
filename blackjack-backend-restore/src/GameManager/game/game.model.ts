@@ -1,6 +1,9 @@
 import IPlayer from "../player/IPlayer";
 import { Action } from "../player/player.model";
 import IShoe from "../deck/IShoe";
+import IGameState from "./IGamestate";
+import GameState from "./gamestate.model";
+import { stat } from "fs";
 
 export class Game {
 
@@ -18,6 +21,8 @@ export class Game {
 
     private shoe: IShoe
     private usedCards: number = 0;
+
+    private gameState: IGameState = new GameState();
 
     getName(): string {
         return this.name;
@@ -60,6 +65,7 @@ export class Game {
 
     nextPlayer() {
         this.activePlayer.endTurn()
+        this.gameState.resetGameState()
         const activeIndex = this.players.indexOf(this.activePlayer)
 
         this.activePlayer = this.players[(activeIndex + 1) % this.players.length]
@@ -79,7 +85,9 @@ export class Game {
             case Action.Waiting:
                 const cardOne = this.shoe.getCard()
                 const cardTwo = this.shoe.getCard()
-                this.activePlayer.sendInitialHand(cardOne, cardTwo)
+                this.gameState.addCardToPlayer(cardOne, this.shoe.getCardValue(cardOne))
+                this.gameState.addCardToPlayer(cardTwo, this.shoe.getCardValue(cardTwo))
+                this.activePlayer.sendGameState(this.gameState.getPlayerHand())
                 break;
             case Action.Hit:
                 break;

@@ -9,6 +9,7 @@ export default function Game(props: any) {
     const [tableName, setTableName] = useState<string>(props.match.params.name)
     const [myTurn, setMyTurn] = useState<boolean>(false)
     const [myHand, setMyHand] = useState<string[]>([])
+    const [myHandValue, setMyHandValue] = useState<number>(0)
 
     const connection: any = useRef();
 
@@ -18,7 +19,7 @@ export default function Game(props: any) {
                 connection.current = socketIO("http://localhost:5000/game")
                 connection.current.on("connected", sitPlayerIn)
                 connection.current.on("set_turn", toggleMyTurn)
-                connection.current.on("initial_hand", setInitialHand)
+                connection.current.on("game-state", setGameState)
             }
         }
     })
@@ -37,8 +38,9 @@ export default function Game(props: any) {
 
     }
 
-    const setInitialHand = (data: []) => {
-        setMyHand(myHand => myHand.concat(data))
+    const setGameState = (data: { cards: string[], handValue: number }) => {
+        setMyHand(myHand => myHand.concat(data.cards))
+        setMyHandValue(myHandValue => myHandValue + data.handValue)
     }
 
     const getCard = () => {
@@ -58,7 +60,12 @@ export default function Game(props: any) {
                     <div>
                         <button onClick={getCard} >card</button>
                         <button onClick={fold} >fold</button>
-                        {myHand.map(card => <p>{card}</p>)}
+                        {myHand.map(card =>
+                            <div>
+                                <img src={`http://localhost:5000/gameManager/card-image?cardId=${card}.png`}></img>
+                            </div>
+                        )}
+                        <h1>{myHandValue}</h1>
                     </div> : null
             }
         </div>

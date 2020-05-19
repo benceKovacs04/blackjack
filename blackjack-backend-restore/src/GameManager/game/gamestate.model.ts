@@ -1,20 +1,31 @@
 import IGameState from "./IGamestate";
 
 export default class GameState implements IGameState {
+
+    private playerHand: string[] = []
+    private playerHandValue: number = 0
+    private dealerHand: string[] = []
+    private dealerHandValue: number = 0
+
     addCardToPlayer(cardName: string, cardValue: number): void {
-        throw new Error("Method not implemented.");
+        this.playerHand.push(cardName)
+        this.playerHandValue += cardValue
     }
     addCardToDealer(cardName: string, cardValue: number): void {
-        throw new Error("Method not implemented.");
+        this.dealerHand.push(cardName)
+        this.dealerHandValue += cardValue
     }
     getPlayerHand(): { cards: string[]; handValue: number; } {
-        throw new Error("Method not implemented.");
+        return { cards: this.playerHand, handValue: this.playerHandValue }
     }
     getDealerHand(): { cards: string[]; handValue: number; } {
-        throw new Error("Method not implemented.");
+        return { cards: this.dealerHand, handValue: this.dealerHandValue }
     }
     resetGameState(): void {
-        throw new Error("Method not implemented.");
+        this.playerHand = []
+        this.playerHandValue = 0
+        this.dealerHand = []
+        this.dealerHandValue = 0
     }
 
 
