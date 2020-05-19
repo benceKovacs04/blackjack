@@ -39,7 +39,7 @@ export default class Player implements IPlayer {
 
 export enum Action {
     Fold,
-    Card,
+    Hit,
     Tentative,
     Waiting
 }
