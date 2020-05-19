@@ -12,7 +12,7 @@ export default class Player implements IPlayer {
     public readonly username: string
 
     initEvents(): void {
-        this.socket.on("action", (resp) => { this.actionMethod(Action[Action[resp]]) })
+        this.socket.on("action", (resp) => { this.actionMethod(Action[resp]) })
     }
 
     setTurn(): void {
@@ -32,8 +32,8 @@ export default class Player implements IPlayer {
 }
 
 export enum Action {
-    Stay,
-    Hit,
-    Tentative,
-    Waiting
+    Stay = "Stay",
+    Hit = "Hit",
+    Tentative = "Tentative",
+    Waiting = "Waiting"
 }

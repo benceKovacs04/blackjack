@@ -27,7 +27,7 @@ export default function Game(props: any) {
 
     const toggleMyTurn = () => {
         setMyTurn(myTurn => !myTurn)
-        connection.current.emit("action", 3)
+        connection.current.emit("action", "Waiting")
     }
 
     const sitPlayerIn = () => {
@@ -45,12 +45,12 @@ export default function Game(props: any) {
         setMyHandValue(data.handValue)
     }
 
-    const getCard = () => {
-        connection.current.emit("action", 1)
+    const hit = () => {
+        connection.current.emit("action", "Hit")
     }
 
-    const fold = () => {
-        connection.current.emit("action", 0)
+    const stay = () => {
+        connection.current.emit("action", "Stay")
     }
 
     return (
@@ -68,8 +68,8 @@ export default function Game(props: any) {
                         <h1>{username}</h1>
                         <h1>{myHandValue}</h1>
                         {myTurn ? <div className={classes.Buttons}>
-                            <button onClick={getCard} >Hit</button>
-                            <button onClick={fold} >Stay</button>
+                            <button onClick={hit} >Hit</button>
+                            <button onClick={stay} >Stay</button>
                         </div> : null
                         }
                         {myTurn ? <div>
