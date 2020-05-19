@@ -21,11 +21,13 @@ export default function Game(props: any) {
                 connection.current.on("set_turn", toggleMyTurn)
                 connection.current.on("game-state", setGameState)
             }
+
         }
-    })
+    }, [])
 
     const toggleMyTurn = () => {
         setMyTurn(myTurn => !myTurn)
+        connection.current.emit("action", 3)
     }
 
     const sitPlayerIn = () => {

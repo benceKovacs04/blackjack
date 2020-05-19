@@ -4,7 +4,7 @@ export default interface IPlayer {
     initEvents(): void
     setTurn(): void
     endTurn(): void
-    getAction(): Action
     sendGameState(gameState: { cards: string[], handValue: number })
     username: string
+    actionMethod: (action: any) => void
 }

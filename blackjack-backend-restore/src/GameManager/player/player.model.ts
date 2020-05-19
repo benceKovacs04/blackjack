@@ -8,14 +8,11 @@ export default class Player implements IPlayer {
         this.username = username
     }
 
-
     private readonly socket: Socket
     public readonly username: string
 
-    private action: Action = Action.Waiting;
-
     initEvents(): void {
-        this.socket.on("action", (resp) => { this.action = Action[Action[resp]] })
+        this.socket.on("action", (resp) => { this.actionMethod(Action[Action[resp]]) })
     }
 
     setTurn(): void {
@@ -24,22 +21,18 @@ export default class Player implements IPlayer {
 
     endTurn(): void {
         this.setTurn();
-        this.action = Action.Waiting;
-    }
-
-    getAction(): Action {
-        return this.action
     }
 
     sendGameState(gameState: { cards: string[]; handValue: number; }) {
         this.socket.emit("game-state", gameState)
-        this.action = Action.Tentative
     }
+
+    actionMethod: (action: Action) => void;
 
 }
 
 export enum Action {
-    Fold,
+    Stay,
     Hit,
     Tentative,
     Waiting
