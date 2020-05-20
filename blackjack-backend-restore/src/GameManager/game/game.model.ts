@@ -73,10 +73,10 @@ export class Game {
 
         switch (action) {
             case Action.Waiting:
-                const cardOne = this.shoe.getCard()
-                const cardTwo = this.shoe.getCard()
-                this.gameState.addCardToPlayer(cardOne, this.shoe.getCardValue(cardOne))
-                this.gameState.addCardToPlayer(cardTwo, this.shoe.getCardValue(cardTwo))
+                for (let i = 0; i < 2; i++) {
+                    const card = this.shoe.getCard()
+                    this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
+                }
                 this.activePlayer.sendGameState(this.gameState.getPlayerHand())
                 break;
             case Action.Hit:

@@ -1,6 +1,6 @@
-import { TestingModule, Test, TestingModuleBuilder } from "@nestjs/testing"
-import Shoe from "../src/GameManager/deck/shoe";
-import IShoe from "../src/GameManager/deck/IShoe";
+import IShoe from '../../../src/GameManager/deck/IShoe'
+import Shoe from "../../../src/GameManager/deck/shoe"
+
 
 describe('Shoe', () => {
     let shoe: IShoe
