@@ -33,16 +33,42 @@
     margin: 5px;
 }
 
-.Player .Buttons {
+.Player .Actions {
     margin: 10px;
 }
 
-.Player .Buttons button {
+.Player .Actions button {
     margin: 5px;
     width: 150px;
     height: 40px;
     border-radius: 50px;
     outline: none;
+}
+
+.Player .Bet {
+    margin: 5px;
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.Player .Bet .Buttons button {
+    
+    margin: 5px;
+    width: 60px;
+    height: 60px;
+    border-radius: 90px;
+    outline: none;
+    font-weight: bold;
+
+    transition: background-color 0.5s ease;
+    background-color: white;
+    
+}
+
+.Player .Bet button:hover {
+    transition: background-color 0.5s ease;
+    background-color: maroon;
 }
 
 .OtherPlayer {
@@ -54,11 +80,12 @@
 }
 
 .Card {
-    animation-name: move;
+    animation-name: moveCard;
     animation-duration: 0.3s;
 }
 
-@keyframes move {
+@keyframes moveCard {
     from {margin-top: 30px; opacity: 0.1;}
     to {margin-top: 0px; opacity: 1;}
 }
+
