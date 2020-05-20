@@ -7,10 +7,12 @@ export default function Game(props: any) {
 
     const { username, loggedIn } = useContext(loggedInContext)
     const [tableName, setTableName] = useState<string>(props.match.params.name)
+
+    const [bet, setBet] = useState<number>(0)
+    const [availableCurrency, setAvailableCurrency] = useState<number>(0)
     const [myTurn, setMyTurn] = useState<boolean>(false)
     const [myHand, setMyHand] = useState<string[]>([])
     const [myHandValue, setMyHandValue] = useState<number>(0)
-    const [bet, setBet] = useState<number>(0)
 
     const connection: any = useRef();
 
@@ -26,8 +28,9 @@ export default function Game(props: any) {
         }
     }, [])
 
-    const toggleMyTurn = () => {
+    const toggleMyTurn = (availableCurr: number) => {
         setMyTurn(myTurn => !myTurn)
+        setAvailableCurrency(availableCurr)
         //connection.current.emit("action", "Waiting")
     }
 
@@ -71,7 +74,7 @@ export default function Game(props: any) {
 
                     </div>
                     <div className={classes.Player}>
-                        <h1>{username}</h1>
+                        <h1>{username} - {availableCurrency}$</h1>
                         {myTurn ? <h1>{bet}$</h1> : null}
 
                         {myTurn ?

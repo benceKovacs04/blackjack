@@ -11,12 +11,14 @@ export default class Player implements IPlayer {
     private readonly socket: Socket
     public readonly username: string
 
+    private availableCurrency: number = 2500;
+
     initEvents(): void {
         this.socket.on("action", (resp) => { this.actionMethod(Action[resp]) })
     }
 
     setTurn(): void {
-        this.socket.emit("set_turn")
+        this.socket.emit("set_turn", this.availableCurrency)
     }
 
     endTurn(): void {
@@ -29,6 +31,13 @@ export default class Player implements IPlayer {
 
     actionMethod: (action: Action) => void;
 
+    getAvailableCurrency(): number {
+        return this.availableCurrency
+    }
+
+    setAvailableCurrency(diff: number): void {
+        this.availableCurrency += diff
+    }
 }
 
 export enum Action {
