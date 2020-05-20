@@ -61,14 +61,18 @@
     outline: none;
     font-weight: bold;
 
-    transition: background-color 0.5s ease;
+    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease;
     background-color: white;
+    color: black;
     
 }
 
 .Player .Bet button:hover {
-    transition: background-color 0.5s ease;
+    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease;
     background-color: maroon;
+    color: white;
+    width: 80px;
+    
 }
 
 .OtherPlayer {
