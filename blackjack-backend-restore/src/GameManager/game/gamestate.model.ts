@@ -8,6 +8,17 @@ export default class GameState implements IGameState {
     private dealerHandValue: number = 0
 
     addCardToPlayer(cardName: string, cardValue: number): void {
+        if (cardValue + this.playerHandValue > 21 && this.playerHand.find(c => c[1] === "A")) {
+            this.playerHandValue -= 10;
+            this.playerHand.push(cardName)
+            this.playerHandValue += cardValue
+            return
+        }
+        if (cardValue === 1 && this.playerHandValue <= 10) {
+            this.playerHand.push(cardName)
+            this.playerHandValue += 11;
+            return
+        }
         this.playerHand.push(cardName)
         this.playerHandValue += cardValue
     }
