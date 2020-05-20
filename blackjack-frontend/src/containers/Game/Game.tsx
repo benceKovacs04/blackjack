@@ -31,7 +31,7 @@ export default function Game(props: any) {
     const toggleMyTurn = (availableCurr: number) => {
         setMyTurn(myTurn => !myTurn)
         setAvailableCurrency(availableCurr)
-        //connection.current.emit("action", "Waiting")
+        connection.current.emit("action", "Deal")
     }
 
     const sitPlayerIn = () => {
@@ -79,7 +79,7 @@ export default function Game(props: any) {
 
                         {myTurn ?
                             [myHand.length > 0 ?
-                                <div>
+                                <div className={classes.Hand}>
                                     <h1>{myHandValue}</h1>
                                     <div className={classes.Actions}>
                                         <button onClick={hit} >Hit</button>

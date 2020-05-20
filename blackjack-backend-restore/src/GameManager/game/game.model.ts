@@ -31,7 +31,7 @@ export class Game {
 
     addPlayer(player: IPlayer): boolean {
         if (this.players.length <= 3) {
-            player.actionMethod = this.handlePlayerAction.bind(this)
+            player.actionHandlers = this.actionHandlers
             player.initEvents()
             this.players.push(player)
             if (this.players.length == 1) {
@@ -65,29 +65,39 @@ export class Game {
 
         this.activePlayer.setTurn()
     }
+    placeBet(amount: number) {
 
-    handlePlayerAction(action: any) {
-        if ((this.shoe.getShoeSize() * 52) * 0.25 < this.usedCards) {
+    }
+
+    handlePlayerAction(action: Action) {
+        if ((this.shoe.getShoeSize() * 52) * 0.25 > this.usedCards) {
             this.shoe.resetShoe()
         }
 
         switch (action) {
-            case Action.Waiting:
+            case Action.Deal:
                 for (let i = 0; i < 2; i++) {
                     const card = this.shoe.getCard()
                     this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
                 }
                 this.activePlayer.sendGameState(this.gameState.getPlayerHand())
+                this.usedCards += 2;
                 break;
             case Action.Hit:
                 const card = this.shoe.getCard()
                 this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
                 this.activePlayer.sendGameState(this.gameState.getPlayerHand())
+                this.usedCards++;
                 break;
             case Action.Stay:
                 break;
             case Action.Tentative:
                 break;
         }
+    }
+
+    actionHandlers = {
+        bet: this.placeBet.bind(this),
+        action: this.handlePlayerAction.bind(this)
     }
 }

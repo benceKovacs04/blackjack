@@ -14,7 +14,7 @@ export default class Player implements IPlayer {
     private availableCurrency: number = 2500;
 
     initEvents(): void {
-        this.socket.on("action", (resp) => { this.actionMethod(Action[resp]) })
+        this.socket.on("action", (resp) => { this.actionHandlers.action(Action[resp]) })
     }
 
     setTurn(): void {
@@ -29,7 +29,6 @@ export default class Player implements IPlayer {
         this.socket.emit("game-state", gameState)
     }
 
-    actionMethod: (action: Action) => void;
 
     getAvailableCurrency(): number {
         return this.availableCurrency
@@ -38,11 +37,14 @@ export default class Player implements IPlayer {
     setAvailableCurrency(diff: number): void {
         this.availableCurrency += diff
     }
+
+    actionHandlers: { bet: (amount: number) => void; action: (action: Action) => void; };
 }
 
 export enum Action {
     Stay = "Stay",
     Hit = "Hit",
     Tentative = "Tentative",
-    Waiting = "Waiting"
+    Deal = "Deal",
+    Bet = "Bet"
 }

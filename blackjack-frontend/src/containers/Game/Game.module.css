@@ -20,10 +20,17 @@
     height: 50%;
     width: 100%;
     display:flex;
+    justify-content: center;
 }
 
 .Player {
     width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Player .Hand {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -6,7 +6,8 @@ export default interface IPlayer {
     endTurn(): void
     sendGameState(gameState: { cards: string[], handValue: number })
     username: string
-    actionMethod: (action: any) => void
     getAvailableCurrency(): number
     setAvailableCurrency(diff: number): void
+    //actionMethod: (action: any) => void
+    actionHandlers: { bet: (amount: number) => void, action: (action: Action) => void }
 }
