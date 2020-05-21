@@ -28,7 +28,7 @@ describe("GameState", () => {
 
         it('should return object player hand value of 10 with one card: "TEST"', async () => {
             gameState.addCardToPlayer("TEST", 10)
-            const result = { cards: ["TEST"], handValue: 10 }
+            const result = { cards: ["TEST"], handValue: 10, over: false }
             const state = gameState.getPlayerHand()
             expect(state).toEqual(result)
         })
@@ -60,7 +60,17 @@ describe("GameState", () => {
             const state = gameState.getPlayerHand()
             expect(state.handValue).toEqual(14)
         })
+
+        it('should return 25 on a 10, double seven and ace', async () => {
+            gameState.addCardToPlayer("TEST_7", 7)
+            gameState.addCardToPlayer("TEST_7", 7)
+            gameState.addCardToPlayer("XA", 1)
+            gameState.addCardToPlayer("TEST_10", 10)
+            const state = gameState.getPlayerHand()
+            expect(state.handValue).toEqual(25)
+        })
     })
+
 
     describe('addCardToDealer', () => {
         it('should return object player hand value of 10', async () => {

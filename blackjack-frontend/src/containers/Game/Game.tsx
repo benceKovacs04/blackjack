@@ -14,6 +14,8 @@ export default function Game(props: any) {
     const [myHand, setMyHand] = useState<string[]>([])
     const [myHandValue, setMyHandValue] = useState<number>(0)
 
+    const [disableActionButtons, setDisabeActionButton] = useState<boolean>(false)
+
     const connection: any = useRef();
 
     useEffect(() => {
@@ -31,6 +33,7 @@ export default function Game(props: any) {
     const toggleMyTurn = (availableCurr: number) => {
         setMyTurn(myTurn => !myTurn)
         setAvailableCurrency(availableCurr)
+        setDisabeActionButton(false)
     }
 
     const sitPlayerIn = () => {
@@ -46,7 +49,10 @@ export default function Game(props: any) {
     const setGameState = (data: { cards: string[], handValue: number, over: boolean }) => {
         setMyHand(data.cards)
         setMyHandValue(data.handValue)
-        console.log(data)
+        if (data.over) {
+            setDisabeActionButton(true)
+            connection.current.emit("action", "Stay")
+        }
     }
 
     const increaseBet = (value: number) => {
@@ -89,10 +95,10 @@ export default function Game(props: any) {
                             [myHand.length > 0 ?
                                 <div className={classes.Hand}>
                                     <h1>{myHandValue}</h1>
-                                    <div className={classes.Actions}>
+                                    {disableActionButtons ? null : <div className={classes.Actions}>
                                         <button onClick={hit} >Hit</button>
                                         <button onClick={stay} >Stay</button>
-                                    </div>
+                                    </div>}
                                     <div>
                                         <div className={classes.Cards}>
                                             {myHand.map(card =>
