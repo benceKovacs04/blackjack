@@ -65,6 +65,33 @@ export class Game {
 
         this.activePlayer.setTurn()
     }
+
+    handleInitialDeal() {
+        for (let i = 0; i < 2; i++) {
+            const card = this.shoe.getCard()
+            this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
+        }
+
+        this.gameState.addCardToDealer("card_back", 0)
+        const dealerCard = this.shoe.getCard()
+        this.gameState.addCardToDealer(dealerCard, this.shoe.getCardValue(dealerCard))
+
+        this.activePlayer.sendGameState(this.gameState.getPlayerHand())
+        this.usedCards += 3;
+    }
+
+    handleHit() {
+        const card = this.shoe.getCard()
+        this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
+        const state = this.gameState.getPlayerHand()
+        if (state.handValue > 21) {
+            state.over = true
+            this.activePlayer.setAvailableCurrency(this.gameState.getBet() * -1)
+        }
+        this.activePlayer.sendGameState(state)
+        this.usedCards++;
+    }
+
     placeBet(amount: number) {
         this.gameState.placeBet(amount)
         this.handlePlayerAction(Action.Deal)
@@ -77,23 +104,10 @@ export class Game {
 
         switch (action) {
             case Action.Deal:
-                for (let i = 0; i < 2; i++) {
-                    const card = this.shoe.getCard()
-                    this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
-                }
-                this.activePlayer.sendGameState(this.gameState.getPlayerHand())
-                this.usedCards += 2;
+                this.handleInitialDeal()
                 break;
             case Action.Hit:
-                const card = this.shoe.getCard()
-                this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
-                const state = this.gameState.getPlayerHand()
-                if (state.handValue > 21) {
-                    state.over = true
-                    this.activePlayer.setAvailableCurrency(this.gameState.getBet() * -1)
-                }
-                this.activePlayer.sendGameState(state)
-                this.usedCards++;
+                this.handleHit()
                 break;
             case Action.Stay:
                 break;
