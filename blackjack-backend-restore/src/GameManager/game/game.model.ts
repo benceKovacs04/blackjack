@@ -1,18 +1,20 @@
 import IPlayer from "../player/IPlayer";
 import { Action } from "../player/player.model";
 import IShoe from "../deck/IShoe";
-import IGameState from "./IGamestate";
-import GameState from "./gamestate.model"
+import IGameState from "./gamestate/IGamestate";
+import GameState from "./gamestate/gamestate.model"
 
 export class Game {
 
     constructor(name: string, shoe: IShoe) {
         this.name = name;
         this.shoe = shoe
+        this.phase = Phase.EmptyRoom
     }
 
     private name: string;
     private players: IPlayer[] = new Array<IPlayer>()
+    private waitingRoom: IPlayer[] = []
 
     private activePlayer: IPlayer;
 
@@ -20,6 +22,8 @@ export class Game {
     private usedCards: number = 0;
 
     private gameState: IGameState = new GameState();
+
+    private phase: Phase
 
     getName(): string {
         return this.name;
@@ -33,10 +37,10 @@ export class Game {
         if (this.players.length <= 3) {
             player.actionHandlers = this.actionHandlers
             player.initEvents()
-            this.players.push(player)
+            this.waitingRoom.push(player)
+            this.gameState.addPlayerToState(player.username)
             if (this.players.length == 1) {
-                this.activePlayer = player
-                this.activePlayer.setTurn()
+                this.phase = Phase.Betting
             }
             return true;
         }
@@ -44,29 +48,77 @@ export class Game {
     }
 
     removePlayer(player: IPlayer): void {
-        if (this.players.length === 1) {
-            this.activePlayer = null
-            this.gameState.resetGameState()
-        }
-        if (player === this.activePlayer) {
-            this.nextPlayer();
-        }
         this.players.splice(this.players.indexOf(player), 1)
+        this.gameState.removePlayerFromState(player.username)
         if (this.players.length === 0) {
+            this.setPhase(Phase.EmptyRoom)
         }
     }
 
-    nextPlayer() {
+    /*nextPlayer() {
         this.activePlayer.endTurn()
-        this.gameState.resetGameState()
         const activeIndex = this.players.indexOf(this.activePlayer)
 
         this.activePlayer = this.players[(activeIndex + 1) % this.players.length]
 
         this.activePlayer.setTurn()
+    }*/
+
+    private setPhase(phase: Phase) {
+        this.phase = phase
+        this.executePhase(phase)
     }
 
-    handleInitialDeal() {
+    addPlayersFromWaitingRoom() {
+        this.waitingRoom.forEach(p => this.players.push(p))
+        this.waitingRoom = []
+    }
+
+    handleBetting() {
+        this.players.forEach(p => p.askForBet())
+    }
+
+    handleInitialHand() {
+        const dealOneCard = () => {
+            this.players.forEach(p => {
+                const card = this.shoe.getCard()
+                this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card), p.username)
+            })
+        }
+        dealOneCard()
+        const dealerCard = this.shoe.getCard()
+        this.gameState.addCardToDealer(dealerCard, this.shoe.getCardValue(dealerCard))
+        let state = this.gameState.getGameState()
+        this.players.forEach(p => p.sendGameState(state))
+
+        setTimeout(() => {
+            dealOneCard()
+            this.gameState.addCardToDealer("card_back", 0)
+            state = this.gameState.getGameState()
+            this.players.forEach(p => {
+                p.sendGameState(state)
+            })
+        }, 2000)
+    }
+
+    private executePhase(phase: Phase) {
+        switch (phase) {
+            case Phase.Betting:
+                this.addPlayersFromWaitingRoom()
+                this.handleBetting()
+                break;
+            case Phase.DealHands:
+                this.handleInitialHand()
+                break;
+
+        }
+    }
+
+
+
+    //---- player action handlers ----
+
+    /*private handleInitialDeal() {  
         for (let i = 0; i < 2; i++) {
             const card = this.shoe.getCard()
             this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
@@ -78,9 +130,9 @@ export class Game {
 
         this.activePlayer.sendGameState(this.gameState.getGameState())
         this.usedCards += 3;
-    }
+    }*/
 
-    handleHit() {
+    /*private handleHit() {
         const card = this.shoe.getCard()
         this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
         const state = this.gameState.getGameState()
@@ -90,14 +142,16 @@ export class Game {
         }
         this.activePlayer.sendGameState(state)
         this.usedCards++;
+    }*/
+
+    private placeBet(amount: number, playerName: string) {
+        this.gameState.placeBet(playerName, amount)
+        if (this.gameState.getNrOfBets() === this.players.length) {
+            this.setPhase(Phase.DealHands)
+        }
     }
 
-    placeBet(amount: number) {
-        this.gameState.placeBet(amount)
-        this.handlePlayerAction(Action.Deal)
-    }
-
-    handlePlayerAction(action: Action) {
+    /*private handlePlayerAction(action: Action) {
         if ((this.shoe.getShoeSize() * 52) * 0.25 > this.usedCards) {
             this.shoe.resetShoe()
         }
@@ -116,8 +170,19 @@ export class Game {
         }
     }
 
-    actionHandlers = {
+    private actionHandlers = {
         bet: this.placeBet.bind(this),
         action: this.handlePlayerAction.bind(this)
-    }
+    }*/
+}
+
+//---- end of player action handlers ----
+
+enum Phase {
+    Betting,
+    DealHands,
+    PlayerActions,
+    DealDealer,
+    Evaulate,
+    EmptyRoom
 }

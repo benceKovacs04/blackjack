@@ -1,5 +1,6 @@
 import IPlayer from "./IPlayer";
 import { Socket } from "socket.io";
+import PlayerState from "../game/gamestate/playerState.model";
 
 export default class Player implements IPlayer {
 
@@ -18,6 +19,10 @@ export default class Player implements IPlayer {
         this.socket.on("place-bet", this.actionHandlers.bet)
     }
 
+    askForBet(): void {
+        this.socket.emit("bet-phase")
+    }
+
     setTurn(): void {
         this.socket.emit("set_turn", this.availableCurrency)
     }
@@ -26,7 +31,7 @@ export default class Player implements IPlayer {
         this.setTurn();
     }
 
-    sendGameState(gameState: { playerHand: string[], playerHandValue: number, dealerHand: string[], dealerHandValue: number, over: boolean }) {
+    sendGameState(gameState: { players: PlayerState[]; dealer: { dealerHand: { card: string; value: number; }[]; dealerHandValue: number; }; }) {
         this.socket.emit("game-state", gameState)
     }
 

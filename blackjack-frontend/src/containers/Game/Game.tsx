@@ -25,10 +25,15 @@ export default function Game(props: any) {
                 connection.current.on("connected", sitPlayerIn)
                 connection.current.on("set_turn", toggleMyTurn)
                 connection.current.on("game-state", setGameState)
+                connection.current.on("bet-phase", betPhase)
             }
 
         }
     }, [])
+
+    const betPhase = () => {
+        //IMPLEMENT BET PHASE!!
+    }
 
     const toggleMyTurn = (availableCurr: number) => {
         setMyTurn(myTurn => !myTurn)
