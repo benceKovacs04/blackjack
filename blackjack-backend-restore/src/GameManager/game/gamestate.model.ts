@@ -32,8 +32,8 @@ export default class GameState implements IGameState {
         this.dealerHandValue += valueToAdd
     }
 
-    getPlayerHand(): { cards: string[]; handValue: number; } {
-        return { cards: this.playerHand, handValue: this.playerHandValue }
+    getPlayerHand(): { cards: string[]; handValue: number; over: boolean } {
+        return { cards: this.playerHand, handValue: this.playerHandValue, over: false }
     }
 
     getDealerHand(): { cards: string[]; handValue: number; } {

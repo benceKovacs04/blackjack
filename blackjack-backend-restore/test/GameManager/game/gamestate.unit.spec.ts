@@ -103,6 +103,15 @@ describe("GameState", () => {
             const state = gameState.getDealerHand()
             expect(state.handValue).toEqual(14)
         })
+
+        it('should return 25 on a 10, double seven and ace', async () => {
+            gameState.addCardToDealer("TEST_7", 7)
+            gameState.addCardToDealer("TEST_7", 7)
+            gameState.addCardToDealer("XA", 1)
+            gameState.addCardToDealer("TEST_10", 10)
+            const state = gameState.getDealerHand()
+            expect(state.handValue).toEqual(25)
+        })
     })
 
 

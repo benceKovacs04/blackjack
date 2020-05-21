@@ -43,10 +43,10 @@ export default function Game(props: any) {
 
     }
 
-    const setGameState = (data: { cards: string[], handValue: number }) => {
-        setTimeout("", 2000)
+    const setGameState = (data: { cards: string[], handValue: number, over: boolean }) => {
         setMyHand(data.cards)
         setMyHandValue(data.handValue)
+        console.log(data)
     }
 
     const increaseBet = (value: number) => {

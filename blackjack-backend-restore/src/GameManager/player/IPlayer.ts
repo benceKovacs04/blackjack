@@ -4,7 +4,7 @@ export default interface IPlayer {
     initEvents(): void
     setTurn(): void
     endTurn(): void
-    sendGameState(gameState: { cards: string[], handValue: number })
+    sendGameState(gameState: { cards: string[], handValue: number, over: boolean })
     username: string
     getAvailableCurrency(): number
     setAvailableCurrency(diff: number): void

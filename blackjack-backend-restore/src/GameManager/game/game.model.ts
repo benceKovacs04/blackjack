@@ -87,7 +87,12 @@ export class Game {
             case Action.Hit:
                 const card = this.shoe.getCard()
                 this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
-                this.activePlayer.sendGameState(this.gameState.getPlayerHand())
+                const state = this.gameState.getPlayerHand()
+                if (state.handValue > 21) {
+                    state.over = true
+                }
+                console.log(state)
+                this.activePlayer.sendGameState(state)
                 this.usedCards++;
                 break;
             case Action.Stay:
