@@ -51,8 +51,15 @@ export default function Game(props: any) {
         setMyHandValue(data.handValue)
         if (data.over) {
             setDisabeActionButton(true)
-            connection.current.emit("action", "Stay")
+            setTimeout(resetMe, 3000)
         }
+    }
+
+    const resetMe = () => {
+        connection.current.emit("action", "Tentative")
+        setMyHand([])
+        setMyHandValue(0)
+        setBet(0)
     }
 
     const increaseBet = (value: number) => {

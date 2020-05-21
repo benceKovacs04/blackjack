@@ -5,4 +5,5 @@ export default interface IGameState {
     getDealerHand(): { cards: string[], handValue: number }
     resetGameState(): void
     placeBet(amount: number): void
+    getBet(): number
 }

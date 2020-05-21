@@ -90,15 +90,15 @@ export class Game {
                 const state = this.gameState.getPlayerHand()
                 if (state.handValue > 21) {
                     state.over = true
+                    this.activePlayer.setAvailableCurrency(this.gameState.getBet() * -1)
                 }
-                console.log(state)
                 this.activePlayer.sendGameState(state)
                 this.usedCards++;
                 break;
             case Action.Stay:
                 break;
             case Action.Tentative:
-                break;
+                this.nextPlayer()
         }
     }
 

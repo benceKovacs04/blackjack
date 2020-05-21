@@ -56,4 +56,8 @@ export default class GameState implements IGameState {
         this.bet = amount
     }
 
+    getBet(): number {
+        return this.bet
+    }
+
 }
