@@ -18,10 +18,11 @@ describe("GameState", () => {
 
         let gameState: IGameState
 
-        beforeEach(() => {
-            gameState = new GameState()
-        })
         describe("addPlayerToState", async () => {
+
+            beforeEach(() => {
+                gameState = new GameState()
+            })
             it("should add player 'TEST' to player list", async () => {
                 gameState.addPlayerToState("TEST")
                 const state = gameState.getGameState()
@@ -43,6 +44,24 @@ describe("GameState", () => {
                 const result = gameState.addPlayerToState("TEST_4")
                 expect(result).toEqual(false)
 
+            })
+        })
+
+        describe("removePlayerFromState", async () => {
+            beforeEach(() => {
+                gameState = new GameState()
+                gameState.addPlayerToState("TEST")
+            })
+
+            it("should remove TEST player from state", async () => {
+                gameState.removePlayerFromState("TEST")
+                expect(gameState.getGameState().players.length).toEqual(0)
+            })
+
+            it("should remove TEST player from state, first element of player array should be TEST_2", async () => {
+                gameState.addPlayerToState("TEST_2")
+                gameState.removePlayerFromState("TEST")
+                expect(gameState.getGameState().players[0].playerName).toEqual("TEST_2")
             })
         })
 

@@ -30,11 +30,11 @@ export class Game {
     }
 
     getPlayerNum(): number {
-        return this.players.length
+        return this.players.length + this.waitingRoom.length
     }
 
     addPlayer(player: IPlayer): boolean {
-        if (this.players.length <= 3) {
+        if (this.players.length + this.waitingRoom.length < 3) {
             player.actionHandlers = this.actionHandlers
             player.initEvents()
             this.waitingRoom.push(player)
@@ -49,6 +49,7 @@ export class Game {
 
     removePlayer(player: IPlayer): void {
         this.players.splice(this.players.indexOf(player), 1)
+        this.waitingRoom.splice(this.waitingRoom.indexOf(player), 1)
         this.gameState.removePlayerFromState(player.username)
         if (this.players.length === 0) {
             this.setPhase(Phase.EmptyRoom)
@@ -69,16 +70,16 @@ export class Game {
         this.executePhase(phase)
     }
 
-    addPlayersFromWaitingRoom() {
+    private addPlayersFromWaitingRoom() {
         this.waitingRoom.forEach(p => this.players.push(p))
         this.waitingRoom = []
     }
 
-    handleBetting() {
+    private handleBetting() {
         this.players.forEach(p => p.askForBet())
     }
 
-    handleInitialHand() {
+    private handleInitialHand() {
         const dealOneCard = () => {
             this.players.forEach(p => {
                 const card = this.shoe.getCard()
@@ -169,6 +170,10 @@ export class Game {
                 this.nextPlayer()
         }
     }*/
+
+    private handlePlayerAction(action: Action) {
+
+    }
 
     private actionHandlers = {
         bet: this.placeBet.bind(this),

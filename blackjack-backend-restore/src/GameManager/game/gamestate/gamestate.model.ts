@@ -84,7 +84,7 @@ export default class GameState implements IGameState {
     }
 
     removePlayerFromState(name: string) {
-        this.players.filter(p => p.playerName !== name)
+        this.players = this.players.filter(p => p.playerName !== name)
     }
 
 
