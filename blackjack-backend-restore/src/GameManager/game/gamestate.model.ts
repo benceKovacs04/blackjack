@@ -24,9 +24,6 @@ export default class GameState implements IGameState {
         const valueToAdd = this.calculateValueToAdd(cardValue, this.playerHandValue, this.playerHand)
         this.playerHand.push({ card: cardName, value: valueToAdd })
         this.playerHandValue = this.playerHand.map(c => c.value).reduce((a, b) => a + b, 0)
-
-
-
     }
 
     addCardToDealer(cardName: string, cardValue: number): void {
@@ -35,14 +32,10 @@ export default class GameState implements IGameState {
         this.dealerHandValue = this.dealerHand.map(c => c.value).reduce((a, b) => a + b, 0)
     }
 
-    getPlayerHand(): { cards: string[]; handValue: number; over: boolean } {
-        const cardArray = this.playerHand.map(c => c.card)
-        return { cards: cardArray, handValue: this.playerHandValue, over: false }
-    }
-
-    getDealerHand(): { cards: string[]; handValue: number; } {
-        const cardArray = this.dealerHand.map(c => c.card)
-        return { cards: cardArray, handValue: this.dealerHandValue }
+    getGameState(): { playerHand: string[]; playerHandValue: number; dealerHand: string[]; dealerHandValue: number; over: boolean } {
+        const playerCards = this.playerHand.map(c => c.card)
+        const dealerCards = this.dealerHand.map(c => c.card)
+        return { playerHand: playerCards, playerHandValue: this.playerHandValue, dealerHand: dealerCards, dealerHandValue: this.dealerHandValue, over: false }
     }
 
     resetGameState(): void {

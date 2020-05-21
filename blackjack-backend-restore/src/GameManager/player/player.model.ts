@@ -26,7 +26,7 @@ export default class Player implements IPlayer {
         this.setTurn();
     }
 
-    sendGameState(gameState: { cards: string[]; handValue: number; over: boolean }) {
+    sendGameState(gameState: { playerHand: string[], playerHandValue: number, dealerHand: string[], dealerHandValue: number, over: boolean }) {
         this.socket.emit("game-state", gameState)
     }
 

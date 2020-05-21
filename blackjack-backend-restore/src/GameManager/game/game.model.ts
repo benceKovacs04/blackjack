@@ -76,15 +76,15 @@ export class Game {
         const dealerCard = this.shoe.getCard()
         this.gameState.addCardToDealer(dealerCard, this.shoe.getCardValue(dealerCard))
 
-        this.activePlayer.sendGameState(this.gameState.getPlayerHand())
+        this.activePlayer.sendGameState(this.gameState.getGameState())
         this.usedCards += 3;
     }
 
     handleHit() {
         const card = this.shoe.getCard()
         this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
-        const state = this.gameState.getPlayerHand()
-        if (state.handValue > 21) {
+        const state = this.gameState.getGameState()
+        if (state.playerHandValue > 21) {
             state.over = true
             this.activePlayer.setAvailableCurrency(this.gameState.getBet() * -1)
         }

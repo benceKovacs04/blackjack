@@ -46,9 +46,9 @@ export default function Game(props: any) {
 
     }
 
-    const setGameState = (data: { cards: string[], handValue: number, over: boolean }) => {
-        setMyHand(data.cards)
-        setMyHandValue(data.handValue)
+    const setGameState = (data: { playerHand: string[], playerHandValue: number, dealerHand: string[], dealerHandValue: number, over: boolean }) => {
+        setMyHand(data.playerHand)
+        setMyHandValue(data.playerHandValue)
         if (data.over) {
             setDisabeActionButton(true)
             setTimeout(resetMe, 3000)
