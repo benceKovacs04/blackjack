@@ -6,6 +6,7 @@ export default class GameState implements IGameState {
     private playerHandValue: number = 0
     private dealerHand: string[] = []
     private dealerHandValue: number = 0
+    private bet: number = 0;
 
     private calculateValueToAdd(cardValue: number, handValue: number, hand: string[]) {
         let valueToAdd = cardValue;
@@ -24,17 +25,21 @@ export default class GameState implements IGameState {
         this.playerHandValue += valueToAdd
 
     }
+
     addCardToDealer(cardName: string, cardValue: number): void {
         const valueToAdd = this.calculateValueToAdd(cardValue, this.dealerHandValue, this.dealerHand)
         this.dealerHand.push(cardName)
         this.dealerHandValue += valueToAdd
     }
+
     getPlayerHand(): { cards: string[]; handValue: number; } {
         return { cards: this.playerHand, handValue: this.playerHandValue }
     }
+
     getDealerHand(): { cards: string[]; handValue: number; } {
         return { cards: this.dealerHand, handValue: this.dealerHandValue }
     }
+
     resetGameState(): void {
         this.playerHand = []
         this.playerHandValue = 0
@@ -42,6 +47,8 @@ export default class GameState implements IGameState {
         this.dealerHandValue = 0
     }
 
-
+    placeBet(amount: number): void {
+        this.bet = amount
+    }
 
 }

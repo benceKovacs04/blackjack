@@ -31,7 +31,6 @@ export default function Game(props: any) {
     const toggleMyTurn = (availableCurr: number) => {
         setMyTurn(myTurn => !myTurn)
         setAvailableCurrency(availableCurr)
-        connection.current.emit("action", "Deal")
     }
 
     const sitPlayerIn = () => {
@@ -51,7 +50,16 @@ export default function Game(props: any) {
     }
 
     const increaseBet = (value: number) => {
-        setBet(bet => bet += value)
+        if (value + bet <= availableCurrency) {
+            setBet(bet => bet += value)
+        }
+    }
+
+    const placeBet = () => {
+        if (bet > 0 && bet <= availableCurrency) {
+            connection.current.emit("place-bet", bet)
+            setAvailableCurrency(availableCurrency => availableCurrency - bet)
+        }
     }
 
     const hit = () => {
@@ -95,7 +103,7 @@ export default function Game(props: any) {
                                 </div> :
                                 <div className={classes.Bet}>
                                     <div className={classes.Buttons}>
-                                        <button>Bet</button>
+                                        <button onClick={placeBet}>Bet</button>
                                         <button onClick={() => increaseBet(1)}>1$</button>
                                         <button onClick={() => increaseBet(10)}>10$</button>
                                         <button onClick={() => increaseBet(50)}>50$</button>

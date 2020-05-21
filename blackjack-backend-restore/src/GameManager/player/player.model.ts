@@ -15,6 +15,7 @@ export default class Player implements IPlayer {
 
     initEvents(): void {
         this.socket.on("action", (resp) => { this.actionHandlers.action(Action[resp]) })
+        this.socket.on("place-bet", this.actionHandlers.bet)
     }
 
     setTurn(): void {

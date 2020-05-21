@@ -66,7 +66,8 @@ export class Game {
         this.activePlayer.setTurn()
     }
     placeBet(amount: number) {
-
+        this.gameState.placeBet(amount)
+        this.handlePlayerAction(Action.Deal)
     }
 
     handlePlayerAction(action: Action) {
