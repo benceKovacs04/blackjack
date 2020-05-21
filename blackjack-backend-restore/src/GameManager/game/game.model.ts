@@ -6,9 +6,10 @@ import GameState from "./gamestate/gamestate.model"
 
 export class Game {
 
-    constructor(name: string, shoe: IShoe) {
+    constructor(name: string, shoe: IShoe, gameState: IGameState) {
         this.name = name;
         this.shoe = shoe
+        this.gameState = gameState
         this.phase = Phase.EmptyRoom
     }
 
@@ -21,7 +22,7 @@ export class Game {
     private shoe: IShoe
     private usedCards: number = 0;
 
-    private gameState: IGameState = new GameState();
+    private gameState: IGameState;
 
     private phase: Phase
 
@@ -39,8 +40,8 @@ export class Game {
             player.initEvents()
             this.waitingRoom.push(player)
             this.gameState.addPlayerToState(player.username)
-            if (this.players.length == 1) {
-                this.phase = Phase.Betting
+            if (this.players.length === 0 && this.waitingRoom.length === 1) {
+                this.setPhase(Phase.Betting)
             }
             return true;
         }

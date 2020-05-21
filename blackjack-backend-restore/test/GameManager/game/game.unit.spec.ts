@@ -4,7 +4,8 @@ import Shoe from "../../../src/GameManager/deck/shoe"
 import IPlayer from "../../../src/GameManager/player/IPlayer"
 import PlayerState from "../../../src/GameManager/game/gamestate/playerState.model"
 import { Action } from "../../../src/GameManager/player/player.model"
-import { TableForeignKey } from "typeorm"
+import IGameState from "../../../src/GameManager/game/gamestate/IGamestate"
+import GameState from "src/GameManager/game/gamestate/gamestate.model"
 
 
 class PlayerMock implements IPlayer {
@@ -34,9 +35,33 @@ class PlayerMock implements IPlayer {
     askForBet(): void {
         return
     }
+}
 
-
-
+class MockGameState implements IGameState {
+    addPlayerToState(name: string): boolean {
+        return true;
+    }
+    removePlayerFromState(name: string): void {
+        return
+    }
+    addCardToPlayer(card: string, value: number, playerName: string): void {
+        return
+    }
+    addCardToDealer(card: string, value: number): void {
+        return
+    }
+    resetState(): void {
+        return
+    }
+    getGameState(): { players: PlayerState[]; dealer: { dealerHand: { card: string; value: number }[]; dealerHandValue: number } } {
+        return
+    }
+    placeBet(playerName: string, amount: number): void {
+        return
+    }
+    getNrOfBets(): number {
+        return
+    }
 
 }
 
@@ -44,10 +69,11 @@ describe("Game", () => {
 
     let game: Game
     let player: IPlayer;
+    let gameState: IGameState = new GameState()
 
     beforeEach(() => {
         let shoe: IShoe = new Shoe(6)
-        game = new Game("test_game", shoe)
+        game = new Game("test_game", shoe, gameState)
         player = new PlayerMock()
     })
 
@@ -88,6 +114,17 @@ describe("Game", () => {
             game.removePlayer(player)
             expect(game.getPlayerNum()).toEqual(0)
         })
+    })
 
+    describe('handleBetting', async () => {
+        beforeEach(() => {
+
+        })
+
+        it("on adding first player, game should start betting phase, should call askForBet on player", async () => {
+            player.askForBet = jest.fn()
+            game.addPlayer(player)
+            expect(player.askForBet).toHaveBeenCalled()
+        })
     })
 })
