@@ -168,12 +168,12 @@ export class Game {
             case Action.Tentative:
                 this.nextPlayer()
         }
-    }
+    }*/
 
     private actionHandlers = {
         bet: this.placeBet.bind(this),
         action: this.handlePlayerAction.bind(this)
-    }*/
+    }
 }
 
 //---- end of player action handlers ----

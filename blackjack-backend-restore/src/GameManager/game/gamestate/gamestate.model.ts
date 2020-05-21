@@ -73,10 +73,14 @@ export default class GameState implements IGameState {
         return valueToAdd
     }
 
-    addPlayerToState(name: string) {
-        const playerState = new PlayerState()
-        playerState.playerName = name
-        this.players.push(playerState)
+    addPlayerToState(name: string): boolean {
+        if (this.players.length < 3) {
+            const playerState = new PlayerState()
+            playerState.playerName = name
+            this.players.push(playerState)
+            return true
+        }
+        return false
     }
 
     removePlayerFromState(name: string) {

@@ -1,14 +1,9 @@
-import IGameState from "../../../src/GameManager/game/IGamestate"
-import GameState from "../../../src/GameManager/game/gamestate.model";
+import IGameState from "../../../src/GameManager/game/gamestate/IGamestate";
+import GameState from "../../../src/GameManager/game/gamestate/gamestate.model";
 
 
 describe("GameState", () => {
 
-    let gameState: IGameState;
-
-    beforeEach(() => {
-        gameState = new GameState()
-    })
 
     // cards are represented as a string of length 2: 
     // D5 -> diamond 5
@@ -17,20 +12,71 @@ describe("GameState", () => {
     // XK -> random suite King
     //
     // needed for the controller to find valid card image
+
+
     describe("getGameState", () => {
-        describe('addCardToPlayer', () => {
-            it('should return object player hand value of 10', async () => {
-                gameState.addCardToPlayer("TEST", 10)
+
+        let gameState: IGameState
+
+        beforeEach(() => {
+            gameState = new GameState()
+        })
+        describe("addPlayerToState", async () => {
+            it("should add player 'TEST' to player list", async () => {
+                gameState.addPlayerToState("TEST")
                 const state = gameState.getGameState()
-                expect(state.playerHandValue).toBe(10)
+                expect(state.players[0].playerName).toEqual("TEST")
             })
 
-            it('should return object player hand value of 10 with one card: "TEST"', async () => {
-                gameState.addCardToPlayer("TEST", 10)
-                const result = { playerHand: ["TEST"], playerHandValue: 10, dealerHand: [], dealerHandValue: 0, over: false }
+            it("should add 3 players, player list length should be 3", async () => {
+                gameState.addPlayerToState("TEST_1")
+                gameState.addPlayerToState("TEST_2")
+                gameState.addPlayerToState("TEST_3")
                 const state = gameState.getGameState()
-                expect(state).toEqual(result)
+                expect(state.players.length).toEqual(3)
             })
+
+            it("should return false on tryng to add a fourth player", async () => {
+                gameState.addPlayerToState("TEST_1")
+                gameState.addPlayerToState("TEST_2")
+                gameState.addPlayerToState("TEST_3")
+                const result = gameState.addPlayerToState("TEST_4")
+                expect(result).toEqual(false)
+
+            })
+        })
+
+        describe("addCardToPlayer", async () => {
+            beforeEach(() => {
+                gameState = new GameState()
+                gameState.addPlayerToState("TEST_PLAYER_ONE")
+                gameState.addPlayerToState("TEST_PLAYER_TWO")
+                gameState.addPlayerToState("TEST_PLAYER_THREE")
+            })
+
+            it("should add card of value 10 to TEST_PLAYER_ONE, TEST_PLAYER_ONE should have a hand value of 10", async () => {
+                gameState.addCardToPlayer("X10", 10, "TEST_PLAYER_ONE")
+                const state = gameState.getGameState()
+                expect(state.players[0].playerHandValue).toEqual(10)
+            })
+
+            it("should return 'TEST' named card after adding it to TEST_PLAYER_ONE", async () => {
+                gameState.addCardToPlayer("TEST", 0, "TEST_PLAYER_ONE")
+                const state = gameState.getGameState()
+                expect(state.players[0].playerHand[0].card).toEqual("TEST")
+            })
+
+            it("ace should add 11 to TEST_PLAYER_ONE instead of 1 if hand value is 10 or under", async () => {
+                gameState.addCardToPlayer("XA", 1, "TEST_PLAYER_ONE")
+                const state = gameState.getGameState()
+                expect(state.players[0].playerHandValue).toEqual(11)
+            })
+        })
+        /*
+    
+        
+
+        
 
             it('should add 11 to player hand instead of 1 if handvalue is 10 or under', async () => {
                 gameState.addCardToPlayer("TEST", 1)
@@ -121,7 +167,7 @@ describe("GameState", () => {
                 const state = gameState.getGameState()
                 expect(state.dealerHandValue).toEqual(25)
             })
-        })
+        })*/
 
     })
 
