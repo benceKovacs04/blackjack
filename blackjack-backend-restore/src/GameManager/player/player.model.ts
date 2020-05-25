@@ -19,8 +19,8 @@ export default class Player implements IPlayer {
         this.socket.on("place-bet", this.actionHandlers.bet)
     }
 
-    askForBet(): void {
-        this.socket.emit("bet-phase")
+    setBettingPhaseOnPlayer(remainingTime: number): void {
+        this.socket.emit("bet-phase", remainingTime)
     }
 
     setTurn(): void {

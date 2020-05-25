@@ -5,7 +5,7 @@ import IPlayer from "../../../src/GameManager/player/IPlayer"
 import PlayerState from "../../../src/GameManager/game/gamestate/playerState.model"
 import { Action } from "../../../src/GameManager/player/player.model"
 import IGameState from "../../../src/GameManager/game/gamestate/IGamestate"
-import GameState from "src/GameManager/game/gamestate/gamestate.model"
+import GameState from "../../../src/GameManager/game/gamestate/gamestate.model"
 
 
 class PlayerMock implements IPlayer {
@@ -32,7 +32,8 @@ class PlayerMock implements IPlayer {
         return
     }
     actionHandlers: { bet: (amount: number) => void; action: (action: Action) => void } = null
-    askForBet(): void {
+
+    setBettingPhaseOnPlayer(remainingTime: number): void {
         return
     }
 }
@@ -122,9 +123,9 @@ describe("Game", () => {
         })
 
         it("on adding first player, game should start betting phase, should call askForBet on player", async () => {
-            player.askForBet = jest.fn()
+            player.setBettingPhaseOnPlayer = jest.fn()
             game.addPlayer(player)
-            expect(player.askForBet).toHaveBeenCalled()
+            expect(player.setBettingPhaseOnPlayer).toHaveBeenCalled()
         })
     })
 })

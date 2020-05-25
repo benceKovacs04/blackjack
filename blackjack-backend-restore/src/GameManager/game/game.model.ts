@@ -1,5 +1,5 @@
 import IPlayer from "../player/IPlayer";
-import { Action } from "../player/player.model";
+import Player, { Action } from "../player/player.model";
 import IShoe from "../deck/IShoe";
 import IGameState from "./gamestate/IGamestate";
 import GameState from "./gamestate/gamestate.model"
@@ -17,14 +17,17 @@ export class Game {
     private players: IPlayer[] = new Array<IPlayer>()
     private waitingRoom: IPlayer[] = []
 
+    private gameState: IGameState;
+
     private activePlayer: IPlayer;
 
     private shoe: IShoe
     private usedCards: number = 0;
 
-    private gameState: IGameState;
-
     private phase: Phase
+
+    private timer
+    private bettingCounter: number
 
     getName(): string {
         return this.name;
@@ -38,7 +41,12 @@ export class Game {
         if (this.players.length + this.waitingRoom.length < 3) {
             player.actionHandlers = this.actionHandlers
             player.initEvents()
-            this.waitingRoom.push(player)
+            if (this.phase === Phase.Betting && this.bettingCounter > 2) {
+                this.players.push(player)
+                player.setBettingPhaseOnPlayer(this.bettingCounter)
+            } else {
+                this.waitingRoom.push(player)
+            }
             this.gameState.addPlayerToState(player.username)
             if (this.players.length === 0 && this.waitingRoom.length === 1) {
                 this.setPhase(Phase.Betting)
@@ -76,8 +84,19 @@ export class Game {
         this.waitingRoom = []
     }
 
+    private startBettingTimer() {
+        this.bettingCounter = 10
+        this.timer = setInterval(() => {
+            this.bettingCounter--
+            if (this.bettingCounter === 0) {
+                clearInterval(this.timer)
+            }
+        })
+    }
+
     private handleBetting() {
-        this.players.forEach(p => p.askForBet())
+        this.players.forEach(p => p.setBettingPhaseOnPlayer(10))
+        this.startBettingTimer()
     }
 
     private handleInitialHand() {

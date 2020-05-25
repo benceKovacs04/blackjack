@@ -10,5 +10,5 @@ export default interface IPlayer {
     getAvailableCurrency(): number
     setAvailableCurrency(diff: number): void
     actionHandlers: { bet: (amount: number) => void, action: (action: Action) => void }
-    askForBet(): void
+    setBettingPhaseOnPlayer(remainingTime: number): void
 }
