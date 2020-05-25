@@ -90,6 +90,29 @@ describe("GameState", () => {
                 const state = gameState.getGameState()
                 expect(state.players[0].playerHandValue).toEqual(11)
             })
+
+            describe("playceBet", async () => {
+                beforeEach(() => {
+                    gameState = new GameState()
+                })
+
+                it("should place bet to player 'TEST' (10)", async () => {
+                    gameState.addPlayerToState("TEST")
+                    gameState.placeBet("TEST", 10)
+                    const playerState = gameState.getGameState().players.find(p => p.playerName === "TEST")
+                    expect(playerState.bet).toEqual(10)
+                })
+
+                it("should place bet to player 'TEST_2' (10)", async () => {
+                    gameState.addPlayerToState("TEST")
+                    gameState.addPlayerToState("TEST_2")
+                    gameState.placeBet("TEST_2", 10)
+                    const test = gameState.getGameState().players.find(p => p.playerName === "TEST")
+                    const test_2 = gameState.getGameState().players.find(p => p.playerName === "TEST_2")
+                    expect(test.bet).toBeUndefined()
+                    expect(test_2.bet).toEqual(10)
+                })
+            })
         })
         /*
     

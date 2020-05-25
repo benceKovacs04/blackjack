@@ -125,7 +125,8 @@ export class Game {
         this.activePlayer.endTurn()
         const activeIndex = this.players.indexOf(this.activePlayer)
         if (activeIndex + 1 === this.players.length) {
-            this.setPhase(Phase.DealHands)
+            this.setPhase(Phase.DealDealer)
+            clearTimeout(this.timer)
             return
         }
 
@@ -146,6 +147,9 @@ export class Game {
                 break;
             case Phase.PlayerDecisions:
                 this.initPlayerDecisionPhase()
+                break;
+            case Phase.DealDealer:
+
                 break;
             case Phase.EmptyRoom:
                 clearInterval(this.timer)

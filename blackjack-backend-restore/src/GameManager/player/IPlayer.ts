@@ -9,6 +9,6 @@ export default interface IPlayer {
     username: string
     getAvailableCurrency(): number
     setAvailableCurrency(diff: number): void
-    actionHandlers: { bet: (amount: number) => void, action: (action: Action) => void }
+    actionHandlers: { bet: (amount: number, username: string) => void, action: (action: Action) => void }
     setBettingPhaseOnPlayer(remainingTime: number): void
 }

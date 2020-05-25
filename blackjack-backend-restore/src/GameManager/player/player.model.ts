@@ -44,7 +44,7 @@ export default class Player implements IPlayer {
         this.availableCurrency += diff
     }
 
-    actionHandlers: { bet: (amount: number) => void; action: (action: Action) => void; };
+    actionHandlers: { bet: (amount: number, username: string) => void; action: (action: Action) => void; };
 }
 
 export enum Action {
