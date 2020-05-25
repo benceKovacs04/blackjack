@@ -90,6 +90,7 @@ export class Game {
             this.bettingCounter -= 1
             if (this.bettingCounter === 0) {
                 clearInterval(this.timer)
+                this.setPhase(Phase.DealHands)
             }
         }, 1000)
     }
@@ -119,7 +120,7 @@ export class Game {
             this.players.forEach(p => {
                 p.sendGameState(state)
             })
-        }, 2000)
+        }, 1000)
     }
 
     private executePhase(phase: Phase) {
@@ -129,7 +130,8 @@ export class Game {
                 this.handleBetting()
                 break;
             case Phase.DealHands:
-                this.handleInitialHand()
+                this.players.forEach(p => p.setBettingPhaseOnPlayer(0))
+                setTimeout(() => this.handleInitialHand(), 2000)
                 break;
 
         }

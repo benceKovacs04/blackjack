@@ -116,36 +116,68 @@ describe("Game", () => {
             expect(game.getPlayerNum()).toEqual(0)
         })
     })
-
-    describe('handleBetting', async () => {
-        beforeEach(() => {
-
-        })
+    describe('Phase handling', async () => {
 
         jest.useFakeTimers()
 
-        it("on adding first player, game should start betting phase, should call askForBet on player", async () => {
-            player.setBettingPhaseOnPlayer = jest.fn()
-            game.addPlayer(player)
-            expect(player.setBettingPhaseOnPlayer).toHaveBeenCalled()
+        describe('handleBetting', async () => {
+            beforeEach(() => {
+
+            })
+
+
+
+            it("on adding first player, game should start betting phase, should call askForBet on player", async () => {
+                player.setBettingPhaseOnPlayer = jest.fn()
+                game.addPlayer(player)
+                expect(player.setBettingPhaseOnPlayer).toHaveBeenCalled()
+            })
+
+            it("should notify player on betting phase if player joins during the betting phase", () => {
+                const playerTwo = new PlayerMock()
+                playerTwo.setBettingPhaseOnPlayer = jest.fn()
+                game.addPlayer(player);
+                jest.advanceTimersByTime(4000)
+                game.addPlayer(playerTwo)
+                expect(playerTwo.setBettingPhaseOnPlayer).toHaveBeenCalledTimes(1)
+            })
+
+            it("should not notify player on betting phase if player joins during the betting phase, and theres less then 4 seconds left", () => {
+                const playerTwo = new PlayerMock()
+                playerTwo.setBettingPhaseOnPlayer = jest.fn()
+                game.addPlayer(player);
+                jest.advanceTimersByTime(8000)
+                game.addPlayer(playerTwo)
+                expect(playerTwo.setBettingPhaseOnPlayer).not.toHaveBeenCalled()
+            })
         })
 
-        it("should notify player on betting phase if player joins during the betting phase", () => {
-            const playerTwo = new PlayerMock()
-            playerTwo.setBettingPhaseOnPlayer = jest.fn()
-            game.addPlayer(player);
-            jest.advanceTimersByTime(4000)
-            game.addPlayer(playerTwo)
-            expect(playerTwo.setBettingPhaseOnPlayer).toHaveBeenCalledTimes(1)
-        })
+        describe("handleInitialHand", async () => {
 
-        it("should not notify player on betting phase if player joins during the betting phase, and theres less then 4 seconds left", () => {
-            const playerTwo = new PlayerMock()
-            playerTwo.setBettingPhaseOnPlayer = jest.fn()
-            game.addPlayer(player);
-            jest.advanceTimersByTime(8000)
-            game.addPlayer(playerTwo)
-            expect(playerTwo.setBettingPhaseOnPlayer).not.toHaveBeenCalled()
+            it("should notify every player at the end of the betting phase", async () => {
+                const playerTwo = new PlayerMock()
+                player.setBettingPhaseOnPlayer = jest.fn()
+                playerTwo.setBettingPhaseOnPlayer = jest.fn()
+                game.addPlayer(player)
+                game.addPlayer(playerTwo)
+                jest.advanceTimersByTime(10000)
+                expect(player.setBettingPhaseOnPlayer).toHaveBeenCalledWith(0)
+                expect(playerTwo.setBettingPhaseOnPlayer).toHaveBeenCalledWith(0)
+            })
+
+            it("should start dealing cards 2 seconds after betting phase is over", async () => {
+                player.sendGameState = jest.fn()
+                game.addPlayer(player)
+                jest.advanceTimersByTime(12000)
+                expect(player.sendGameState).toHaveBeenCalledTimes(1)
+            })
+
+            it('player should receive two gamestate update on initial hand dealing 3 seconds after bettingphase is over', async () => {
+                player.sendGameState = jest.fn()
+                game.addPlayer(player)
+                jest.advanceTimersByTime(13000)
+                expect(player.sendGameState).toHaveBeenCalledTimes(2)
+            })
         })
     })
 })
