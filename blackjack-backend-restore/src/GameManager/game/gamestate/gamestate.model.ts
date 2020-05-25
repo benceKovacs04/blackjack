@@ -103,7 +103,7 @@ export default class GameState implements IGameState {
 
     placeBet(playerName: string, amount: number) {
         this.players.find(p => p.playerName === playerName).bet = amount
-        this.placedBets++
+        this.placedBets += 1
     }
 
     getNrOfBets(): number {

@@ -2,7 +2,6 @@ import IPlayer from "../player/IPlayer";
 import Player, { Action } from "../player/player.model";
 import IShoe from "../deck/IShoe";
 import IGameState from "./gamestate/IGamestate";
-import GameState from "./gamestate/gamestate.model"
 
 export class Game {
 
@@ -22,12 +21,11 @@ export class Game {
     private activePlayer: IPlayer;
 
     private shoe: IShoe
-    private usedCards: number = 0;
 
     private phase: Phase
 
     private timer
-    private bettingCounter: number
+    private timerCounter: number
 
     getName(): string {
         return this.name;
@@ -41,9 +39,9 @@ export class Game {
         if (this.players.length + this.waitingRoom.length < 3) {
             player.actionHandlers = this.actionHandlers
             player.initEvents()
-            if (this.phase === Phase.Betting && this.bettingCounter > 3) {
+            if (this.phase === Phase.Betting && this.timerCounter > 3) {
                 this.players.push(player)
-                player.setBettingPhaseOnPlayer(this.bettingCounter)
+                player.setBettingPhaseOnPlayer(this.timerCounter)
             } else {
                 this.waitingRoom.push(player)
             }
@@ -65,14 +63,7 @@ export class Game {
         }
     }
 
-    /*nextPlayer() {
-        this.activePlayer.endTurn()
-        const activeIndex = this.players.indexOf(this.activePlayer)
-
-        this.activePlayer = this.players[(activeIndex + 1) % this.players.length]
-
-        this.activePlayer.setTurn()
-    }*/
+    //---- Game phase handlers ----
 
     private setPhase(phase: Phase) {
         this.phase = phase
@@ -84,20 +75,20 @@ export class Game {
         this.waitingRoom = []
     }
 
+    private handleBetting() {
+        this.players.forEach(p => p.setBettingPhaseOnPlayer(10))
+        this.startBettingTimer()
+    }
+
     private startBettingTimer() {
-        this.bettingCounter = 10
+        this.timerCounter = 10
         this.timer = setInterval(() => {
-            this.bettingCounter -= 1
-            if (this.bettingCounter === 0) {
+            this.timerCounter -= 1
+            if (this.timerCounter === 0) {
                 clearInterval(this.timer)
                 this.setPhase(Phase.DealHands)
             }
         }, 1000)
-    }
-
-    private handleBetting() {
-        this.players.forEach(p => p.setBettingPhaseOnPlayer(10))
-        this.startBettingTimer()
     }
 
     private handleInitialHand() {
@@ -121,6 +112,26 @@ export class Game {
                 p.sendGameState(state)
             })
         }, 1000)
+        setTimeout(() => this.setPhase(Phase.PlayerDecisions), 3000)
+    }
+
+    initPlayerDecisionPhase() {
+        this.activePlayer = this.players[0]
+        this.activePlayer.setTurn()
+        this.timer = setTimeout(this.nextPlayer, 10000)
+    }
+
+    nextPlayer() {
+        this.activePlayer.endTurn()
+        const activeIndex = this.players.indexOf(this.activePlayer)
+        if (activeIndex + 1 === this.players.length) {
+            this.setPhase(Phase.DealHands)
+            return
+        }
+
+        this.activePlayer = this.players[activeIndex + 1]
+
+        this.activePlayer.setTurn()
     }
 
     private executePhase(phase: Phase) {
@@ -133,27 +144,22 @@ export class Game {
                 this.players.forEach(p => p.setBettingPhaseOnPlayer(0))
                 setTimeout(() => this.handleInitialHand(), 2000)
                 break;
+            case Phase.PlayerDecisions:
+                this.initPlayerDecisionPhase()
+                break;
+            case Phase.EmptyRoom:
+                clearInterval(this.timer)
+                this.gameState.resetState()
+                this.activePlayer = null;
+
 
         }
     }
 
-
+    //---- End Game phase handlers ----
 
     //---- player action handlers ----
 
-    /*private handleInitialDeal() {  
-        for (let i = 0; i < 2; i++) {
-            const card = this.shoe.getCard()
-            this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
-        }
-
-        this.gameState.addCardToDealer("card_back", 0)
-        const dealerCard = this.shoe.getCard()
-        this.gameState.addCardToDealer(dealerCard, this.shoe.getCardValue(dealerCard))
-
-        this.activePlayer.sendGameState(this.gameState.getGameState())
-        this.usedCards += 3;
-    }*/
 
     /*private handleHit() {
         const card = this.shoe.getCard()
@@ -170,31 +176,16 @@ export class Game {
     private placeBet(amount: number, playerName: string) {
         this.gameState.placeBet(playerName, amount)
         if (this.gameState.getNrOfBets() === this.players.length) {
+            clearInterval(this.timer)
             this.setPhase(Phase.DealHands)
         }
     }
 
-    /*private handlePlayerAction(action: Action) {
-        if ((this.shoe.getShoeSize() * 52) * 0.25 > this.usedCards) {
-            this.shoe.resetShoe()
-        }
-
-        switch (action) {
-            case Action.Deal:
-                this.handleInitialDeal()
-                break;
-            case Action.Hit:
-                this.handleHit()
-                break;
-            case Action.Stay:
-                break;
-            case Action.Tentative:
-                this.nextPlayer()
-        }
-    }*/
-
     private handlePlayerAction(action: Action) {
 
+        switch (action) {
+
+        }
     }
 
     private actionHandlers = {
@@ -208,7 +199,7 @@ export class Game {
 enum Phase {
     Betting,
     DealHands,
-    PlayerActions,
+    PlayerDecisions,
     DealDealer,
     Evaulate,
     EmptyRoom
