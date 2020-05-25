@@ -122,10 +122,30 @@ describe("Game", () => {
 
         })
 
+        jest.useFakeTimers()
+
         it("on adding first player, game should start betting phase, should call askForBet on player", async () => {
             player.setBettingPhaseOnPlayer = jest.fn()
             game.addPlayer(player)
             expect(player.setBettingPhaseOnPlayer).toHaveBeenCalled()
+        })
+
+        it("should notify player on betting phase if player joins during the betting phase", () => {
+            const playerTwo = new PlayerMock()
+            playerTwo.setBettingPhaseOnPlayer = jest.fn()
+            game.addPlayer(player);
+            jest.advanceTimersByTime(4000)
+            game.addPlayer(playerTwo)
+            expect(playerTwo.setBettingPhaseOnPlayer).toHaveBeenCalledTimes(1)
+        })
+
+        it("should not notify player on betting phase if player joins during the betting phase, and theres less then 4 seconds left", () => {
+            const playerTwo = new PlayerMock()
+            playerTwo.setBettingPhaseOnPlayer = jest.fn()
+            game.addPlayer(player);
+            jest.advanceTimersByTime(8000)
+            game.addPlayer(playerTwo)
+            expect(playerTwo.setBettingPhaseOnPlayer).not.toHaveBeenCalled()
         })
     })
 })

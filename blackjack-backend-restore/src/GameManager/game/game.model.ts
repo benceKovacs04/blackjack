@@ -41,7 +41,7 @@ export class Game {
         if (this.players.length + this.waitingRoom.length < 3) {
             player.actionHandlers = this.actionHandlers
             player.initEvents()
-            if (this.phase === Phase.Betting && this.bettingCounter > 2) {
+            if (this.phase === Phase.Betting && this.bettingCounter > 3) {
                 this.players.push(player)
                 player.setBettingPhaseOnPlayer(this.bettingCounter)
             } else {
@@ -87,11 +87,11 @@ export class Game {
     private startBettingTimer() {
         this.bettingCounter = 10
         this.timer = setInterval(() => {
-            this.bettingCounter--
+            this.bettingCounter -= 1
             if (this.bettingCounter === 0) {
                 clearInterval(this.timer)
             }
-        })
+        }, 1000)
     }
 
     private handleBetting() {
