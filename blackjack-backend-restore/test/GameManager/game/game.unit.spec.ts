@@ -63,7 +63,6 @@ class MockShoe implements IShoe {
     getShoeSize(): number {
         return
     }
-
 }
 
 describe("Game", () => {
@@ -73,9 +72,10 @@ describe("Game", () => {
     let game: Game
     let player: PlayerMock;
     let gameState: IGameState
+    let shoe: IShoe
 
     beforeEach(() => {
-        let shoe: IShoe = new Shoe(6)
+        shoe = new Shoe(6)
         gameState = new GameState()
         game = new Game("test_game", shoe, gameState)
         player = new PlayerMock()
@@ -259,6 +259,22 @@ describe("Game", () => {
                 expect(playerTwo.setTurn).toHaveBeenCalled()
             })
 
+        })
+
+        describe("DealDealer", () => {
+
+            it("dealer should have 2 cards and none of them should be 'back_card'", () => {
+                game.addPlayer(player)
+                player.MOCK_BET()
+                jest.advanceTimersByTime(6000);
+                player.MOCK_STAY()
+
+                while (gameState.getGameState().dealer.dealerHandValue < 17) {
+                    jest.advanceTimersByTime(1000)
+                }
+
+                expect(gameState.getGameState().dealer.dealerHandValue).toBeGreaterThan(17)
+            })
         })
     })
 })

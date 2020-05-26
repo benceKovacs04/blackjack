@@ -69,6 +69,8 @@ export class Game {
         const activeIndex = this.players.indexOf(this.activePlayer)
         if (activeIndex + 1 === this.players.length) {
             this.setPhase(Phase.DealDealer)
+            this.activePlayer.endTurn()
+            this.activePlayer = null;
             return
         }
 
@@ -135,6 +137,20 @@ export class Game {
         this.timer = setTimeout(() => this.nextPlayer(), 10000)
     }
 
+    handleDealerHand() {
+        this.timer = setInterval(() => {
+            let card = this.shoe.getCard()
+            this.gameState.addCardToDealer(card, this.shoe.getCardValue(card))
+            let state = this.gameState.getGameState()
+            this.players.forEach(p => p.sendGameState(state))
+
+            if (state.dealer.dealerHandValue > 16) {
+                clearInterval(this.timer)
+                this.setPhase(Phase.Evaulate)
+            }
+        }, 1000)
+    }
+
 
     private executePhase(phase: Phase) {
         switch (phase) {
@@ -150,7 +166,7 @@ export class Game {
                 this.initPlayerDecisionPhase()
                 break;
             case Phase.DealDealer:
-
+                this.handleDealerHand()
                 break;
             case Phase.EmptyRoom:
                 clearInterval(this.timer)
