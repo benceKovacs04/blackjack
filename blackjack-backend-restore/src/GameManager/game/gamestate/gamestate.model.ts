@@ -60,7 +60,7 @@ export default class GameState implements IGameState {
     }
 
     getGameState(): { players: PlayerState[]; dealer: { dealerHand: { card: string; value: number; }[]; dealerHandValue: number; }; } {
-        return { players: this.players, dealer: this.dealer }
+        return { players: [...this.players], dealer: { dealerHand: [...this.dealer.dealerHand], dealerHandValue: this.dealer.dealerHandValue } }
     }
 
     resetState() {

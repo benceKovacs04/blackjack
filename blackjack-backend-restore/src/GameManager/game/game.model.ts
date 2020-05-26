@@ -1,8 +1,7 @@
 import IPlayer from "../player/IPlayer";
-import Player, { Action } from "../player/player.model";
+import { Action } from "../player/player.model";
 import IShoe from "../deck/IShoe";
 import IGameState from "./gamestate/IGamestate";
-import { Brackets } from "typeorm";
 
 export class Game {
 
@@ -131,13 +130,13 @@ export class Game {
         setTimeout(() => this.setPhase(Phase.PlayerDecisions), 3000)
     }
 
-    initPlayerDecisionPhase() {
+    private initPlayerDecisionPhase() {
         this.activePlayer = this.players[0]
         this.activePlayer.setTurn()
         this.timer = setTimeout(() => this.nextPlayer(), 10000)
     }
 
-    handleDealerHand() {
+    private handleDealerHand() {
         this.timer = setInterval(() => {
             let card = this.shoe.getCard()
             this.gameState.addCardToDealer(card, this.shoe.getCardValue(card))
@@ -151,6 +150,29 @@ export class Game {
         }, 1000)
     }
 
+    private handleEvaulate() {
+        const state = this.gameState.getGameState()
+        this.players.forEach(p => {
+            let playerState = state.players.find(ps => ps.playerName === p.username)
+            if (state.dealer.dealerHandValue > 21) {
+                if (playerState.playerHandValue <= 21) {
+                    p.setAvailableCurrency(playerState.bet * 1.5)
+                    //p.notify player
+                }
+            } else {
+                if (playerState.playerHandValue > state.dealer.dealerHandValue && playerState.playerHandValue <= 21) {
+                    p.setAvailableCurrency(playerState.bet * 1.5)
+                    //p.notify player
+                } else if (playerState.playerHandValue === state.dealer.dealerHandValue) {
+                    //p.notify player
+                } else {
+                    p.setAvailableCurrency(playerState.bet * -1)
+                }
+
+            }
+        })
+        setTimeout(() => this.setPhase(Phase.Betting), 2000)
+    }
 
     private executePhase(phase: Phase) {
         switch (phase) {
@@ -167,6 +189,9 @@ export class Game {
                 break;
             case Phase.DealDealer:
                 this.handleDealerHand()
+                break;
+            case Phase.Evaulate:
+                this.handleEvaulate()
                 break;
             case Phase.EmptyRoom:
                 clearInterval(this.timer)

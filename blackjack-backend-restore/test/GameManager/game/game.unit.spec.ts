@@ -11,7 +11,6 @@ import GameState from "../../../src/GameManager/game/gamestate/gamestate.model"
 class PlayerMock implements IPlayer {
     state = []
     username: string
-    asd: Action
 
     initEvents(): void {
         return
@@ -262,13 +261,14 @@ describe("Game", () => {
         })
 
         describe("DealDealer", () => {
-
-            it("dealer should have 2 cards and none of them should be 'back_card'", () => {
+            beforeEach(() => {
                 game.addPlayer(player)
                 player.MOCK_BET()
                 jest.advanceTimersByTime(6000);
                 player.MOCK_STAY()
+            })
 
+            it("dealer should have 2 cards and none of them should be 'back_card'", () => {
                 while (gameState.getGameState().dealer.dealerHandValue < 17) {
                     jest.advanceTimersByTime(1000)
                 }
