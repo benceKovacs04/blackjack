@@ -44,6 +44,26 @@ class PlayerMock implements IPlayer {
     MOCK_STAY() {
         this.actionHandlers.action(Action.Stay, this.username)
     }
+
+    MOCK_HIT() {
+        this.actionHandlers.action(Action.Hit, this.username)
+    }
+}
+
+class MockShoe implements IShoe {
+    getCard(): string {
+        return "TEST"
+    }
+    getCardValue(card: string): number {
+        return 10
+    }
+    resetShoe(): void {
+        return
+    }
+    getShoeSize(): number {
+        return
+    }
+
 }
 
 describe("Game", () => {
@@ -177,9 +197,6 @@ describe("Game", () => {
                 jest.advanceTimersByTime(13000)
                 expect(player.sendGameState).toHaveBeenCalledTimes(2)
             })
-        })
-
-        describe("handlePlayerDecision", () => {
 
             it("should set player as active after the initial hand deal", () => {
                 player.setTurn = jest.fn()
@@ -188,6 +205,10 @@ describe("Game", () => {
                 jest.advanceTimersByTime(30000)
                 expect(player.setTurn).toHaveBeenCalled()
             })
+        })
+
+        describe("handlePlayerDecision", () => {
+
 
             it("should end players turn if palyer is tentative for 10 seconds", () => {
                 let playerTwo = new PlayerMock();
@@ -213,6 +234,28 @@ describe("Game", () => {
                 playerTwo.MOCK_BET();
                 jest.advanceTimersByTime(6000);
                 player.MOCK_STAY()
+                expect(playerTwo.setTurn).toHaveBeenCalled()
+            })
+
+            it("should send a state update on player HIT", () => {
+                game.addPlayer(player);
+                player.MOCK_BET();
+                jest.advanceTimersByTime(6000);
+                expect(player.state.length).toEqual(2)
+                player.MOCK_HIT()
+                expect(player.state.length).toEqual(3)
+            })
+
+            it("should set next player as active if active player busts", () => {
+                game = new Game("test", new MockShoe(), gameState)
+                const playerTwo = new PlayerMock()
+                playerTwo.setTurn = jest.fn()
+                game.addPlayer(player)
+                game.addPlayer(playerTwo)
+                player.MOCK_BET()
+                playerTwo.MOCK_BET()
+                jest.advanceTimersByTime(6000);
+                player.MOCK_HIT()
                 expect(playerTwo.setTurn).toHaveBeenCalled()
             })
 

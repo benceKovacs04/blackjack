@@ -63,6 +63,20 @@ export class Game {
         }
     }
 
+    nextPlayer() {
+        this.activePlayer.endTurn()
+        clearTimeout(this.timer)
+        const activeIndex = this.players.indexOf(this.activePlayer)
+        if (activeIndex + 1 === this.players.length) {
+            this.setPhase(Phase.DealDealer)
+            return
+        }
+
+        this.activePlayer = this.players[activeIndex + 1]
+        this.timer = setTimeout(() => this.nextPlayer(), 10000)
+        this.activePlayer.setTurn()
+    }
+
     //---- Game phase handlers ----
 
     private setPhase(phase: Phase) {
@@ -121,19 +135,6 @@ export class Game {
         this.timer = setTimeout(() => this.nextPlayer(), 10000)
     }
 
-    nextPlayer() {
-        this.activePlayer.endTurn()
-        clearTimeout(this.timer)
-        const activeIndex = this.players.indexOf(this.activePlayer)
-        if (activeIndex + 1 === this.players.length) {
-            this.setPhase(Phase.DealDealer)
-            return
-        }
-
-        this.activePlayer = this.players[activeIndex + 1]
-        this.timer = setTimeout(() => this.nextPlayer(), 10000)
-        this.activePlayer.setTurn()
-    }
 
     private executePhase(phase: Phase) {
         switch (phase) {
@@ -163,26 +164,29 @@ export class Game {
 
     //---- End Game phase handlers ----
 
+
+
     //---- player action handlers ----
-
-
-    /*private handleHit() {
-        const card = this.shoe.getCard()
-        this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card))
-        const state = this.gameState.getGameState()
-        if (state.playerHandValue > 21) {
-            state.over = true
-            this.activePlayer.setAvailableCurrency(this.gameState.getBet() * -1)
-        }
-        this.activePlayer.sendGameState(state)
-        this.usedCards++;
-    }*/
 
     private placeBet(amount: number, playerName: string) {
         this.gameState.placeBet(playerName, amount)
         if (this.gameState.getNrOfBets() === this.players.length) {
             clearInterval(this.timer)
             this.setPhase(Phase.DealHands)
+        }
+    }
+
+    private handleHit() {
+        const card = this.shoe.getCard()
+        this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card), this.activePlayer.username)
+        const state = this.gameState.getGameState()
+        this.players.forEach(p => p.sendGameState(state))
+
+        if (state.players.find(p => p.playerName === this.activePlayer.username).playerHandValue > 21) {
+            this.nextPlayer()
+        } else {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => this.nextPlayer(), 10000)
         }
     }
 
@@ -195,6 +199,7 @@ export class Game {
                 this.nextPlayer()
                 break;
             case Action.Hit:
+                this.handleHit()
                 break;
         }
     }
