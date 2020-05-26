@@ -50,7 +50,4 @@ export default class Player implements IPlayer {
 export enum Action {
     Stay = "Stay",
     Hit = "Hit",
-    Tentative = "Tentative",
-    Deal = "Deal",
-    Bet = "Bet"
 }

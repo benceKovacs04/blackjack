@@ -2,6 +2,7 @@ import IPlayer from "../player/IPlayer";
 import Player, { Action } from "../player/player.model";
 import IShoe from "../deck/IShoe";
 import IGameState from "./gamestate/IGamestate";
+import { Brackets } from "typeorm";
 
 export class Game {
 
@@ -9,7 +10,6 @@ export class Game {
         this.name = name;
         this.shoe = shoe
         this.gameState = gameState
-        this.phase = Phase.EmptyRoom
     }
 
     private name: string;
@@ -118,20 +118,20 @@ export class Game {
     initPlayerDecisionPhase() {
         this.activePlayer = this.players[0]
         this.activePlayer.setTurn()
-        this.timer = setTimeout(this.nextPlayer, 10000)
+        this.timer = setTimeout(() => this.nextPlayer(), 10000)
     }
 
     nextPlayer() {
         this.activePlayer.endTurn()
+        clearTimeout(this.timer)
         const activeIndex = this.players.indexOf(this.activePlayer)
         if (activeIndex + 1 === this.players.length) {
             this.setPhase(Phase.DealDealer)
-            clearTimeout(this.timer)
             return
         }
 
         this.activePlayer = this.players[activeIndex + 1]
-
+        this.timer = setTimeout(() => this.nextPlayer(), 10000)
         this.activePlayer.setTurn()
     }
 
@@ -153,6 +153,7 @@ export class Game {
                 break;
             case Phase.EmptyRoom:
                 clearInterval(this.timer)
+                clearTimeout(this.timer)
                 this.gameState.resetState()
                 this.activePlayer = null;
 
@@ -188,7 +189,11 @@ export class Game {
     private handlePlayerAction(action: Action) {
 
         switch (action) {
-
+            case Action.Stay:
+                this.nextPlayer()
+                break;
+            case Action.Hit:
+                break;
         }
     }
 
