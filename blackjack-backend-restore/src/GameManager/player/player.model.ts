@@ -15,7 +15,7 @@ export default class Player implements IPlayer {
     private availableCurrency: number = 2500;
 
     initEvents(): void {
-        this.socket.on("action", (resp) => { this.actionHandlers.action(Action[resp]) })
+        this.socket.on("action", (resp) => { this.actionHandlers.action(Action[resp], this.username) })
         this.socket.on("place-bet", this.actionHandlers.bet)
     }
 
@@ -44,7 +44,7 @@ export default class Player implements IPlayer {
         this.availableCurrency += diff
     }
 
-    actionHandlers: { bet: (amount: number, username: string) => void; action: (action: Action) => void; };
+    actionHandlers: { bet: (amount: number, username: string) => void; action: (action: Action, username: string) => void; };
 }
 
 export enum Action {

@@ -186,7 +186,9 @@ export class Game {
         }
     }
 
-    private handlePlayerAction(action: Action) {
+    private handlePlayerAction(action: Action, username: string) {
+
+        if (username !== this.activePlayer.username) return
 
         switch (action) {
             case Action.Stay:

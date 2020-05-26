@@ -31,7 +31,7 @@ class PlayerMock implements IPlayer {
     setAvailableCurrency(diff: number): void {
         return
     }
-    actionHandlers: { bet: (amount: number, username: string) => void; action: (action: Action) => void } = null
+    actionHandlers: { bet: (amount: number, username: string) => void; action: (action: Action, username: string) => void } = null
 
     setBettingPhaseOnPlayer(remainingTime: number): void {
         return
@@ -42,7 +42,7 @@ class PlayerMock implements IPlayer {
     }
 
     MOCK_STAY() {
-        this.actionHandlers.action(Action.Stay)
+        this.actionHandlers.action(Action.Stay, this.username)
     }
 }
 
@@ -53,6 +53,7 @@ describe("Game", () => {
     let game: Game
     let player: PlayerMock;
     let gameState: IGameState
+
     beforeEach(() => {
         let shoe: IShoe = new Shoe(6)
         gameState = new GameState()
@@ -203,6 +204,17 @@ describe("Game", () => {
                 expect(playerTwo.setTurn).toHaveBeenCalled()
             })
 
+            it("should set player two as active palyer if player 1 stays", () => {
+                let playerTwo = new PlayerMock()
+                playerTwo.setTurn = jest.fn()
+                game.addPlayer(player);
+                game.addPlayer(playerTwo);
+                player.MOCK_BET();
+                playerTwo.MOCK_BET();
+                jest.advanceTimersByTime(6000);
+                player.MOCK_STAY()
+                expect(playerTwo.setTurn).toHaveBeenCalled()
+            })
 
         })
     })
