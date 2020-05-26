@@ -38,15 +38,13 @@ class PlayerMock implements IPlayer {
     }
 
     MOCK_BET() {
-        this.actionHandlers.bet(0, "TEST")
+        this.actionHandlers.bet(10, "TEST")
     }
 
     MOCK_STAY() {
         this.actionHandlers.action(Action.Stay)
     }
-
 }
-
 
 describe("Game", () => {
 
@@ -54,9 +52,10 @@ describe("Game", () => {
 
     let game: Game
     let player: PlayerMock;
-    let gameState: IGameState = new GameState()
+    let gameState: IGameState
     beforeEach(() => {
         let shoe: IShoe = new Shoe(6)
+        gameState = new GameState()
         game = new Game("test_game", shoe, gameState)
         player = new PlayerMock()
         player.username = "TEST"
@@ -92,12 +91,6 @@ describe("Game", () => {
     })
 
     describe('removePlayer', () => {
-        /* beforeEach(() => {
-             let shoe: IShoe = new Shoe(6)
-             game = new Game("test_game", shoe, gameState)
-             player = new PlayerMock()
-             player.username = "TEST"
-         })*/
 
         it("should remove player from game on removePlayer", () => {
             game.removePlayer(player)
@@ -106,16 +99,7 @@ describe("Game", () => {
     })
     describe('Phase handling', () => {
 
-        //jest.useFakeTimers()
-
         describe('handleBetting', () => {
-
-            /*beforeEach(() => {
-                let shoe: IShoe = new Shoe(6)
-                game = new Game("test_game", shoe, gameState)
-                player = new PlayerMock()
-                player.username = "TEST"
-            })*/
 
             it("on adding first player, game should start betting phase, should call askForBet on player", () => {
                 player.setBettingPhaseOnPlayer = jest.fn()
@@ -148,16 +132,23 @@ describe("Game", () => {
                 player.MOCK_BET()
                 expect(player.setBettingPhaseOnPlayer).toHaveBeenCalledWith(0)
             })
+
+            it(" --COPY-- should start dealing cards if every player (one player here) placed in the bets", () => {
+                let gameState = new GameState()
+                let shoe: IShoe = new Shoe(6)
+                let game = new Game("test_game", shoe, gameState)
+                player = new PlayerMock()
+                player.username = "TEST"
+                player.setBettingPhaseOnPlayer = jest.fn()
+                game.addPlayer(player)
+                expect(player.setBettingPhaseOnPlayer).toHaveBeenCalledWith(10)
+                player.MOCK_BET()
+                expect(player.setBettingPhaseOnPlayer).toHaveBeenCalledWith(0)
+            })
+
         })
 
         describe("handleInitialHand", () => {
-
-            /*beforeEach(() => {
-                let shoe: IShoe = new Shoe(6)
-                game = new Game("test_game", shoe, gameState)
-                player = new PlayerMock()
-                player.username = "TEST"
-            })*/
 
             it("should notify every player at the end of the betting phase", () => {
                 const playerTwo = new PlayerMock()
@@ -170,7 +161,7 @@ describe("Game", () => {
                 expect(playerTwo.setBettingPhaseOnPlayer).toHaveBeenCalledWith(0)
             })
 
-            it("should start dealing cards 2 seconds after betting phase is over", async () => {
+            it("should start dealing cards 2 seconds after betting phase is over", () => {
                 player.sendGameState = jest.fn()
                 game.addPlayer(player)
                 jest.advanceTimersByTime(6000)
@@ -179,7 +170,7 @@ describe("Game", () => {
                 expect(player.sendGameState).toHaveBeenCalledTimes(1)
             })
 
-            it('player should receive two gamestate update on initial hand dealing 3 seconds after bettingphase is over', async () => {
+            it('player should receive two gamestate update on initial hand dealing 3 seconds after bettingphase is over', () => {
                 player.sendGameState = jest.fn()
                 game.addPlayer(player)
                 jest.advanceTimersByTime(13000)
@@ -189,7 +180,7 @@ describe("Game", () => {
 
         describe("handlePlayerDecision", () => {
 
-            it("should set player as active after the initial hand deal", async () => {
+            it("should set player as active after the initial hand deal", () => {
                 player.setTurn = jest.fn()
                 game.addPlayer(player)
                 player.MOCK_BET()
@@ -197,18 +188,22 @@ describe("Game", () => {
                 expect(player.setTurn).toHaveBeenCalled()
             })
 
-            it("should set activeplayer to the next player after 10 seconds if player doesnt do any action", () => {
-                let playerTwo = new PlayerMock()
-                playerTwo.setTurn = jest.fn()
-                game.addPlayer(player)
-                game.addPlayer(playerTwo)
-                player.MOCK_BET()
-                playerTwo.MOCK_BET()
-                jest.advanceTimersByTime(6000)
+            it("should end players turn if palyer is tentative for 10 seconds", () => {
+                let playerTwo = new PlayerMock();
+                player.setTurn = jest.fn();
+                playerTwo.setTurn = jest.fn();
+                game.addPlayer(player);
+                game.addPlayer(playerTwo);
+                player.MOCK_BET();
+                playerTwo.MOCK_BET();
+                jest.advanceTimersByTime(6000);
+                expect(player.setTurn).toHaveBeenCalled()
                 expect(playerTwo.setTurn).not.toHaveBeenCalled()
-                jest.advanceTimersByTime(10500)
+                jest.advanceTimersByTime(10000)
                 expect(playerTwo.setTurn).toHaveBeenCalled()
             })
+
+
         })
     })
 })

@@ -10,43 +10,44 @@ describe('Shoe', () => {
     })
 
     /* describe('getCard', () => {
-         it('should return a string', async () => {
+         it('should return a string',  () => {
              expect(shoe.getCard()).toBeInstanceOf(String)
          })
      })*/
 
     describe('getCard', () => {
-        it('should return a string of length 2', async () => {
-            expect(shoe.getCard().length).toBe(2)
+        it('should return a string of length between 2 and 3', () => {
+            expect(shoe.getCard().length).toBeGreaterThanOrEqual(2)
+            expect(shoe.getCard().length).toBeLessThanOrEqual(3)
         })
     })
 
     describe('getCardValue', () => {
-        it('should return 1 for XA', async () => {
+        it('should return 1 for XA', () => {
             expect(shoe.getCardValue('XA')).toBe(1)
         })
     })
 
     describe('getCardValue', () => {
-        it('should return 2 for X2', async () => {
+        it('should return 2 for X2', () => {
             expect(shoe.getCardValue('X2')).toBe(2)
         })
     })
 
     describe('getCardValue', () => {
-        it('should return 5 for X5', async () => {
+        it('should return 5 for X5', () => {
             expect(shoe.getCardValue('X5')).toBe(5)
         })
     })
 
     describe('getCardValue', () => {
-        it('should return 10 for XJ', async () => {
+        it('should return 10 for XJ', () => {
             expect(shoe.getCardValue('XJ')).toBe(10)
         })
     })
 
     describe('getCardValue', () => {
-        it('should return 10 for XK', async () => {
+        it('should return 10 for XK', () => {
             expect(shoe.getCardValue('XK')).toBe(10)
         })
     })
