@@ -24,7 +24,7 @@ export default class Player implements IPlayer {
     }
 
     setTurn(): void {
-        this.socket.emit("set_turn", this.availableCurrency)
+        this.socket.emit("set_turn")
     }
 
     endTurn(): void {

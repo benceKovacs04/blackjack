@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect, useRef } from 'react'
 import classes from './Game.module.css'
 import loggedInContext from '../../contexts/LoggedInContext'
 import socketIO from "socket.io-client"
+import MePlayer from '../../components/Players/MePlayer'
+import OtherPlayer from '../../components/Players/OtherPlayer'
 
 export default function Game(props: any) {
 
@@ -10,11 +12,13 @@ export default function Game(props: any) {
 
     const [bet, setBet] = useState<number>(0)
     const [availableCurrency, setAvailableCurrency] = useState<number>(0)
-    const [myTurn, setMyTurn] = useState<boolean>(false)
-    const [myHand, setMyHand] = useState<string[]>([])
-    const [myHandValue, setMyHandValue] = useState<number>(0)
+    //const [myTurn, setMyTurn] = useState<boolean>(false)
+    //const [myHand, setMyHand] = useState<string[]>([])
+    //const [myHandValue, setMyHandValue] = useState<number>(0)
 
-    const [disableActionButtons, setDisabeActionButton] = useState<boolean>(false)
+    //const [disableActionButtons, setDisabeActionButton] = useState<boolean>(false)
+
+    const [players, setPlayers] = useState<any[]>([]);
 
     const connection: any = useRef();
 
@@ -23,22 +27,22 @@ export default function Game(props: any) {
             if (connection.current === undefined) {
                 connection.current = socketIO("http://localhost:5000/game")
                 connection.current.on("connected", sitPlayerIn)
-                connection.current.on("set_turn", toggleMyTurn)
-                connection.current.on("game-state", setGameState)
                 connection.current.on("bet-phase", betPhase)
+                connection.current.on("game-state", setGameState)
+                connection.current.on("set_turn", toggleMyTurn)
             }
 
         }
     }, [])
 
-    const betPhase = () => {
+    const betPhase = (remTime: number) => {
         //IMPLEMENT BET PHASE!!
     }
 
     const toggleMyTurn = (availableCurr: number) => {
-        setMyTurn(myTurn => !myTurn)
+        // setMyTurn(myTurn => !myTurn)
         setAvailableCurrency(availableCurr)
-        setDisabeActionButton(false)
+        // setDisabeActionButton(false)
     }
 
     const sitPlayerIn = () => {
@@ -51,19 +55,14 @@ export default function Game(props: any) {
 
     }
 
-    const setGameState = (data: { playerHand: string[], playerHandValue: number, dealerHand: string[], dealerHandValue: number, over: boolean }) => {
-        setMyHand(data.playerHand)
-        setMyHandValue(data.playerHandValue)
-        if (data.over) {
-            setDisabeActionButton(true)
-            setTimeout(resetMe, 3000)
-        }
+    const setGameState = (data: any) => {
+        setPlayers(data.players)
     }
 
     const resetMe = () => {
         connection.current.emit("action", "Tentative")
-        setMyHand([])
-        setMyHandValue(0)
+        //setMyHand([])
+        // setMyHandValue(0)
         setBet(0)
     }
 
@@ -96,7 +95,7 @@ export default function Game(props: any) {
 
                 </div>
                 <div className={classes.Players}>
-                    <div className={classes.OtherPlayer}>
+                    {/*    <div className={classes.OtherPlayer}>
 
                     </div>
                     <div className={classes.Player}>
@@ -137,6 +136,13 @@ export default function Game(props: any) {
                     <div className={classes.OtherPlayer}>
 
                     </div>
+                    */}
+                    {players.map(p => {
+                        if (p.playerName === username) {
+                            return <MePlayer />
+                        }
+                        return <OtherPlayer />
+                    })}
                 </div>
             </div>
         </div>

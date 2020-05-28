@@ -34,6 +34,12 @@ export class Game {
         return this.players.length + this.waitingRoom.length
     }
 
+    sendGameStateToPlayers() {
+        const state = this.gameState.getGameState();
+        this.players.forEach(p => p.sendGameState(state));
+        this.waitingRoom.forEach(p => p.sendGameState(state));
+    }
+
     addPlayer(player: IPlayer): boolean {
         if (this.players.length + this.waitingRoom.length < 3) {
             player.actionHandlers = this.actionHandlers
@@ -48,6 +54,7 @@ export class Game {
             if (this.players.length === 0 && this.waitingRoom.length === 1) {
                 this.setPhase(Phase.Betting)
             }
+            this.sendGameStateToPlayers();
             return true;
         }
         return false;
@@ -57,6 +64,7 @@ export class Game {
         this.players.splice(this.players.indexOf(player), 1)
         this.waitingRoom.splice(this.waitingRoom.indexOf(player), 1)
         this.gameState.removePlayerFromState(player.username)
+        this.sendGameStateToPlayers();
         if (this.players.length === 0) {
             this.setPhase(Phase.EmptyRoom)
         }
@@ -116,18 +124,14 @@ export class Game {
         dealOneCard()
         const dealerCard = this.shoe.getCard()
         this.gameState.addCardToDealer(dealerCard, this.shoe.getCardValue(dealerCard))
-        let state = this.gameState.getGameState()
-        this.players.forEach(p => p.sendGameState(state))
+        this.sendGameStateToPlayers()
 
         setTimeout(() => {
-            dealOneCard()
-            this.gameState.addCardToDealer("card_back", 0)
-            state = this.gameState.getGameState()
-            this.players.forEach(p => {
-                p.sendGameState(state)
-            })
+            dealOneCard();
+            this.gameState.addCardToDealer("card_back", 0);
+            this.sendGameStateToPlayers();
         }, 1000)
-        setTimeout(() => this.setPhase(Phase.PlayerDecisions), 3000)
+        setTimeout(() => this.setPhase(Phase.PlayerDecisions), 3000);
     }
 
     private initPlayerDecisionPhase() {
