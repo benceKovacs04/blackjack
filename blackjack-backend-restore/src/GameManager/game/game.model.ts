@@ -140,18 +140,21 @@ export class Game {
         this.gameState.addCardToDealer(dealerCard, this.shoe.getCardValue(dealerCard))
         this.sendGameStateToPlayers()
 
-        setTimeout(() => {
+        this.timeoutIDs.push(setTimeout(() => {
             dealOneCard();
             this.gameState.addCardToDealer("card_back", 0);
             this.sendGameStateToPlayers();
-        }, 1000)
-        setTimeout(() => this.setPhase(Phase.PlayerDecisions), 3000);
+        }, 1000))
+        this.timeoutIDs.push(setTimeout(() => this.setPhase(Phase.PlayerDecisions), 3000));
     }
 
     private initPlayerDecisionPhase() {
-        this.activePlayer = this.players[0]
-        this.activePlayer.setTurn()
-        this.timeoutIDs.push(setTimeout(() => this.nextPlayer(), 10000))
+        console.log(this.phase)
+        if (this.players.length > 0) {
+            this.activePlayer = this.players[0]
+            this.activePlayer.setTurn()
+            this.timeoutIDs.push(setTimeout(() => this.nextPlayer(), 10000))
+        }
     }
 
     private handleDealerHand() {
@@ -189,7 +192,7 @@ export class Game {
 
             }
         })
-        setTimeout(() => this.setPhase(Phase.Betting), 2000)
+        this.timeoutIDs.push(setTimeout(() => this.setPhase(Phase.Betting), 2000))
     }
 
     private executePhase(phase: Phase) {
@@ -200,7 +203,7 @@ export class Game {
                 break;
             case Phase.DealHands:
                 this.players.forEach(p => p.setBettingPhaseOnPlayer(0))
-                setTimeout(() => this.handleInitialHand(), 2000)
+                this.timeoutIDs.push(setTimeout(() => this.handleInitialHand(), 2000))
                 break;
             case Phase.PlayerDecisions:
                 this.initPlayerDecisionPhase()
@@ -213,6 +216,7 @@ export class Game {
                 break;
             case Phase.EmptyRoom:
                 this.killTimers()
+                console.log(this.phase)
                 this.gameState.resetState()
                 this.activePlayer = null;
 
