@@ -3,6 +3,7 @@ import classes from './Game.module.css'
 import loggedInContext from '../../contexts/LoggedInContext'
 import socketIO from "socket.io-client"
 import Player from '../../components/Player/Player'
+import Dealer from '../../components/Player/Dealer'
 
 export default function Game(props: any) {
 
@@ -12,14 +13,12 @@ export default function Game(props: any) {
     const [bet, setBet] = useState<number>(0)
     const [availableCurrency, setAvailableCurrency] = useState<number>(0)
 
-
-    //const [disableActionButtons, setDisabeActionButton] = useState<boolean>(false)
-
     const [players, setPlayers] = useState<any[]>([]);
     const [isBetPhase, setBetPhase] = useState<boolean>(false)
     const [betTimer, setBetTimer] = useState<number>(0)
     const [myTurn, setMyTurn] = useState<boolean>(false)
     const [result, setResult] = useState<string>("")
+    const [dealer, setDealer] = useState<any>()
 
     const connection: any = useRef();
 
@@ -66,6 +65,7 @@ export default function Game(props: any) {
     const setGameState = (data: any) => {
         setPlayers(data.players)
         setAvailableCurrency(data.availableCurrency)
+        setDealer(data.dealer)
     }
 
 
@@ -100,7 +100,7 @@ export default function Game(props: any) {
             <div className={classes.Table}>
                 <h1>{tableName}</h1>
                 <div className={classes.Dealer}>
-                    {betTimer > 0 ? <h1>Remaining time to bet: {betTimer}</h1> : null}
+                    {betTimer > 0 ? <h1>Remaining time to bet: {betTimer}</h1> : dealer ? <Dealer dealer={dealer} /> : null}
                 </div>
                 {myTurn ?
                     <div className={classes.Actions}>
