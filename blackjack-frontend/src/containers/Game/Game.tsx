@@ -19,6 +19,7 @@ export default function Game(props: any) {
 
     const [players, setPlayers] = useState<any[]>([]);
     const [isBetPhase, setBetPhase] = useState<boolean>(false)
+    const [betTimer, setBetTimer] = useState<number>(0)
 
     const connection: any = useRef();
 
@@ -27,8 +28,9 @@ export default function Game(props: any) {
             if (connection.current === undefined) {
                 connection.current = socketIO("http://localhost:5000/game")
                 connection.current.on("connected", sitPlayerIn)
-                connection.current.on("bet-phase", betPhase)
                 connection.current.on("game-state", setGameState)
+                connection.current.on("bet-phase", betPhase)
+                connection.current.on("bet-timer", (time: number) => setBetTimer(time))
                 connection.current.on("set_turn", toggleMyTurn)
             }
 
@@ -38,8 +40,10 @@ export default function Game(props: any) {
     const betPhase = (remTime: number) => {
         if (remTime > 0) {
             setBetPhase(true)
+            setBetTimer(remTime)
         } else {
             setBetPhase(false)
+            setBetTimer(0)
         }
     }
 
@@ -79,7 +83,7 @@ export default function Game(props: any) {
 
     const placeBet = () => {
         if (bet > 0 && bet <= availableCurrency) {
-            connection.current.emit("place-bet", bet)
+            connection.current.emit("place-bet", { amount: bet, username: username })
             setAvailableCurrency(availableCurrency => availableCurrency - bet)
         }
     }
@@ -97,7 +101,7 @@ export default function Game(props: any) {
             <div className={classes.Table}>
                 <h1>{tableName}</h1>
                 <div className={classes.Dealer}>
-
+                    {betTimer > 0 ? <h1>Remaining time to bet: {betTimer}</h1> : null}
                 </div>
                 <div className={classes.Players}>
                     {/*    <div className={classes.OtherPlayer}>
@@ -145,7 +149,10 @@ export default function Game(props: any) {
                     {players.map(p => {
                         if (p.playerName === username) {
                             return <Player
+                                increaseBet={increaseBet}
+                                placeBet={placeBet}
                                 betPhase={isBetPhase}
+                                bet={bet}
                                 currency={availableCurrency}
                                 player={p} />
                         }

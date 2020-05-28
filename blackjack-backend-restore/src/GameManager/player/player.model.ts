@@ -23,6 +23,9 @@ export default class Player implements IPlayer {
         this.socket.emit("bet-phase", remainingTime)
     }
 
+    sendTimer(remainingTime: number): void {
+        this.socket.emit("bet-timer", remainingTime)
+    }
     setTurn(): void {
         this.socket.emit("set_turn")
     }
@@ -45,7 +48,7 @@ export default class Player implements IPlayer {
         this.availableCurrency += diff
     }
 
-    actionHandlers: { bet: (amount: number, username: string) => void; action: (action: Action, username: string) => void; };
+    actionHandlers: { bet: (bet: { amount: number, username: string }) => void; action: (action: Action, username: string) => void; };
 }
 
 export enum Action {

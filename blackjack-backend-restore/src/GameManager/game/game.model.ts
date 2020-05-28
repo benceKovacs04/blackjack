@@ -119,6 +119,7 @@ export class Game {
         this.timerCounter = 10
         this.intervalIDs.push(setInterval(() => {
             this.timerCounter -= 1
+            this.players.forEach(p => p.sendTimer(this.timerCounter))
             if (this.timerCounter === 0) {
                 this.killTimers()
                 if (this.players.length > 0) {
@@ -149,7 +150,6 @@ export class Game {
     }
 
     private initPlayerDecisionPhase() {
-        console.log(this.phase)
         if (this.players.length > 0) {
             this.activePlayer = this.players[0]
             this.activePlayer.setTurn()
@@ -216,11 +216,8 @@ export class Game {
                 break;
             case Phase.EmptyRoom:
                 this.killTimers()
-                console.log(this.phase)
                 this.gameState.resetState()
                 this.activePlayer = null;
-
-
         }
     }
 
@@ -230,8 +227,8 @@ export class Game {
 
     //---- player action handlers ----
 
-    private placeBet(amount: number, playerName: string) {
-        this.gameState.placeBet(playerName, amount)
+    private placeBet(bet: { amount: number, username: string }) {
+        this.gameState.placeBet(bet.username, bet.amount)
         if (this.gameState.getNrOfBets() === this.players.length) {
             this.killTimers()
             this.setPhase(Phase.DealHands)
