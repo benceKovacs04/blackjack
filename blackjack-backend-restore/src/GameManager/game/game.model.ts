@@ -9,6 +9,7 @@ export class Game {
         this.name = name;
         this.shoe = shoe
         this.gameState = gameState
+        this.phase = Phase.EmptyRoom
     }
 
     private name: string;
@@ -44,16 +45,18 @@ export class Game {
         if (this.players.length + this.waitingRoom.length < 3) {
             player.actionHandlers = this.actionHandlers
             player.initEvents()
-            if (this.phase === Phase.Betting && this.timerCounter > 3) {
+
+            if (this.phase === Phase.EmptyRoom) {
+                this.players.push(player)
+                this.setPhase(Phase.Betting)
+            } else if (this.phase === Phase.Betting && this.timerCounter > 3) {
                 this.players.push(player)
                 player.setBettingPhaseOnPlayer(this.timerCounter)
             } else {
                 this.waitingRoom.push(player)
             }
             this.gameState.addPlayerToState(player.username)
-            if (this.players.length === 0 && this.waitingRoom.length === 1) {
-                this.setPhase(Phase.Betting)
-            }
+
             this.sendGameStateToPlayers();
             return true;
         }
@@ -109,7 +112,9 @@ export class Game {
             this.timerCounter -= 1
             if (this.timerCounter === 0) {
                 clearInterval(this.timer)
-                this.setPhase(Phase.DealHands)
+                if (this.players.length > 0) {
+                    this.setPhase(Phase.DealHands)
+                }
             }
         }, 1000)
     }
@@ -198,6 +203,10 @@ export class Game {
                 this.handleEvaulate()
                 break;
             case Phase.EmptyRoom:
+                console.log(this.timer[0])
+                console.log(this.timer[1])
+                console.log(this.timer)
+
                 clearInterval(this.timer)
                 clearTimeout(this.timer)
                 this.gameState.resetState()

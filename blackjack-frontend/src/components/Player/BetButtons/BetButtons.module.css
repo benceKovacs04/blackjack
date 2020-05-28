@@ -1,0 +1,27 @@
+.BetButtons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    height: 80px;
+}
+
+.BetButtons button{
+    margin: 5px;
+    width: 60px;
+    height: 60px;
+    border-radius: 90px;
+    outline: none;
+    font-weight: bold;
+
+    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease;
+    background-color: white;
+    color: black;
+}
+
+.BetButtons button:hover {
+    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease, height 0.5s ease;
+    background-color: maroon;
+    color: white;
+    width: 80px;
+    height: 80px;
+}

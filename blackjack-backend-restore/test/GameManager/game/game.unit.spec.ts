@@ -113,6 +113,7 @@ describe("Game", () => {
     describe('removePlayer', () => {
 
         it("should remove player from game on removePlayer", () => {
+            game.addPlayer(player)
             game.removePlayer(player)
             expect(game.getPlayerNum()).toEqual(0)
         })

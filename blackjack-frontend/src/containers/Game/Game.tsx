@@ -2,8 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react'
 import classes from './Game.module.css'
 import loggedInContext from '../../contexts/LoggedInContext'
 import socketIO from "socket.io-client"
-import MePlayer from '../../components/Players/MePlayer'
-import OtherPlayer from '../../components/Players/OtherPlayer'
+import Player from '../../components/Player/Player'
 
 export default function Game(props: any) {
 
@@ -19,6 +18,7 @@ export default function Game(props: any) {
     //const [disableActionButtons, setDisabeActionButton] = useState<boolean>(false)
 
     const [players, setPlayers] = useState<any[]>([]);
+    const [isBetPhase, setBetPhase] = useState<boolean>(false)
 
     const connection: any = useRef();
 
@@ -36,7 +36,11 @@ export default function Game(props: any) {
     }, [])
 
     const betPhase = (remTime: number) => {
-        //IMPLEMENT BET PHASE!!
+        if (remTime > 0) {
+            setBetPhase(true)
+        } else {
+            setBetPhase(false)
+        }
     }
 
     const toggleMyTurn = (availableCurr: number) => {
@@ -57,6 +61,7 @@ export default function Game(props: any) {
 
     const setGameState = (data: any) => {
         setPlayers(data.players)
+        setAvailableCurrency(data.availableCurrency)
     }
 
     const resetMe = () => {
@@ -139,9 +144,12 @@ export default function Game(props: any) {
                     */}
                     {players.map(p => {
                         if (p.playerName === username) {
-                            return <MePlayer />
+                            return <Player
+                                betPhase={isBetPhase}
+                                currency={availableCurrency}
+                                player={p} />
                         }
-                        return <OtherPlayer />
+                        return <Player player={p} />
                     })}
                 </div>
             </div>
