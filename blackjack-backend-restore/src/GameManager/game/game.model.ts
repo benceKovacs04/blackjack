@@ -145,7 +145,7 @@ export class Game {
             let card = this.shoe.getCard()
             this.gameState.addCardToDealer(card, this.shoe.getCardValue(card))
             let state = this.gameState.getGameState()
-            this.players.forEach(p => p.sendGameState(state))
+            this.sendGameStateToPlayers();
 
             if (state.dealer.dealerHandValue > 16) {
                 clearInterval(this.timer)

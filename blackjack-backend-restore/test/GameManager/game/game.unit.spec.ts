@@ -185,16 +185,16 @@ describe("Game", () => {
                 player.sendGameState = jest.fn()
                 game.addPlayer(player)
                 jest.advanceTimersByTime(6000)
-                expect(player.sendGameState).toHaveBeenCalledTimes(0)
-                jest.advanceTimersByTime(6000)
                 expect(player.sendGameState).toHaveBeenCalledTimes(1)
+                jest.advanceTimersByTime(6000)
+                expect(player.sendGameState).toHaveBeenCalledTimes(2)
             })
 
-            it('player should receive two gamestate update on initial hand dealing 3 seconds after bettingphase is over', () => {
+            it('player should receive two gamestate update on initial hand dealing 3 seconds after bettingphase is over(got on from adding the player)', () => {
                 player.sendGameState = jest.fn()
                 game.addPlayer(player)
                 jest.advanceTimersByTime(13000)
-                expect(player.sendGameState).toHaveBeenCalledTimes(2)
+                expect(player.sendGameState).toHaveBeenCalledTimes(3)
             })
 
             it("should set player as active after the initial hand deal", () => {
@@ -240,9 +240,9 @@ describe("Game", () => {
                 game.addPlayer(player);
                 player.MOCK_BET();
                 jest.advanceTimersByTime(6000);
-                expect(player.state.length).toEqual(2)
-                player.MOCK_HIT()
                 expect(player.state.length).toEqual(3)
+                player.MOCK_HIT()
+                expect(player.state.length).toEqual(4)
             })
 
             it("should set next player as active if active player busts", () => {
