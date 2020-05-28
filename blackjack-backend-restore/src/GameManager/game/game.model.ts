@@ -24,7 +24,16 @@ export class Game {
 
     private phase: Phase
 
-    private timer
+    private intervalIDs = []
+    private timeoutIDs = []
+
+    killTimers() {
+        this.intervalIDs.forEach(i => clearInterval(i));
+        this.timeoutIDs.forEach(t => clearTimeout(t));
+        this.intervalIDs = [];
+        this.timeoutIDs = [];
+    }
+
     private timerCounter: number
 
     getName(): string {
@@ -75,7 +84,7 @@ export class Game {
 
     nextPlayer() {
         this.activePlayer.endTurn()
-        clearTimeout(this.timer)
+        this.killTimers()
         const activeIndex = this.players.indexOf(this.activePlayer)
         if (activeIndex + 1 === this.players.length) {
             this.setPhase(Phase.DealDealer)
@@ -85,7 +94,7 @@ export class Game {
         }
 
         this.activePlayer = this.players[activeIndex + 1]
-        this.timer = setTimeout(() => this.nextPlayer(), 10000)
+        this.timeoutIDs.push(setTimeout(() => this.nextPlayer(), 10000))
         this.activePlayer.setTurn()
     }
 
@@ -108,15 +117,15 @@ export class Game {
 
     private startBettingTimer() {
         this.timerCounter = 10
-        this.timer = setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             this.timerCounter -= 1
             if (this.timerCounter === 0) {
-                clearInterval(this.timer)
+                this.killTimers()
                 if (this.players.length > 0) {
                     this.setPhase(Phase.DealHands)
                 }
             }
-        }, 1000)
+        }, 1000))
     }
 
     private handleInitialHand() {
@@ -142,21 +151,21 @@ export class Game {
     private initPlayerDecisionPhase() {
         this.activePlayer = this.players[0]
         this.activePlayer.setTurn()
-        this.timer = setTimeout(() => this.nextPlayer(), 10000)
+        this.timeoutIDs.push(setTimeout(() => this.nextPlayer(), 10000))
     }
 
     private handleDealerHand() {
-        this.timer = setInterval(() => {
+        this.intervalIDs.push(setInterval(() => {
             let card = this.shoe.getCard()
             this.gameState.addCardToDealer(card, this.shoe.getCardValue(card))
             let state = this.gameState.getGameState()
             this.sendGameStateToPlayers();
 
             if (state.dealer.dealerHandValue > 16) {
-                clearInterval(this.timer)
+                this.killTimers()
                 this.setPhase(Phase.Evaulate)
             }
-        }, 1000)
+        }, 1000))
     }
 
     private handleEvaulate() {
@@ -203,12 +212,7 @@ export class Game {
                 this.handleEvaulate()
                 break;
             case Phase.EmptyRoom:
-                console.log(this.timer[0])
-                console.log(this.timer[1])
-                console.log(this.timer)
-
-                clearInterval(this.timer)
-                clearTimeout(this.timer)
+                this.killTimers()
                 this.gameState.resetState()
                 this.activePlayer = null;
 
@@ -225,7 +229,7 @@ export class Game {
     private placeBet(amount: number, playerName: string) {
         this.gameState.placeBet(playerName, amount)
         if (this.gameState.getNrOfBets() === this.players.length) {
-            clearInterval(this.timer)
+            this.killTimers()
             this.setPhase(Phase.DealHands)
         }
     }
@@ -239,8 +243,8 @@ export class Game {
         if (state.players.find(p => p.playerName === this.activePlayer.username).playerHandValue > 21) {
             this.nextPlayer()
         } else {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => this.nextPlayer(), 10000)
+            this.killTimers()
+            this.timeoutIDs.push(setTimeout(() => this.nextPlayer(), 10000))
         }
     }
 
