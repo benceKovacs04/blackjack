@@ -24,44 +24,18 @@
     justify-content: center;
 }
 
-.Player {
-    width: 50%;
+.Actions {
+    position: fixed;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    top:40%;
+    z-index: 1;
+    width: 30%;
+    height: 10%;
 }
 
-.Player .Hand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.Player h1 {
-    margin: 5px;
-}
-
-.Player .Actions {
-    margin: 10px;
-}
-
-.Player .Actions button {
-    margin: 5px;
-    width: 150px;
-    height: 40px;
-    border-radius: 50px;
-    outline: none;
-}
-
-.Player .Bet {
-    margin: 5px;
-    display:flex;
-    flex-direction: column;
-    text-align: center;
-}
-
-.Player .Bet .Buttons button {
-    
+.Actions button {
     margin: 5px;
     width: 60px;
     height: 60px;
@@ -72,32 +46,16 @@
     transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease;
     background-color: white;
     color: black;
-    
 }
 
-.Player .Bet button:hover {
-    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease;
+.Actions button:hover {
+    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease, height 0.5s ease;
     background-color: maroon;
     color: white;
     width: 80px;
-    
+    height: 80px;
 }
 
-.OtherPlayer {
-    width: 25%;
-}
 
-.Cards {
-    display: flex;
-}
 
-.Card {
-    animation-name: moveCard;
-    animation-duration: 0.3s;
-}
-
-@keyframes moveCard {
-    from {margin-top: 30px; opacity: 0.1;}
-    to {margin-top: 0px; opacity: 1;}
-}
 

@@ -6,6 +6,11 @@
     align-items: center;
 }
 
+.Player h1 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .Player .Cards {
     display: flex;
 }

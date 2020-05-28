@@ -11,15 +11,14 @@ export default function Game(props: any) {
 
     const [bet, setBet] = useState<number>(0)
     const [availableCurrency, setAvailableCurrency] = useState<number>(0)
-    //const [myTurn, setMyTurn] = useState<boolean>(false)
-    //const [myHand, setMyHand] = useState<string[]>([])
-    //const [myHandValue, setMyHandValue] = useState<number>(0)
+
 
     //const [disableActionButtons, setDisabeActionButton] = useState<boolean>(false)
 
     const [players, setPlayers] = useState<any[]>([]);
     const [isBetPhase, setBetPhase] = useState<boolean>(false)
     const [betTimer, setBetTimer] = useState<number>(0)
+    const [myTurn, setMyTurn] = useState<boolean>(false)
 
     const connection: any = useRef();
 
@@ -48,9 +47,7 @@ export default function Game(props: any) {
     }
 
     const toggleMyTurn = (availableCurr: number) => {
-        // setMyTurn(myTurn => !myTurn)
-        setAvailableCurrency(availableCurr)
-        // setDisabeActionButton(false)
+        setMyTurn(myTurn => !myTurn)
     }
 
     const sitPlayerIn = () => {
@@ -64,6 +61,7 @@ export default function Game(props: any) {
     }
 
     const setGameState = (data: any) => {
+        console.log(data)
         setPlayers(data.players)
         setAvailableCurrency(data.availableCurrency)
     }
@@ -103,6 +101,12 @@ export default function Game(props: any) {
                 <div className={classes.Dealer}>
                     {betTimer > 0 ? <h1>Remaining time to bet: {betTimer}</h1> : null}
                 </div>
+                {myTurn ?
+                    <div className={classes.Actions}>
+                        <button>Stay</button>
+                        <button>Hit</button>
+                    </div> : null
+                }
                 <div className={classes.Players}>
                     {/*    <div className={classes.OtherPlayer}>
 
@@ -156,7 +160,7 @@ export default function Game(props: any) {
                                 currency={availableCurrency}
                                 player={p} />
                         }
-                        return <Player player={p} />
+                        return <Player bet={p.bet} player={p} />
                     })}
                 </div>
             </div>

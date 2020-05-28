@@ -14,9 +14,6 @@ export default function Player(props: any) {
                         placeBet={props.placeBet} /> :
                     null
             }
-            <div>
-
-            </div>
             <div className={classes.Cards}>
                 {props.player.playerHand.map((h: any) => {
                     return <img src={`http://localhost:5000/gameManager/card-image?cardId=${h.card}.png`}></img>
