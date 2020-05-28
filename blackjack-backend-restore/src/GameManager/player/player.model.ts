@@ -32,6 +32,7 @@ export default class Player implements IPlayer {
     }
 
     sendGameState(gameState: { players: PlayerState[]; dealer: { dealerHand: { card: string; value: number; }[]; dealerHandValue: number; }; }) {
+        gameState["availableCurrency"] = this.availableCurrency;
         this.socket.emit("game-state", gameState)
     }
 
