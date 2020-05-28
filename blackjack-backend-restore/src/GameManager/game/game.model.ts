@@ -88,7 +88,6 @@ export class Game {
         const activeIndex = this.players.indexOf(this.activePlayer)
         if (activeIndex + 1 === this.players.length) {
             this.setPhase(Phase.DealDealer)
-            this.activePlayer.endTurn()
             this.activePlayer = null;
             return
         }
@@ -111,6 +110,7 @@ export class Game {
     }
 
     private handleBetting() {
+        this.sendGameStateToPlayers()
         this.players.forEach(p => p.setBettingPhaseOnPlayer(10))
         this.startBettingTimer()
     }
@@ -177,21 +177,23 @@ export class Game {
             let playerState = state.players.find(ps => ps.playerName === p.username)
             if (state.dealer.dealerHandValue > 21) {
                 if (playerState.playerHandValue <= 21) {
-                    p.setAvailableCurrency(playerState.bet * 1.5)
-                    //p.notify player
+                    p.setAvailableCurrency(playerState.bet * 2)
+                    p.sendRoundResult("Win")
                 }
             } else {
                 if (playerState.playerHandValue > state.dealer.dealerHandValue && playerState.playerHandValue <= 21) {
-                    p.setAvailableCurrency(playerState.bet * 1.5)
-                    //p.notify player
+                    p.setAvailableCurrency(playerState.bet * 2)
+                    p.sendRoundResult("Win")
                 } else if (playerState.playerHandValue === state.dealer.dealerHandValue) {
-                    //p.notify player
+                    p.setAvailableCurrency(playerState.bet)
+                    p.sendRoundResult("Push")
                 } else {
-                    p.setAvailableCurrency(playerState.bet * -1)
+                    p.sendRoundResult("Lose")
                 }
 
             }
         })
+        this.gameState.resetState()
         this.timeoutIDs.push(setTimeout(() => this.setPhase(Phase.Betting), 2000))
     }
 

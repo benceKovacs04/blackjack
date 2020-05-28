@@ -7,6 +7,7 @@ export default function Player(props: any) {
         <div className={classes.Player}>
             <h1>{props.player.playerName} {props.currency ? `- ${props.currency}$` : null}</h1>
             <h1>Bet: {props.bet}$</h1>
+            <h1>{props.player.playerHandValue}</h1>
             {
                 props.betPhase ?
                     <BetButtons

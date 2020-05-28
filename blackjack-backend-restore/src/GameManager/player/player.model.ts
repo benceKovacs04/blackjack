@@ -51,6 +51,10 @@ export default class Player implements IPlayer {
         this.availableCurrency += diff
     }
 
+    sendRoundResult(result: string): void {
+        this.socket.emit("round-result", result)
+    }
+
     actionHandlers: { bet: (bet: { amount: number, username: string }) => void; action: (action: Action, username: string) => void; };
 }
 

@@ -19,6 +19,7 @@ export default function Game(props: any) {
     const [isBetPhase, setBetPhase] = useState<boolean>(false)
     const [betTimer, setBetTimer] = useState<number>(0)
     const [myTurn, setMyTurn] = useState<boolean>(false)
+    const [result, setResult] = useState<string>("")
 
     const connection: any = useRef();
 
@@ -31,12 +32,14 @@ export default function Game(props: any) {
                 connection.current.on("bet-phase", betPhase)
                 connection.current.on("bet-timer", (time: number) => setBetTimer(time))
                 connection.current.on("set_turn", toggleMyTurn)
+                connection.current.on("round-result", showResult)
             }
 
         }
     }, [])
 
     const betPhase = (remTime: number) => {
+        setResult("")
         if (remTime > 0) {
             setBetPhase(true)
             setBetTimer(remTime)
@@ -46,7 +49,7 @@ export default function Game(props: any) {
         }
     }
 
-    const toggleMyTurn = (availableCurr: number) => {
+    const toggleMyTurn = () => {
         setMyTurn(myTurn => !myTurn)
     }
 
@@ -61,17 +64,10 @@ export default function Game(props: any) {
     }
 
     const setGameState = (data: any) => {
-        console.log(data)
         setPlayers(data.players)
         setAvailableCurrency(data.availableCurrency)
     }
 
-    const resetMe = () => {
-        connection.current.emit("action", "Tentative")
-        //setMyHand([])
-        // setMyHandValue(0)
-        setBet(0)
-    }
 
     const increaseBet = (value: number) => {
         if (value + bet <= availableCurrency) {
@@ -94,6 +90,11 @@ export default function Game(props: any) {
         connection.current.emit("action", "Stay")
     }
 
+    const showResult = (res: string) => {
+        setBet(0)
+        setResult(res)
+    }
+
     return (
         <div className={classes.Background}>
             <div className={classes.Table}>
@@ -103,9 +104,9 @@ export default function Game(props: any) {
                 </div>
                 {myTurn ?
                     <div className={classes.Actions}>
-                        <button>Stay</button>
-                        <button>Hit</button>
-                    </div> : null
+                        <button onClick={stay}>Stay</button>
+                        <button onClick={hit}>Hit</button>
+                    </div> : <h1>{result}</h1>
                 }
                 <div className={classes.Players}>
                     {/*    <div className={classes.OtherPlayer}>
