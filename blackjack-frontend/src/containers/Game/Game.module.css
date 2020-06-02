@@ -6,6 +6,12 @@
     background-attachment: fixed;
 }
 
+.TableName{
+    position: fixed;
+    left: 1%;
+    color: white;
+}
+
 .Table {
     display: flex;
     flex-direction: column;
@@ -55,6 +61,7 @@
     width: 80px;
     height: 80px;
 }
+
 
 
 

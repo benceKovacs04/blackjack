@@ -98,7 +98,9 @@ export default function Game(props: any) {
     return (
         <div className={classes.Background}>
             <div className={classes.Table}>
-                <h1>{tableName}</h1>
+                <div className={classes.TableName}>
+                    <h1>Table: {tableName}</h1>
+                </div>
                 <div className={classes.Dealer}>
                     {betTimer > 0 ? <h1>Remaining time to bet: {betTimer}</h1> : dealer ? <Dealer dealer={dealer} /> : null}
                 </div>
@@ -106,51 +108,9 @@ export default function Game(props: any) {
                     <div className={classes.Actions}>
                         <button onClick={stay}>Stay</button>
                         <button onClick={hit}>Hit</button>
-                    </div> : <h1>{result}</h1>
+                    </div> : <div className={classes.Actions}><h1>{result}</h1></div>
                 }
                 <div className={classes.Players}>
-                    {/*    <div className={classes.OtherPlayer}>
-
-                    </div>
-                    <div className={classes.Player}>
-                        <h1>{username} - {availableCurrency}$</h1>
-                        {myTurn ? <h1>{bet}$</h1> : null}
-
-                        {myTurn ?
-                            [myHand.length > 0 ?
-                                <div className={classes.Hand}>
-                                    <h1>{myHandValue}</h1>
-                                    {disableActionButtons ? null : <div className={classes.Actions}>
-                                        <button onClick={hit} >Hit</button>
-                                        <button onClick={stay} >Stay</button>
-                                    </div>}
-                                    <div>
-                                        <div className={classes.Cards}>
-                                            {myHand.map(card =>
-                                                <img className={classes.Card} src={`http://localhost:5000/gameManager/card-image?cardId=${card}.png`}></img>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div> :
-                                <div className={classes.Bet}>
-                                    <div className={classes.Buttons}>
-                                        <button onClick={placeBet}>Bet</button>
-                                        <button onClick={() => increaseBet(1)}>1$</button>
-                                        <button onClick={() => increaseBet(10)}>10$</button>
-                                        <button onClick={() => increaseBet(50)}>50$</button>
-                                        <button onClick={() => increaseBet(100)}>100$</button>
-                                        <button onClick={() => increaseBet(200)}>200$</button>
-                                        <button onClick={() => increaseBet(500)}>500$</button>
-                                        <button onClick={() => increaseBet(-1 * bet)}>Reset</button>
-                                    </div>
-                                </div>]
-                            : null
-                        }
-                    </div>
-                    <div className={classes.OtherPlayer}>
-
-                    </div>
-                    */}
                     {players.map(p => {
                         if (p.playerName === username) {
                             return <Player
