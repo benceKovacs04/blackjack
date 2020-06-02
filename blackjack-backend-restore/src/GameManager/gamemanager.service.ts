@@ -13,19 +13,19 @@ export class GameManagerService implements IGameManagerService {
     private readonly games: Array<Game> = new Array<Game>()
     private readonly playersAtGames: Array<{ player: IPlayer, game: Game }> = new Array<{ player: IPlayer, game: Game }>();
 
-    addNewGame(name: string): { name: string, seats: number } {
+    addNewGame(name: string, owner: string): { name: string, seats: number, owner: string } {
         if (!this.games.find(game => game.getName() === name)) {
             const shoe: IShoe = new Shoe(6)
             const gameState: IGameState = new GameState()
-            const game: Game = new Game(name, shoe, gameState)
+            const game: Game = new Game(name, owner, shoe, gameState)
             this.games.push(game)
-            return { name: game.getName(), seats: game.getPlayerNum() }
+            return { name: game.getName(), seats: game.getPlayerNum(), owner: game.getOwner() }
         }
     }
 
-    getGamesData(): Array<{ name: string, seats: number }> {
+    getGamesData(): Array<{ name: string, seats: number, owner: string }> {
         return this.games.map(game => {
-            return { name: game.getName(), seats: game.getPlayerNum() }
+            return { name: game.getName(), seats: game.getPlayerNum(), owner: game.getOwner() }
         })
     }
 
@@ -46,5 +46,7 @@ export class GameManagerService implements IGameManagerService {
         }
     }
 
-
+    deleteGame(gameName: string): void {
+        this.games.splice(this.games.indexOf(this.games.find(g => g.getName() === gameName)), 1)
+    }
 }

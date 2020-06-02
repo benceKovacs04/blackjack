@@ -5,14 +5,16 @@ import IGameState from "./gamestate/IGamestate";
 
 export class Game {
 
-    constructor(name: string, shoe: IShoe, gameState: IGameState) {
+    constructor(name: string, owner: string, shoe: IShoe, gameState: IGameState) {
         this.name = name;
         this.shoe = shoe
         this.gameState = gameState
         this.phase = Phase.EmptyRoom
+        this.owner = owner;
     }
 
     private name: string;
+    private owner: string;
     private players: IPlayer[] = new Array<IPlayer>()
     private waitingRoom: IPlayer[] = []
 
@@ -38,6 +40,10 @@ export class Game {
 
     getName(): string {
         return this.name;
+    }
+
+    getOwner(): string {
+        return this.owner;
     }
 
     getPlayerNum(): number {
