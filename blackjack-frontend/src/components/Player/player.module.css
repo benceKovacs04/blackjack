@@ -16,3 +16,9 @@
     display: flex;
 }
 
+.Dealer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
