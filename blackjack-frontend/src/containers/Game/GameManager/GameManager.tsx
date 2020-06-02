@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import classes from './GameManager.module.css'
 import axios from 'axios'
 import GameCard from '../../../components/GameCard/GameCard'
 import { Redirect } from 'react-router-dom'
+import loggedInContext from '../../../contexts/LoggedInContext'
 
 export default function GameManager() {
 
-    const [games, setGames] = useState<Array<{ name: string, seats: number }>>([])
+    const [games, setGames] = useState<Array<{ name: string, seats: number, owner: string }>>([])
     const [name, setName] = useState<string>("")
     const [redirectToGame, setRedirectToGame] = useState<boolean>(false)
     const [roomName, setRoomName] = useState<string>("")
+
+    const { username } = useContext(loggedInContext)
 
     useEffect(() => {
         axios.get(
@@ -24,7 +27,7 @@ export default function GameManager() {
         if (name !== "") {
             axios.post(
                 "http://localhost:5000/gameManager/newGame",
-                { name: name },
+                { name: name, owner: username },
                 { withCredentials: true }
             ).then(resp => {
                 if (resp.data !== "") {
@@ -51,7 +54,7 @@ export default function GameManager() {
             </div>
             <div className={classes.LobbyList}>
                 {games.map(game => {
-                    return <GameCard click={onCardClick} name={game.name} seats={game.seats} />
+                    return <GameCard click={onCardClick} name={game.name} seats={game.seats} owner={game.owner} />
                 })}
             </div>
         </div>

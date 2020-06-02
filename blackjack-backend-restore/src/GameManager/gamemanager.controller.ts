@@ -1,5 +1,5 @@
-import { Controller, Get, UseGuards, Res, Inject, Post, Body, Query, Delete } from "@nestjs/common";
-import { Response } from 'express';
+import { Controller, Get, UseGuards, Res, Inject, Post, Body, Query, Delete, Req } from "@nestjs/common";
+import { Response, Request } from 'express';
 import { IGameManagerService } from "./IGameManagerService.interface";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { join } from "path";
@@ -35,11 +35,13 @@ export class GameManagerController {
     @UseGuards(JwtAuthGuard)
     @Delete("/delete-game")
     deleteGame(
+        @Req() req: Request,
         @Res() res: Response,
         @Query("gameName") gameName: string
     ) {
         this.gameManagerService.deleteGame(gameName)
         res.send(this.gameManagerService.getGamesData())
+        console.log(req.user)
     }
 
 }
