@@ -37,6 +37,11 @@ export default function GameManager() {
         }
     }
 
+    const onCardDelete = (name: string) => {
+        const newArr = [...games].filter(g => g.name !== name);
+        setGames(newArr)
+    }
+
     const onCardClick = (roomname: string) => {
         setRoomName(roomname);
         setRedirectToGame(true)
@@ -54,7 +59,7 @@ export default function GameManager() {
             </div>
             <div className={classes.LobbyList}>
                 {games.map(game => {
-                    return <GameCard click={onCardClick} name={game.name} seats={game.seats} owner={game.owner} />
+                    return <GameCard click={onCardClick} name={game.name} seats={game.seats} owner={game.owner} onDelete={onCardDelete} />
                 })}
             </div>
         </div>

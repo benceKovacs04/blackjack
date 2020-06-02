@@ -11,6 +11,7 @@ export default function GameCard(props: any) {
             `http://localhost:5000/gameManager/delete-game?gameName=${props.name}`,
             { withCredentials: true }
         )
+        props.onDelete(props.name)
     }
 
     return (

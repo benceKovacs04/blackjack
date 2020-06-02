@@ -39,9 +39,9 @@ export class GameManagerController {
         @Res() res: Response,
         @Query("gameName") gameName: string
     ) {
-        this.gameManagerService.deleteGame(gameName)
+        this.gameManagerService.deleteGame(gameName, req.user["username"])
         res.send(this.gameManagerService.getGamesData())
-        console.log(req.user)
+
     }
 
 }

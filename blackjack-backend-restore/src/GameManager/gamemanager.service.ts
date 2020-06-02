@@ -46,7 +46,12 @@ export class GameManagerService implements IGameManagerService {
         }
     }
 
-    deleteGame(gameName: string): void {
-        this.games.splice(this.games.indexOf(this.games.find(g => g.getName() === gameName)), 1)
+    deleteGame(gameName: string, loggedInUser: string): void {
+        const game = this.games.find(g => g.getName() === gameName)
+        if (game.getOwner() === loggedInUser) {
+            this.games.splice(this.games.indexOf(game), 1)
+
+        }
+
     }
 }

@@ -6,5 +6,5 @@ export interface IGameManagerService {
     getGamesData(): Array<{ name: string, seats: number, owner: string }>
     addPlayerToGame(player: IPlayer, gameName: string): Boolean
     removePlayerFromGame(player: IPlayer): void
-    deleteGame(gameName: string): void
+    deleteGame(gameName: string, loggedInUser: string): void
 }
