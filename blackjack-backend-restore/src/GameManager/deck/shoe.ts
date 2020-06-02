@@ -49,8 +49,9 @@ export default class Shoe implements IShoe {
     }
 
     getCardValue(card: string): number {
-        if (parseInt(card[1])) return parseInt(card[1])
-        if (card[1] === 'A') return 1
-        return 10
+        if (card.length === 3) return 10;
+        if (parseInt(card[1])) return parseInt(card[1]);
+        if (card[1] === 'A') return 1;
+        return 10;
     }
 }
