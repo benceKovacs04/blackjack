@@ -125,7 +125,7 @@ describe("GameState", () => {
                 gameState.placeBet("TEST_2", 10)
                 const test = gameState.getGameState().players.find(p => p.playerName === "TEST")
                 const test_2 = gameState.getGameState().players.find(p => p.playerName === "TEST_2")
-                expect(test.bet).toBeUndefined()
+                expect(test.bet).toEqual(0)
                 expect(test_2.bet).toEqual(10)
             })
         })
