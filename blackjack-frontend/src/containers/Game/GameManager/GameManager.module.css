@@ -73,3 +73,25 @@
     color: white;
 }
 
+.Logout {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 80px;
+    height: 40px;
+    border: none;
+    font-weight: bold;
+    border-radius: 20px;
+    transition: background-color 0.5s ease, color 0.3s ease;
+}
+
+.Logout:hover {
+    background-color: maroon;
+    transition: background-color 0.5s ease, color 0.3s ease;
+    color: white;
+}
+
+.Logout:focus {
+    outline: none;
+}
+

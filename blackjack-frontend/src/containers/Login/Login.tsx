@@ -48,7 +48,7 @@ export default function Login() {
             {toGame ? <Redirect to="/gameManager" /> : null}
             {toSignUp ? <Redirect to="/signUp" /> : null}
             <div className={classes.Login}>
-                <h1>BBBBBBBlackJack - Log in</h1>
+                <h1>BlackJack</h1>
                 <input onChange={usernameOnChange} placeholder="Username"></input>
                 <input type="password" onChange={passwordOnChange} placeholder="Password"></input>
                 <button onClick={logIn}>Log me in!</button>

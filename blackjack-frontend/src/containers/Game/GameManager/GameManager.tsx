@@ -11,9 +11,10 @@ export default function GameManager() {
     const [games, setGames] = useState<Array<{ name: string, seats: number, owner: string }>>([])
     const [name, setName] = useState<string>("")
     const [redirectToGame, setRedirectToGame] = useState<boolean>(false)
+    const [redirectToLogin, setRedirectToLogin] = useState<boolean>(false)
     const [roomName, setRoomName] = useState<string>("")
 
-    const { username } = useContext(loggedInContext)
+    const { username, logOut } = useContext(loggedInContext)
 
     useEffect(() => {
         refreshLobbies()
@@ -52,10 +53,25 @@ export default function GameManager() {
         setRedirectToGame(true)
     }
 
+    const logOutClick = () => {
+        axios.get(
+            `${constants.backendAddress}/auth/log-out`,
+            { withCredentials: true })
+            .then(resp => {
+                if (resp.status === 200) {
+                    logOut();
+                    setRedirectToLogin(true)
+                }
+            })
+
+    }
+
 
     return (
         <div className={classes.Background}>
             {redirectToGame ? <Redirect to={`/game/${roomName}`} /> : null}
+            {redirectToLogin ? <Redirect to={"/"} /> : null}
+            <button onClick={logOutClick} className={classes.Logout}>logout</button>
             <div className={classes.Header}>
                 <h1>Tables</h1>
                 <div className={classes.Inputs}>

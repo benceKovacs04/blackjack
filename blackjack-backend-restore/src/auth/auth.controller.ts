@@ -38,4 +38,13 @@ export class AuthController {
         res.cookie("loggedIn", username, { path: "/" })
         res.send()
     }
+
+
+    @UseGuards(JwtAuthGuard)
+    @HttpCode(200)
+    @Get("/log-out")
+    logOut(@Res() res: Response) {
+        res.cookie("access-token", "logged out");
+        res.send();
+    }
 }

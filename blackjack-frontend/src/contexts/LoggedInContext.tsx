@@ -5,7 +5,8 @@ const loggedInContext = React.createContext({
     loggedIn: false,
     username: "",
     toggleLoggedIn: () => { },
-    setUser: (username: string) => { }
+    setUser: (username: string) => { },
+    logOut: () => { }
 })
 
 
@@ -22,13 +23,20 @@ export const LoggedInContextWrapper = (props: any) => {
         setUsername(username)
     }
 
+    const logOut = () => {
+        setLoggedIn(false)
+        setUsername("")
+        cookies.remove('loggedIn')
+    }
+
     return (
         <loggedInContext.Provider
             value={{
                 loggedIn,
                 username,
                 toggleLoggedIn,
-                setUser
+                setUser,
+                logOut
             }}
         >
             {props.children}
