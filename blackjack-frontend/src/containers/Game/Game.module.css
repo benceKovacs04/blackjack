@@ -10,6 +10,30 @@
     position: fixed;
     left: 1%;
     color: white;
+    width: 20%;
+    overflow: auto;
+}
+
+.TableName button {
+    width: 30%;
+    height: 30px;
+    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease, height 0.5s ease;
+    background-color: white;
+    border: none;
+    border-radius: 20px;
+}
+
+.TableName button:hover {
+    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease, height 0.5s ease;
+    height: 40px;
+    width: 40%;
+    background-color: maroon;
+    color: white;
+    
+}
+
+.TableName button:focus {
+    outline: none;
 }
 
 .Table {
@@ -55,7 +79,7 @@
     outline: none;
     font-weight: bold;
 
-    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease;
+    transition: background-color 0.5s ease, width 0.5s ease, color 0.5s ease, height 0.5s ease;
     background-color: white;
     color: black;
 }

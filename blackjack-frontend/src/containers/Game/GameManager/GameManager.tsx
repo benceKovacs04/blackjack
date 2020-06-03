@@ -60,7 +60,7 @@ export default function GameManager() {
                 <h1>Tables</h1>
                 <div className={classes.Inputs}>
                     <button onClick={addLobby}>Add new game</button>
-                    <input onChange={e => setName(e.target.value)}></input>
+                    <input onChange={e => setName(e.target.value)} maxLength={30}></input>
                     <button onClick={refreshLobbies}>Refresh list</button>
                 </div>
             </div>

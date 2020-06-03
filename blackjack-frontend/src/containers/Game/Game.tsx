@@ -5,6 +5,7 @@ import socketIO from "socket.io-client"
 import Player from '../../components/Player/Player'
 import Dealer from '../../components/Player/Dealer'
 import { constants } from '../../constants/constants'
+import { Redirect } from 'react-router-dom'
 
 export default function Game(props: any) {
 
@@ -20,6 +21,8 @@ export default function Game(props: any) {
     const [myTurn, setMyTurn] = useState<boolean>(false)
     const [result, setResult] = useState<string>("")
     const [dealer, setDealer] = useState<any>()
+
+    const [toTables, setToTables] = useState<boolean>(false)
 
     const connection: any = useRef();
 
@@ -96,11 +99,18 @@ export default function Game(props: any) {
         setResult(res)
     }
 
+    const leaveTable = () => {
+        connection.current.disconnect();
+        setToTables(true);
+    }
+
     return (
         <div className={classes.Background}>
+            {toTables ? <Redirect to={"/gameManager"} /> : null}
             <div className={classes.Table}>
                 <div className={classes.TableName}>
-                    <h1>Table: {tableName}</h1>
+                    <h3>Table: {tableName}</h3>
+                    <button onClick={leaveTable}>Leave Table</button>
                 </div>
                 <div className={classes.Dealer}>
                     {betTimer > 0 ? <h1>Remaining time to bet: {betTimer}</h1> : dealer ? <Dealer dealer={dealer} /> : null}
