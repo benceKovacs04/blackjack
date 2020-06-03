@@ -29,12 +29,12 @@
 }
 
 .Header h1 {
-    color: darkred;
+    color: maroon;
     font-size: 80px;
     margin-top: auto;
     margin-bottom: auto;
-    
 }
+
 
 .Inputs {
     width: 100%;
@@ -45,12 +45,31 @@
 .Inputs input {
     height: 30px;
     width: 77%;
-    font-size: 20px;;
+    font-size: 20px;
+    border-radius: 20px;
+    padding-left: 15px;
+}
+
+.Inputs input:focus {
+    outline: none;
 }
 
 .Inputs button {
     width: 20%;
     margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 20px;
+    transition: background-color 0.5s ease, color 0.3s ease;
+    font-weight: bold;
+}
 
+.Inputs button:focus{
+    outline:none;
+}
+
+.Inputs button:hover {
+    transition: background-color 0.5s ease, color 0.3s ease;
+    background-color: maroon;
+    color: white;
 }
 

@@ -16,13 +16,17 @@ export default function GameManager() {
     const { username } = useContext(loggedInContext)
 
     useEffect(() => {
+        refreshLobbies()
+    }, [])
+
+    const refreshLobbies = () => {
         axios.get(
             `${constants.backendAddress}/gameManager/getGamesData`,
             { withCredentials: true }
         ).then(resp => {
             setGames(resp.data)
         })
-    }, [])
+    }
 
     const addLobby = () => {
         if (name !== "") {
@@ -48,6 +52,7 @@ export default function GameManager() {
         setRedirectToGame(true)
     }
 
+
     return (
         <div className={classes.Background}>
             {redirectToGame ? <Redirect to={`/game/${roomName}`} /> : null}
@@ -56,6 +61,7 @@ export default function GameManager() {
                 <div className={classes.Inputs}>
                     <button onClick={addLobby}>Add new game</button>
                     <input onChange={e => setName(e.target.value)}></input>
+                    <button onClick={refreshLobbies}>Refresh list</button>
                 </div>
             </div>
             <div className={classes.LobbyList}>
