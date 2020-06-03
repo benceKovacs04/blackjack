@@ -36,9 +36,7 @@ export class GameManagerService implements IGameManagerService {
         const game = this.games.find(game => game.getName() === gameName)
         if (game) {
             this.playersAtGames.push({ player: player, game: game })
-            if (this.emptyGameTimers.has(game)) {
-                clearTimeout(this.emptyGameTimers.get(game))
-            }
+            this.clearAutoDelete(game)
             return game.addPlayer(player)
         }
         return false;
@@ -59,15 +57,21 @@ export class GameManagerService implements IGameManagerService {
         const game = this.games.find(g => g.getName() === gameName)
         if (game.getOwner() === loggedInUser) {
             this.games.splice(this.games.indexOf(game), 1)
-            if (this.emptyGameTimers.has(game)) {
-                clearTimeout(this.emptyGameTimers.get(game))
-            }
+            this.clearAutoDelete(game)
         }
     }
 
     setAutoDeleteOnGame(game: Game) {
         this.emptyGameTimers.set(game, setTimeout(() => {
-            this.games.splice(this.games.indexOf(game), 1)
+            this.games.splice(this.games.indexOf(game), 1);
+            this.emptyGameTimers.delete(game)
         }, 180000));
+    }
+
+    clearAutoDelete(game: Game) {
+        if (this.emptyGameTimers.has(game)) {
+            clearTimeout(this.emptyGameTimers.get(game))
+            this.emptyGameTimers.delete(game)
+        }
     }
 }
