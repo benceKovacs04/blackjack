@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route } from "react-router-dom";
-import Login from "./containers/Login/Login"
-import SignUp from './containers/SignUp/SignUp'
+import Login from "./containers/Auth/Login/Login"
+import SignUp from './containers/Auth/SignUp/SignUp'
 import GameManager from './containers/Game/GameManager/GameManager'
 import Game from './containers/Game/Game'
 import { LoggedInContextWrapper } from './contexts/LoggedInContext'

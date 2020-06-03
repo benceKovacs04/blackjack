@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import classes from "./Signup.module.css";
+import classes from "../Auth.module.css";
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
-import { constants } from '../../constants/constants'
+import { constants } from '../../../constants/constants'
 
 export default function Login() {
 
@@ -44,8 +44,8 @@ export default function Login() {
     return (
         <div className={classes.Background}>
             {toLogin ? <Redirect to="/" /> : null}
-            <div className={classes.Login}>
-                <h1>BBBBBBBlackJack - Log in</h1>
+            <div className={classes.Auth}>
+                <h1>Black<span className={classes.Jack}>Jack</span></h1>
                 <input onChange={usernameOnChange} placeholder="Username"></input>
                 <input type="password" onChange={passwordOnChange} placeholder="Password"></input>
                 <input type="password" onChange={passwordTwoOnChange} placeholder="Password again"></input>

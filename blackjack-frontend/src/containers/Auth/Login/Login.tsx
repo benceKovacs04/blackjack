@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
-import classes from "./Login.module.css";
+import classes from "../Auth.module.css";
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
-import LoggedInCpontext from '../../contexts/LoggedInContext'
-import { constants } from "../../constants/constants"
+import LoggedInCpontext from '../../../contexts/LoggedInContext'
+import { constants } from "../../../constants/constants"
 
 export default function Login() {
 
@@ -47,8 +47,8 @@ export default function Login() {
         <div className={classes.Background}>
             {toGame ? <Redirect to="/gameManager" /> : null}
             {toSignUp ? <Redirect to="/signUp" /> : null}
-            <div className={classes.Login}>
-                <h1>BlackJack</h1>
+            <div className={classes.Auth}>
+                <h1>Black<span className={classes.Jack}>Jack</span></h1>
                 <input onChange={usernameOnChange} placeholder="Username"></input>
                 <input type="password" onChange={passwordOnChange} placeholder="Password"></input>
                 <button onClick={logIn}>Log me in!</button>
