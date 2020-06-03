@@ -83,7 +83,7 @@ export class Game {
         this.waitingRoom.splice(this.waitingRoom.indexOf(player), 1)
         this.gameState.removePlayerFromState(player.username)
         this.sendGameStateToPlayers();
-        if (this.players.length === 0) {
+        if (this.players.length === 0 && this.waitingRoom.length === 0) {
             this.setPhase(Phase.EmptyRoom)
         }
     }

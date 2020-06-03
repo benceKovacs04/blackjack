@@ -13,12 +13,15 @@ export class GameManagerService implements IGameManagerService {
     private readonly games: Array<Game> = new Array<Game>()
     private readonly playersAtGames: Array<{ player: IPlayer, game: Game }> = new Array<{ player: IPlayer, game: Game }>();
 
+    private readonly emptyGameTimers: Map<Game, any> = new Map<Game, any>()
+
     addNewGame(name: string, owner: string): { name: string, seats: number, owner: string } {
         if (!this.games.find(game => game.getName() === name)) {
-            const shoe: IShoe = new Shoe(6)
-            const gameState: IGameState = new GameState()
-            const game: Game = new Game(name, owner, shoe, gameState)
-            this.games.push(game)
+            const shoe: IShoe = new Shoe(6);
+            const gameState: IGameState = new GameState();
+            const game: Game = new Game(name, owner, shoe, gameState);
+            this.games.push(game);
+            this.setAutoDeleteOnGame(game);
             return { name: game.getName(), seats: game.getPlayerNum(), owner: game.getOwner() }
         }
     }
@@ -33,6 +36,9 @@ export class GameManagerService implements IGameManagerService {
         const game = this.games.find(game => game.getName() === gameName)
         if (game) {
             this.playersAtGames.push({ player: player, game: game })
+            if (this.emptyGameTimers.has(game)) {
+                clearTimeout(this.emptyGameTimers.get(game))
+            }
             return game.addPlayer(player)
         }
         return false;
@@ -43,6 +49,9 @@ export class GameManagerService implements IGameManagerService {
         if (playerMap) {
             this.playersAtGames.splice(this.playersAtGames.indexOf(playerMap), 1)
             playerMap.game.removePlayer(player);
+            if (playerMap.game.getPlayerNum() === 0) {
+                this.setAutoDeleteOnGame(playerMap.game)
+            }
         }
     }
 
@@ -52,6 +61,11 @@ export class GameManagerService implements IGameManagerService {
             this.games.splice(this.games.indexOf(game), 1)
 
         }
+    }
 
+    setAutoDeleteOnGame(game: Game) {
+        this.emptyGameTimers.set(game, setTimeout(() => {
+            this.games.splice(this.games.indexOf(game), 1)
+        }, 180000));
     }
 }
