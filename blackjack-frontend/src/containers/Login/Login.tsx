@@ -3,6 +3,7 @@ import classes from "./Login.module.css";
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import LoggedInCpontext from '../../contexts/LoggedInContext'
+import { constants } from "../../constants/constants"
 
 export default function Login() {
 
@@ -27,7 +28,7 @@ export default function Login() {
     const logIn = () => {
         setError("")
         axios.post(
-            "http://localhost:5000/auth/login",
+            `${constants.backendAddress}/auth/login`,
             {
                 username: username,
                 password: password

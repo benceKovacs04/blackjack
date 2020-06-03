@@ -2,13 +2,14 @@ import React, { useContext } from 'react'
 import classes from './GameCard.module.css'
 import loggedInContext from '../../contexts/LoggedInContext'
 import axios from 'axios'
+import { constants } from "../../constants/constants"
 
 export default function GameCard(props: any) {
     const { username } = useContext(loggedInContext)
 
     const deleteCard = () => {
         axios.delete(
-            `http://localhost:5000/gameManager/delete-game?gameName=${props.name}`,
+            `${constants.backendAddress}/gameManager/delete-game?gameName=${props.name}`,
             { withCredentials: true }
         )
         props.onDelete(props.name)

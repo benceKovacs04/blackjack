@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import classes from "./Signup.module.css";
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
+import { constants } from '../../constants/constants'
 
 export default function Login() {
 
@@ -26,7 +27,7 @@ export default function Login() {
     const signUp = () => {
         if (password === passwordTwo) {
             axios.post(
-                "http://localhost:5000/auth/signUp",
+                `${constants.backendAddress}/auth/signUp`,
                 {
                     username: username,
                     password: password

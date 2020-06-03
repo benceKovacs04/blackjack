@@ -1,6 +1,7 @@
 import React from 'react'
 import classes from './player.module.css'
 import BetButtons from './BetButtons/BetButtons'
+import { constants } from '../../constants/constants'
 
 export default function Player(props: any) {
     return (
@@ -17,7 +18,7 @@ export default function Player(props: any) {
             }
             <div className={classes.Cards}>
                 {props.player.playerHand.map((h: any) => {
-                    return <img className={classes.Card} src={`http://localhost:5000/gameManager/card-image?cardId=${h.card}.png`}></img>
+                    return <img className={classes.Card} src={`${constants.backendAddress}/gameManager/card-image?cardId=${h.card}.png`}></img>
                 })}
             </div>
         </div>

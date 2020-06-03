@@ -4,6 +4,7 @@ import loggedInContext from '../../contexts/LoggedInContext'
 import socketIO from "socket.io-client"
 import Player from '../../components/Player/Player'
 import Dealer from '../../components/Player/Dealer'
+import { constants } from '../../constants/constants'
 
 export default function Game(props: any) {
 
@@ -25,7 +26,7 @@ export default function Game(props: any) {
     useEffect(() => {
         if (loggedIn) {
             if (connection.current === undefined) {
-                connection.current = socketIO("http://localhost:5000/game")
+                connection.current = socketIO(`${constants.backendAddress}/game`)
                 connection.current.on("connected", sitPlayerIn)
                 connection.current.on("game-state", setGameState)
                 connection.current.on("bet-phase", betPhase)

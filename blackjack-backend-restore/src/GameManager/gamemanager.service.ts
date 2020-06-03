@@ -59,7 +59,9 @@ export class GameManagerService implements IGameManagerService {
         const game = this.games.find(g => g.getName() === gameName)
         if (game.getOwner() === loggedInUser) {
             this.games.splice(this.games.indexOf(game), 1)
-
+            if (this.emptyGameTimers.has(game)) {
+                clearTimeout(this.emptyGameTimers.get(game))
+            }
         }
     }
 

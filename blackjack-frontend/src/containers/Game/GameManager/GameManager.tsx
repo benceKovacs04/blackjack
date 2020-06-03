@@ -4,6 +4,7 @@ import axios from 'axios'
 import GameCard from '../../../components/GameCard/GameCard'
 import { Redirect } from 'react-router-dom'
 import loggedInContext from '../../../contexts/LoggedInContext'
+import { constants } from "../../../constants/constants"
 
 export default function GameManager() {
 
@@ -16,7 +17,7 @@ export default function GameManager() {
 
     useEffect(() => {
         axios.get(
-            "http://localhost:5000/gameManager/getGamesData",
+            `${constants.backendAddress}/gameManager/getGamesData`,
             { withCredentials: true }
         ).then(resp => {
             setGames(resp.data)
@@ -26,7 +27,7 @@ export default function GameManager() {
     const addLobby = () => {
         if (name !== "") {
             axios.post(
-                "http://localhost:5000/gameManager/newGame",
+                `${constants.backendAddress}/gameManager/newGame`,
                 { name: name, owner: username },
                 { withCredentials: true }
             ).then(resp => {

@@ -1,5 +1,6 @@
 import React from 'react'
 import classes from './player.module.css'
+import { constants } from "../../constants/constants"
 
 export default function Dealer(props: any) {
     return (
@@ -7,7 +8,7 @@ export default function Dealer(props: any) {
             <h1>{props.dealer.dealerHandValue}</h1>
             <div>
                 {props.dealer.dealerHand.map((h: any) => {
-                    return <img src={`http://localhost:5000/gameManager/card-image?cardId=${h.card}.png`}></img>
+                    return <img src={`${constants.backendAddress}/gameManager/card-image?cardId=${h.card}.png`}></img>
                 })}
             </div>
         </div>
