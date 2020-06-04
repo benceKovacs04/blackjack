@@ -106,6 +106,15 @@ export class Game {
     //---- Game phase handlers ----
 
     private setPhase(phase: Phase) {
+        if (phase === Phase.DealHands) {
+            if (this.gameState.getGameState().players.reduce((a, b) => a + b.bet, 0) === 0) {
+                setTimeout(() => {
+                    this.phase = Phase.Betting;
+                    this.executePhase(this.phase);
+                }, 1000);
+                return;
+            }
+        }
         this.phase = phase
         this.executePhase(phase)
     }

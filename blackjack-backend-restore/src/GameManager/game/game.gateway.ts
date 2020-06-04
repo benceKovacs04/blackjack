@@ -30,7 +30,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     }
 
-
     @SubscribeMessage("sit_player_in")
     sitPlayerIn(client: Socket, data: { username: string, tableName: string }): void {
         const player: IPlayer = new Player(client, data.username)
