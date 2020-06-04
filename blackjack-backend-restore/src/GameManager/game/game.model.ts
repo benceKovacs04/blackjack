@@ -91,16 +91,22 @@ export class Game {
     nextPlayer() {
         this.activePlayer.endTurn();
         this.killTimers();
-        const activeIndex = this.players.indexOf(this.activePlayer)
-        if (activeIndex + 1 === this.players.length) {
-            this.setPhase(Phase.DealDealer)
-            this.activePlayer = null;
-            return
-        }
+        let possibleNextIndex = this.players.indexOf(this.activePlayer) + 1;
 
-        this.activePlayer = this.players[activeIndex + 1]
-        this.timeoutIDs.push(setTimeout(() => this.nextPlayer(), 10000))
-        this.activePlayer.setTurn()
+        while (true) {
+            if (possibleNextIndex === this.players.length) {
+                this.setPhase(Phase.DealDealer)
+                this.activePlayer = null;
+                return
+            }
+            if (this.gameState.getGameState().players.find(p => p.playerName === this.players[possibleNextIndex].username).bet > 0) {
+                this.activePlayer = this.players[possibleNextIndex];
+                this.timeoutIDs.push(setTimeout(() => this.nextPlayer(), 10000));
+                this.activePlayer.setTurn();
+                return;
+            }
+            possibleNextIndex++;
+        }
     }
 
     //---- Game phase handlers ----
@@ -166,8 +172,13 @@ export class Game {
 
     private initPlayerDecisionPhase() {
         if (this.players.length > 0) {
-            this.activePlayer = this.players[0]
-            this.activePlayer.setTurn()
+            for (let i = 0; i < this.players.length; i++) {
+                if (this.gameState.getGameState().players.find(p => p.playerName === this.players[i].username).bet > 0) {
+                    this.activePlayer = this.players[i];
+                    this.activePlayer.setTurn();
+                    break;
+                }
+            }
             this.timeoutIDs.push(setTimeout(() => this.nextPlayer(), 10000))
         }
     }
