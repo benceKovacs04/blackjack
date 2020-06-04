@@ -20,6 +20,17 @@
 
 .Player .Cards {
     display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.Player .Card {
+    width: 150px;
+    
+}
+
+.Player .Card:not(:first-child){
+    margin-left: -100px;
 }
 
 .Dealer {

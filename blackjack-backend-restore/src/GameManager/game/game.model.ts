@@ -272,7 +272,7 @@ export class Game {
         const state = this.gameState.getGameState()
         this.players.forEach(p => p.sendGameState(state))
 
-        if (state.players.find(p => p.playerName === this.activePlayer.username).playerHandValue > 21) {
+        if (state.players.find(p => p.playerName === this.activePlayer.username).playerHandValue >= 21) {
             this.nextPlayer()
         } else {
             this.killTimers()

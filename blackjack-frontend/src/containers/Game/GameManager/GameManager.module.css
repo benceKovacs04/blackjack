@@ -1,13 +1,6 @@
-.Background {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-image: url("http://cheerspokernh.com/wp-content/uploads/2018/02/bigstock-poker-table-background-26587844-2-1.jpg");
-    background-size: cover;
-}
-
 .LobbyList {
     width: 40vw;
+    min-width: 600px;
     height: 70vh;
     border: 10px black solid;
     border-radius: 20px;
@@ -21,6 +14,7 @@
     display: flex;
     flex-direction: column;
     width: 40vw;
+    min-width: 600px;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
