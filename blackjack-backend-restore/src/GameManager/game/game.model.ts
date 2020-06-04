@@ -89,8 +89,8 @@ export class Game {
     }
 
     nextPlayer() {
-        this.activePlayer.endTurn()
-        this.killTimers()
+        this.activePlayer.endTurn();
+        this.killTimers();
         const activeIndex = this.players.indexOf(this.activePlayer)
         if (activeIndex + 1 === this.players.length) {
             this.setPhase(Phase.DealDealer)

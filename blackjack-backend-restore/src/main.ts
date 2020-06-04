@@ -5,11 +5,10 @@ import * as cookieParser from 'cookie-parser'
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const whitelist = ["http://localhost:3000"]
-    const blacklist = []
     const corsOptions = {
         credentials: true,
         origin: (origin, callback) => {
-            if (!blacklist.includes(origin)) {
+            if (whitelist.includes(origin) || origin === undefined) {
                 return callback(null, true)
             }
             callback(new Error("Not allowed by CORS"))
