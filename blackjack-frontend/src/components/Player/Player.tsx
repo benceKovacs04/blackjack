@@ -17,8 +17,8 @@ export default function Player(props: any) {
                     null
             }
             <div className={classes.Cards}>
-                {props.player.playerHand.map((h: any) => {
-                    return <img className={classes.Card} src={`${constants.backendAddress}/gameManager/card-image?cardId=${h.card}.png`}></img>
+                {props.player.playerHand.map((h: any, index: number) => {
+                    return <img className={classes.Card} style={{ zIndex: index }} src={`${constants.backendAddress}/gameManager/card-image?cardId=${h.card}.png`}></img>
                 })}
             </div>
         </div>
