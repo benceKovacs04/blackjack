@@ -12,7 +12,9 @@ import GameState from "./game/gamestate/gamestate.model";
 export class GameManagerService implements IGameManagerService {
 
     private readonly games: Array<IGame> = new Array<IGame>()
-    private readonly playersAtGames: Array<{ player: IPlayer, game: IGame }> = new Array<{ player: IPlayer, game: IGame }>();
+    //private readonly playersAtGames: Array<{ player: IPlayer, game: IGame }> = new Array<{ player: IPlayer, game: IGame }>();
+
+    private readonly playersAtGames: Map<IPlayer, IGame> = new Map<IPlayer, IGame>()
 
     private readonly emptyGameTimers: Map<IGame, any> = new Map<IGame, any>()
 
@@ -36,7 +38,7 @@ export class GameManagerService implements IGameManagerService {
     addPlayerToGame(player: IPlayer, gameName: string): boolean {
         const game = this.games.find(game => game.getName() === gameName)
         if (game) {
-            this.playersAtGames.push({ player: player, game: game })
+            this.playersAtGames.set(player, game)
             this.clearAutoDelete(game)
             return game.addPlayer(player)
         }
@@ -44,12 +46,12 @@ export class GameManagerService implements IGameManagerService {
     }
 
     removePlayerFromGame(player: IPlayer): void {
-        const playerMap = this.playersAtGames.find(p => p.player === player)
-        if (playerMap) {
-            this.playersAtGames.splice(this.playersAtGames.indexOf(playerMap), 1)
-            playerMap.game.removePlayer(player);
-            if (playerMap.game.getPlayerNum() === 0) {
-                this.setAutoDeleteOnGame(playerMap.game)
+        if (this.playersAtGames.has(player)) {
+            const game = this.playersAtGames.get(player)
+            this.playersAtGames.delete(player)
+            game.removePlayer(player);
+            if (game.getPlayerNum() === 0) {
+                this.setAutoDeleteOnGame(game)
             }
         }
     }
