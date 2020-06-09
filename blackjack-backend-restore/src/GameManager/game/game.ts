@@ -3,6 +3,7 @@ import IGame from "./IGame.interface"
 import { Action } from "../player/player.model";
 import IShoe from "../deck/IShoe";
 import IGameState from "./gamestate/IGamestate";
+import Card from "../UtilModels/Card.model";
 
 export class Game implements IGame {
 
@@ -172,7 +173,7 @@ export class Game implements IGame {
 
         this.timeoutIDs.push(setTimeout(() => {
             dealOneCard();
-            this.gameState.addCardToDealer({ card: "card_back", value: 0 });
+            this.gameState.addCardToDealer(new Card("card_back", 0));
             this.sendGameStateToPlayers();
         }, 1000))
         this.timeoutIDs.push(setTimeout(() => this.setPhase(Phase.PlayerDecisions), 3000));

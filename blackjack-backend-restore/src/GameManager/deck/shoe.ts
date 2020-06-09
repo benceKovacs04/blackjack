@@ -1,4 +1,5 @@
 import IShoe from "./IShoe";
+import Card from "../UtilModels/Card.model";
 
 export default class Shoe implements IShoe {
 
@@ -38,14 +39,15 @@ export default class Shoe implements IShoe {
         this.initShoe(this.nrOfDeck)
     }
 
-    getCard(): { card: string, value: number } {
+    getCard(): Card {
         const keys = Array.from(this.fullShoe.keys());
         let rndKey = keys[Math.floor(Math.random() * keys.length)]
         while (this.fullShoe[rndKey] === 0) {
             rndKey = keys[Math.floor(Math.random() * keys.length)]
         }
-        this.fullShoe[rndKey] = this.fullShoe[rndKey] - 1
-        return { card: rndKey, value: this.getCardValue(rndKey) }
+        this.fullShoe[rndKey] = this.fullShoe[rndKey] - 1;
+        const card = new Card(rndKey, this.getCardValue(rndKey))
+        return card;
     }
 
     private getCardValue(card: string): number {

@@ -1,6 +1,8 @@
+import Card from "src/GameManager/UtilModels/Card.model"
+
 export default class PlayerState {
     playerName: string
-    playerHand: Array<{ card: string, value: number }> = new Array<{ card: string, value: number }>()
+    playerHand: Array<Card> = new Array<Card>()
     playerHandValue: number = 0
     bet: number = 0
 }

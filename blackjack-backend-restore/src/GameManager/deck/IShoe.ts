@@ -1,5 +1,7 @@
+import Card from "../UtilModels/Card.model";
+
 export default interface IShoe {
-    getCard(): { card: string, value: number }
-    resetShoe(): void
-    getShoeSize(): number
+    getCard(): Card;
+    resetShoe(): void;
+    getShoeSize(): number;
 }

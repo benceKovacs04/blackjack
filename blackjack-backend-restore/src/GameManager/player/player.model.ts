@@ -1,6 +1,7 @@
 import IPlayer from "./IPlayer";
 import { Socket } from "socket.io";
 import PlayerState from "../game/gamestate/playerState.model";
+import Card from "../UtilModels/Card.model";
 
 export default class Player implements IPlayer {
 
@@ -37,7 +38,7 @@ export default class Player implements IPlayer {
         this.setTurn();
     }
 
-    sendGameState(gameState: { players: PlayerState[]; dealer: { dealerHand: { card: string; value: number; }[]; dealerHandValue: number; }; }) {
+    sendGameState(gameState: { players: PlayerState[]; dealer: { dealerHand: Card[]; dealerHandValue: number; }; }) {
         gameState["availableCurrency"] = this.availableCurrency;
         this.socket.emit("game-state", gameState)
     }

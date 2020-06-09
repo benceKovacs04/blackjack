@@ -1,11 +1,12 @@
 import { Action } from "./player.model";
 import PlayerState from "../game/gamestate/playerState.model";
+import Card from "../UtilModels/Card.model";
 
 export default interface IPlayer {
     initEvents(): void
     setTurn(): void
     endTurn(): void
-    sendGameState(gameState: { players: PlayerState[]; dealer: { dealerHand: { card: string; value: number; }[]; dealerHandValue: number; }; })
+    sendGameState(gameState: { players: PlayerState[]; dealer: { dealerHand: Card[]; dealerHandValue: number; }; })
     username: string
     getAvailableCurrency(): number
     setAvailableCurrency(diff: number): void

@@ -1,16 +1,17 @@
 import IGameState from "./IGamestate";
 import PlayerState from "./playerState.model";
+import Card from "src/GameManager/UtilModels/Card.model";
 
 export default class GameState implements IGameState {
 
     private players: Array<PlayerState> = new Array<PlayerState>()
-    private dealer: { dealerHand: Array<{ card: string, value: number }>, dealerHandValue: number } = { dealerHand: [], dealerHandValue: 0 }
+    private dealer: { dealerHand: Array<Card>, dealerHandValue: number } = { dealerHand: Array<Card>(), dealerHandValue: 0 }
     private placedBets: number = 0;
 
-    private calculateValueToAdd(cardValue: number, handValue: number, hand: Array<{ card: string, value: number }>) {
+    private calculateValueToAdd(cardValue: number, handValue: number, hand: Array<Card>) {
         let valueToAdd = cardValue;
-        if (cardValue + handValue > 21 && hand.find(c => c.card[1] == 'A' && c.value === 11)) {
-            const ace = hand.find(c => c.card[1] == 'A' && c.value === 11)
+        if (cardValue + handValue > 21 && hand.find(c => c.name[1] == 'A' && c.value === 11)) {
+            const ace = hand.find(c => c.name[1] == 'A' && c.value === 11)
             ace.value = 1;
         }
         if (cardValue === 1 && handValue <= 10) {
@@ -34,18 +35,19 @@ export default class GameState implements IGameState {
     }
 
 
-    addCardToPlayer(card: { card: string, value: number }, playerName: string): void {
+    addCardToPlayer(card: Card, playerName: string): void {
         const player = this.players.find(p => p.playerName === playerName)
         if (player.bet > 0) {
             const valueToAdd = this.calculateValueToAdd(card.value, player.playerHandValue, player.playerHand)
+            card.value = valueToAdd
             player.playerHandValue += valueToAdd
-            player.playerHand.push({ card: card.card, value: valueToAdd })
+            player.playerHand.push(card)
         }
     }
 
-    addCardToDealer(card: { card: string, value: number }) {
+    addCardToDealer(card: Card) {
         if (this.dealer.dealerHand.length === 2) {
-            this.dealer.dealerHand = this.dealer.dealerHand.filter(c => c.card !== "card_back")
+            this.dealer.dealerHand = this.dealer.dealerHand.filter(c => c.name !== "card_back")
         }
         const valueToAdd = this.calculateValueToAdd(card.value, this.dealer.dealerHandValue, this.dealer.dealerHand)
         this.dealer.dealerHand.push(card)
@@ -61,7 +63,7 @@ export default class GameState implements IGameState {
         return this.placedBets
     }
 
-    getGameState(): { players: PlayerState[]; dealer: { dealerHand: { card: string; value: number; }[]; dealerHandValue: number; }; } {
+    getGameState(): { players: PlayerState[]; dealer: { dealerHand: Card[]; dealerHandValue: number; }; } {
         return { players: [...this.players], dealer: { dealerHand: [...this.dealer.dealerHand], dealerHandValue: this.dealer.dealerHandValue } }
     }
 

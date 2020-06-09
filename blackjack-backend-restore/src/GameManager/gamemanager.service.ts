@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { IGameManagerService } from "./IGameManagerService.interface";
-import { Game } from './game/game.model'
+import { Game } from './game/game'
 import IPlayer from "./player/IPlayer";
 import IGame from "./game/IGame.interface"
 import IShoe from "./deck/IShoe";

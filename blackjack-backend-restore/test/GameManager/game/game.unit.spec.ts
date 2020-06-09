@@ -1,4 +1,4 @@
-import { Game } from "../../../src/GameManager/game/game.model"
+import { Game } from "../../../src/GameManager/game/game"
 import IShoe from "../../../src/GameManager/deck/IShoe"
 import Shoe from "../../../src/GameManager/deck/shoe"
 import IPlayer from "../../../src/GameManager/player/IPlayer"
