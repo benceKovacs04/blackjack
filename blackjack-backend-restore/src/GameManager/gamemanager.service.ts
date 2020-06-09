@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { IGameManagerService } from "./IGameManagerService.interface";
 import { Game } from './game/game.model'
 import IPlayer from "./player/IPlayer";
+import IGame from "./game/IGame.interface"
 import IShoe from "./deck/IShoe";
 import Shoe from "./deck/shoe";
 import IGameState from "./game/gamestate/IGamestate";
@@ -10,16 +11,16 @@ import GameState from "./game/gamestate/gamestate.model";
 @Injectable()
 export class GameManagerService implements IGameManagerService {
 
-    private readonly games: Array<Game> = new Array<Game>()
-    private readonly playersAtGames: Array<{ player: IPlayer, game: Game }> = new Array<{ player: IPlayer, game: Game }>();
+    private readonly games: Array<IGame> = new Array<IGame>()
+    private readonly playersAtGames: Array<{ player: IPlayer, game: IGame }> = new Array<{ player: IPlayer, game: IGame }>();
 
-    private readonly emptyGameTimers: Map<Game, any> = new Map<Game, any>()
+    private readonly emptyGameTimers: Map<IGame, any> = new Map<IGame, any>()
 
     addNewGame(name: string, owner: string): { name: string, seats: number, owner: string } {
         if (!this.games.find(game => game.getName() === name)) {
             const shoe: IShoe = new Shoe(6);
             const gameState: IGameState = new GameState();
-            const game: Game = new Game(name, owner, shoe, gameState);
+            const game: IGame = new Game(name, owner, shoe, gameState);
             this.games.push(game);
             this.setAutoDeleteOnGame(game);
             return { name: game.getName(), seats: game.getPlayerNum(), owner: game.getOwner() }
@@ -61,14 +62,14 @@ export class GameManagerService implements IGameManagerService {
         }
     }
 
-    setAutoDeleteOnGame(game: Game) {
+    setAutoDeleteOnGame(game: IGame) {
         this.emptyGameTimers.set(game, setTimeout(() => {
             this.games.splice(this.games.indexOf(game), 1);
             this.emptyGameTimers.delete(game)
         }, 180000));
     }
 
-    clearAutoDelete(game: Game) {
+    clearAutoDelete(game: IGame) {
         if (this.emptyGameTimers.has(game)) {
             clearTimeout(this.emptyGameTimers.get(game))
             this.emptyGameTimers.delete(game)

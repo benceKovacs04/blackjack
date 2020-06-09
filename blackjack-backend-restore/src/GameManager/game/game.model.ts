@@ -1,9 +1,10 @@
 import IPlayer from "../player/IPlayer";
+import IGame from "./IGame.interface"
 import { Action } from "../player/player.model";
 import IShoe from "../deck/IShoe";
 import IGameState from "./gamestate/IGamestate";
 
-export class Game {
+export class Game implements IGame {
 
     constructor(name: string, owner: string, shoe: IShoe, gameState: IGameState) {
         this.name = name;
@@ -29,14 +30,9 @@ export class Game {
     private intervalIDs = []
     private timeoutIDs = []
 
-    killTimers() {
-        this.intervalIDs.forEach(i => clearInterval(i));
-        this.timeoutIDs.forEach(t => clearTimeout(t));
-        this.intervalIDs = [];
-        this.timeoutIDs = [];
-    }
-
     private timerCounter: number
+
+    //----- IGame interface methods ----
 
     getName(): string {
         return this.name;
@@ -91,7 +87,16 @@ export class Game {
         }
     }
 
-    nextPlayer() {
+    //----- End of IGame interface methods ----
+
+    private killTimers() {
+        this.intervalIDs.forEach(i => clearInterval(i));
+        this.timeoutIDs.forEach(t => clearTimeout(t));
+        this.intervalIDs = [];
+        this.timeoutIDs = [];
+    }
+
+    private nextPlayer() {
         this.activePlayer.endTurn();
         this.killTimers();
         let possibleNextIndex = this.players.indexOf(this.activePlayer) + 1;
