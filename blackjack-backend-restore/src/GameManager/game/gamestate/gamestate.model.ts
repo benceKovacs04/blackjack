@@ -34,21 +34,21 @@ export default class GameState implements IGameState {
     }
 
 
-    addCardToPlayer(card: string, value: number, playerName: string): void {
+    addCardToPlayer(card: { card: string, value: number }, playerName: string): void {
         const player = this.players.find(p => p.playerName === playerName)
         if (player.bet > 0) {
-            const valueToAdd = this.calculateValueToAdd(value, player.playerHandValue, player.playerHand)
+            const valueToAdd = this.calculateValueToAdd(card.value, player.playerHandValue, player.playerHand)
             player.playerHandValue += valueToAdd
-            player.playerHand.push({ card: card, value: valueToAdd })
+            player.playerHand.push({ card: card.card, value: valueToAdd })
         }
     }
 
-    addCardToDealer(card: string, value: number) {
+    addCardToDealer(card: { card: string, value: number }) {
         if (this.dealer.dealerHand.length === 2) {
             this.dealer.dealerHand = this.dealer.dealerHand.filter(c => c.card !== "card_back")
         }
-        const valueToAdd = this.calculateValueToAdd(value, this.dealer.dealerHandValue, this.dealer.dealerHand)
-        this.dealer.dealerHand.push({ card, value })
+        const valueToAdd = this.calculateValueToAdd(card.value, this.dealer.dealerHandValue, this.dealer.dealerHand)
+        this.dealer.dealerHand.push(card)
         this.dealer.dealerHandValue += valueToAdd
     }
 

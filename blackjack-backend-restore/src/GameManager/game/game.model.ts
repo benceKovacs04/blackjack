@@ -162,17 +162,17 @@ export class Game implements IGame {
         const dealOneCard = () => {
             this.players.forEach(p => {
                 const card = this.shoe.getCard()
-                this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card), p.username)
+                this.gameState.addCardToPlayer(card, p.username)
             })
         }
         dealOneCard()
         const dealerCard = this.shoe.getCard()
-        this.gameState.addCardToDealer(dealerCard, this.shoe.getCardValue(dealerCard))
+        this.gameState.addCardToDealer(dealerCard)
         this.sendGameStateToPlayers()
 
         this.timeoutIDs.push(setTimeout(() => {
             dealOneCard();
-            this.gameState.addCardToDealer("card_back", 0);
+            this.gameState.addCardToDealer({ card: "card_back", value: 0 });
             this.sendGameStateToPlayers();
         }, 1000))
         this.timeoutIDs.push(setTimeout(() => this.setPhase(Phase.PlayerDecisions), 3000));
@@ -194,7 +194,7 @@ export class Game implements IGame {
     private handleDealerHand() {
         this.intervalIDs.push(setInterval(() => {
             let card = this.shoe.getCard()
-            this.gameState.addCardToDealer(card, this.shoe.getCardValue(card))
+            this.gameState.addCardToDealer(card)
             let state = this.gameState.getGameState()
             this.sendGameStateToPlayers();
 
@@ -273,7 +273,7 @@ export class Game implements IGame {
 
     private handleHit() {
         const card = this.shoe.getCard()
-        this.gameState.addCardToPlayer(card, this.shoe.getCardValue(card), this.activePlayer.username)
+        this.gameState.addCardToPlayer(card, this.activePlayer.username)
         const state = this.gameState.getGameState()
         this.players.forEach(p => p.sendGameState(state))
 

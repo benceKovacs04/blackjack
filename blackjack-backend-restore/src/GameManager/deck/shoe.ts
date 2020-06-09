@@ -38,17 +38,17 @@ export default class Shoe implements IShoe {
         this.initShoe(this.nrOfDeck)
     }
 
-    getCard(): string {
+    getCard(): { card: string, value: number } {
         const keys = Array.from(this.fullShoe.keys());
         let rndKey = keys[Math.floor(Math.random() * keys.length)]
         while (this.fullShoe[rndKey] === 0) {
             rndKey = keys[Math.floor(Math.random() * keys.length)]
         }
         this.fullShoe[rndKey] = this.fullShoe[rndKey] - 1
-        return rndKey
+        return { card: rndKey, value: this.getCardValue(rndKey) }
     }
 
-    getCardValue(card: string): number {
+    private getCardValue(card: string): number {
         if (card.length === 3) return 10;
         if (parseInt(card[1])) return parseInt(card[1]);
         if (card[1] === 'A') return 1;

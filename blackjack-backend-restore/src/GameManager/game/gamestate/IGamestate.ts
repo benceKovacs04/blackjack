@@ -3,8 +3,8 @@ import PlayerState from "./playerState.model";
 export default interface IGameState {
     addPlayerToState(name: string): boolean
     removePlayerFromState(name: string): void
-    addCardToPlayer(card: string, value: number, playerName: string): void
-    addCardToDealer(card: string, value: number): void
+    addCardToPlayer(card: { card: string, value: number }, playerName: string): void
+    addCardToDealer(card: { card: string, value: number }): void
     resetState(): void
     getGameState(): {
         players: PlayerState[],

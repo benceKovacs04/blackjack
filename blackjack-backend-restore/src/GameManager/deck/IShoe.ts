@@ -1,6 +1,5 @@
 export default interface IShoe {
-    getCard(): string
-    getCardValue(card: string): number
+    getCard(): { card: string, value: number }
     resetShoe(): void
     getShoeSize(): number
 }
