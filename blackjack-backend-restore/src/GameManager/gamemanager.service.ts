@@ -11,12 +11,11 @@ import GameState from "./game/gamestate/gamestate.model";
 @Injectable()
 export class GameManagerService implements IGameManagerService {
 
-    private readonly games: Array<IGame> = new Array<IGame>()
-    //private readonly playersAtGames: Array<{ player: IPlayer, game: IGame }> = new Array<{ player: IPlayer, game: IGame }>();
+    private readonly games: Array<IGame> = new Array<IGame>();
 
-    private readonly playersAtGames: Map<IPlayer, IGame> = new Map<IPlayer, IGame>()
+    private readonly playersAtGames: Map<IPlayer, IGame> = new Map<IPlayer, IGame>();
 
-    private readonly emptyGameTimers: Map<IGame, any> = new Map<IGame, any>()
+    private readonly emptyGameTimers: Map<IGame, any> = new Map<IGame, any>();
 
     addNewGame(name: string, owner: string): { name: string, seats: number, owner: string } {
         if (!this.games.find(game => game.getName() === name)) {
@@ -64,14 +63,14 @@ export class GameManagerService implements IGameManagerService {
         }
     }
 
-    setAutoDeleteOnGame(game: IGame) {
+    private setAutoDeleteOnGame(game: IGame) {
         this.emptyGameTimers.set(game, setTimeout(() => {
             this.games.splice(this.games.indexOf(game), 1);
             this.emptyGameTimers.delete(game)
         }, 180000));
     }
 
-    clearAutoDelete(game: IGame) {
+    private clearAutoDelete(game: IGame) {
         if (this.emptyGameTimers.has(game)) {
             clearTimeout(this.emptyGameTimers.get(game))
             this.emptyGameTimers.delete(game)

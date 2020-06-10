@@ -3,6 +3,7 @@ import { Response, Request } from 'express';
 import { IGameManagerService } from "./IGameManagerService.interface";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { join } from "path";
+import { jwtConstants } from "src/constants/constants";
 
 
 @Controller("gameManager")
@@ -30,6 +31,21 @@ export class GameManagerController {
         @Query("cardId") cardId: string
     ) {
         res.sendFile(join(__dirname, '../../', "src", "assets", "cards", cardId))
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get("/can-join-room")
+    canJoinRoom(
+        @Query("roomName") roomName: string,
+        @Res() res: Response
+    ) {
+        const room = this.gameManagerService.getGamesData().find(r => r.name === roomName);
+        if (room && room.seats < 3) {
+            res.send(true);
+        } else {
+            res.send(false);
+        }
+
     }
 
     @UseGuards(JwtAuthGuard)

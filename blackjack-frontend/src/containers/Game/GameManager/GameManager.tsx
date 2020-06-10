@@ -49,8 +49,17 @@ export default function GameManager() {
     }
 
     const onCardClick = (roomname: string) => {
-        setRoomName(roomname);
-        setRedirectToGame(true)
+        axios.get(
+            `${constants.backendAddress}/gameManager/can-join-room?roomName=${roomname}`,
+            { withCredentials: true }
+        ).then(resp => {
+            if (resp.data === true) {
+                setRoomName(roomname);
+                setRedirectToGame(true)
+            } else {
+                refreshLobbies()
+            }
+        })
     }
 
     const logOutClick = () => {
