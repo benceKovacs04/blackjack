@@ -39,7 +39,7 @@ class PlayerMock implements IPlayer {
     }
 
     MOCK_BET() {
-        this.actionHandlers.bet({ amount: 10, username: "TEST" })
+        this.actionHandlers.bet({ amount: 10, username: this.username })
     }
 
     MOCK_STAY() {
@@ -59,10 +59,7 @@ class PlayerMock implements IPlayer {
 
 class MockShoe implements IShoe {
     getCard(): Card {
-        return new Card("TEST", 0);
-    }
-    getCardValue(card: string): number {
-        return 10
+        return new Card("TEST", 10);
     }
     resetShoe(): void {
         return
@@ -98,7 +95,7 @@ describe("Game", () => {
             expect(result).toEqual(1)
         })
 
-        it("should return false on tring adding a fourth player", () => {
+        it("should return false on trying adding a fourth player", () => {
             game.addPlayer(player)
             game.addPlayer(new PlayerMock())
             game.addPlayer(new PlayerMock())
@@ -162,17 +159,11 @@ describe("Game", () => {
                 expect(player.setBettingPhaseOnPlayer).toHaveBeenCalledWith(0)
             })
 
-            it(" --COPY-- should start dealing cards if every player (one player here) placed in the bets", () => {
-                let gameState = new GameState()
-                let shoe: IShoe = new Shoe(6)
-                let game = new Game("test_game", "test-owner", shoe, gameState)
-                player = new PlayerMock()
-                player.username = "TEST"
-                player.setBettingPhaseOnPlayer = jest.fn()
-                game.addPlayer(player)
-                expect(player.setBettingPhaseOnPlayer).toHaveBeenCalledWith(10)
-                player.MOCK_BET()
-                expect(player.setBettingPhaseOnPlayer).toHaveBeenCalledWith(0)
+            it("players should receive two gamestate update. one at adding player to game, one at betting phase start", () => {
+                player.sendGameState = jest.fn();
+                game.addPlayer(player);
+                jest.advanceTimersByTime(10000);
+                expect(player.sendGameState).toHaveBeenCalledTimes(2);
             })
 
         })
@@ -185,9 +176,10 @@ describe("Game", () => {
                 playerTwo.setBettingPhaseOnPlayer = jest.fn()
                 game.addPlayer(player)
                 game.addPlayer(playerTwo)
+                player.MOCK_BET();
                 jest.advanceTimersByTime(10000)
-                expect(player.setBettingPhaseOnPlayer).toHaveBeenCalledWith(0)
-                expect(playerTwo.setBettingPhaseOnPlayer).toHaveBeenCalledWith(0)
+                expect(player.setBettingPhaseOnPlayer).toHaveBeenLastCalledWith(0)
+                expect(playerTwo.setBettingPhaseOnPlayer).toHaveBeenLastCalledWith(0)
             })
 
             it("should start dealing cards 2 seconds after betting phase is over", () => {
@@ -199,10 +191,11 @@ describe("Game", () => {
                 expect(player.sendGameState).toHaveBeenCalledTimes(3)
             })
 
-            it('player should receive two gamestate update on initial hand dealing 3 seconds after bettingphase is over(got on from adding the player)', () => {
+            it('player should receive two gamestate update on initial hand dealing 3 seconds after bettingphase is over(receives 2 in batting phase)', () => {
                 player.sendGameState = jest.fn()
                 game.addPlayer(player)
-                jest.advanceTimersByTime(13000)
+                player.MOCK_BET();
+                jest.advanceTimersByTime(3000)
                 expect(player.sendGameState).toHaveBeenCalledTimes(4)
             })
 
@@ -217,19 +210,19 @@ describe("Game", () => {
 
         describe("handlePlayerDecision", () => {
 
-
-            it("should end players turn if palyer is tentative for 10 seconds", () => {
+            it("should end players turn if player is tentative for 10 seconds", () => {
                 let playerTwo = new PlayerMock();
-                player.setTurn = jest.fn();
+                playerTwo.username = "TEST_PLAYER_TWO"
+                player.endTurn = jest.fn();
                 playerTwo.setTurn = jest.fn();
                 game.addPlayer(player);
                 game.addPlayer(playerTwo);
                 player.MOCK_BET();
                 playerTwo.MOCK_BET();
                 jest.advanceTimersByTime(6000);
-                expect(player.setTurn).toHaveBeenCalled()
                 expect(playerTwo.setTurn).not.toHaveBeenCalled()
                 jest.advanceTimersByTime(10000)
+                expect(player.endTurn).toHaveBeenCalled();
                 expect(playerTwo.setTurn).toHaveBeenCalled()
             })
 
@@ -257,6 +250,7 @@ describe("Game", () => {
             it("should set next player as active if active player busts", () => {
                 game = new Game("test", "test-owner", new MockShoe(), gameState)
                 const playerTwo = new PlayerMock()
+                playerTwo.username = "TEST_PLAYER_TWO"
                 playerTwo.setTurn = jest.fn()
                 game.addPlayer(player)
                 game.addPlayer(playerTwo)
