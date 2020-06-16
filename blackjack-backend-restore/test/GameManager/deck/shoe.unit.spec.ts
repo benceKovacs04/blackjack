@@ -1,5 +1,6 @@
 import IShoe from '../../../src/GameManager/deck/IShoe'
 import Shoe from "../../../src/GameManager/deck/shoe"
+import Card from '../../../src/GameManager/UtilModels/Card.model'
 
 
 describe('Shoe', () => {
@@ -9,46 +10,23 @@ describe('Shoe', () => {
         shoe = new Shoe(6)
     })
 
-    /* describe('getCard', () => {
-         it('should return a string',  () => {
-             expect(shoe.getCard()).toBeInstanceOf(String)
-         })
-     })*/
 
     describe('getCard', () => {
-        it('should return a string of length between 2 and 3', () => {
-            expect(shoe.getCard().length).toBeGreaterThanOrEqual(2)
-            expect(shoe.getCard().length).toBeLessThanOrEqual(3)
+        it('should return a Card with a name and a value', () => {
+            const card: Card = shoe.getCard();
+            expect(card.name).not.toBeUndefined()
+            expect(card.value).not.toBeUndefined();
         })
-    })
 
-    describe('getCardValue', () => {
-        it('should return 1 for XA', () => {
-            expect(shoe.getCardValue('XA')).toBe(1)
+        it("card should have a name equal or shorter than 3 chars", () => {
+            const card: Card = shoe.getCard();
+            expect(card.name.length).toBeLessThanOrEqual(3);
         })
-    })
 
-    describe('getCardValue', () => {
-        it('should return 2 for X2', () => {
-            expect(shoe.getCardValue('X2')).toBe(2)
+        it("card should have a value of equal or lower than 10", () => {
+            const card: Card = shoe.getCard();
+            expect(card.value).toBeLessThanOrEqual(10);
         })
-    })
 
-    describe('getCardValue', () => {
-        it('should return 5 for X5', () => {
-            expect(shoe.getCardValue('X5')).toBe(5)
-        })
-    })
-
-    describe('getCardValue', () => {
-        it('should return 10 for XJ', () => {
-            expect(shoe.getCardValue('XJ')).toBe(10)
-        })
-    })
-
-    describe('getCardValue', () => {
-        it('should return 10 for XK', () => {
-            expect(shoe.getCardValue('XK')).toBe(10)
-        })
     })
 })

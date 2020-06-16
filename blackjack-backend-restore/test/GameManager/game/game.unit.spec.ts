@@ -6,6 +6,7 @@ import PlayerState from "../../../src/GameManager/game/gamestate/playerState.mod
 import { Action } from "../../../src/GameManager/player/player.model"
 import IGameState from "../../../src/GameManager/game/gamestate/IGamestate"
 import GameState from "../../../src/GameManager/game/gamestate/gamestate.model"
+import Card from "../../../src/GameManager/UtilModels/Card.model"
 
 
 class PlayerMock implements IPlayer {
@@ -21,7 +22,7 @@ class PlayerMock implements IPlayer {
     endTurn(): void {
         return
     }
-    sendGameState(gameState: { players: PlayerState[]; dealer: { dealerHand: { card: string; value: number }[]; dealerHandValue: number } }) {
+    sendGameState(gameState: { players: PlayerState[]; dealer: { dealerHand: Card[]; dealerHandValue: number } }) {
         this.state.push(gameState)
     }
     getAvailableCurrency(): number {
@@ -57,8 +58,8 @@ class PlayerMock implements IPlayer {
 }
 
 class MockShoe implements IShoe {
-    getCard(): string {
-        return "TEST"
+    getCard(): Card {
+        return new Card("TEST", 0);
     }
     getCardValue(card: string): number {
         return 10
