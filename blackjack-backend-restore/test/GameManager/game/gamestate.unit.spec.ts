@@ -164,88 +164,83 @@ describe("GameState", () => {
             })
         })
 
-        /* describe("addCardToDealer", () => {
- 
-               it("should remove the not revealed card (named 'card_back') from the dealers hand if game ads the third card to dealer", () => {
-                   gameState.addCardToDealer("TEST", 0)
-                   gameState.addCardToDealer("card_back", 0)
-                   gameState.addCardToDealer("TEST", 0)
-                   let state = gameState.getGameState()
-                   expect(state.dealer.dealerHand.length).toEqual(2)
-               })
- 
-             it("dealerhand should not contain the card called 'card_back' on adding the third card", () => {
-                 gameState.addCardToDealer("TEST", 0)
-                 gameState.addCardToDealer("card_back", 0)
-                 gameState.addCardToDealer("TEST", 0)
-                 let card = gameState.getGameState().dealer.dealerHand.find(c => c.card === 'card_back')
-                 expect(card).toBeUndefined()
-             })
-         })
- 
-         
-     })
-     /*
-  
-     
- 
-     
- 
-         
-     })
- 
- 
-     describe('addCardToDealer', () => {
-         it('should return object player hand value of 10',  () => {
-             gameState.addCardToDealer("TEST", 10)
-             const state = gameState.getGameState()
-             expect(state.dealerHandValue).toBe(10)
-         })
- 
-         it('should return object player hand value of 10 with one card: "TEST"',  () => {
-             gameState.addCardToDealer("TEST", 10)
-             const result = { playerHand: [], playerHandValue: 0, dealerHand: ["TEST"], dealerHandValue: 10, over: false }
-             const state = gameState.getGameState()
-             expect(state).toEqual(result)
-         })
- 
-         it('should add 11 to player hand instead of 1 if handvalue is 10 or under',  () => {
-             gameState.addCardToDealer("TEST", 1)
-             const state = gameState.getGameState()
-             expect(state.dealerHandValue).toEqual(11)
-         })
- 
-         it('should add 1 to player hand if handvalue is 11 or over',  () => {
-             gameState.addCardToDealer("TEST", 15)
-             gameState.addCardToDealer("TEST", 1)
-             const state = gameState.getGameState()
-             expect(state.dealerHandValue).toEqual(16)
-         })
- 
-         it('should return 12 if we add two aces',  () => {
-             gameState.addCardToDealer("XA", 1)
-             gameState.addCardToDealer("XA", 1)
-             const state = gameState.getGameState()
-             expect(state.dealerHandValue).toEqual(12)
-         })
- 
-         it('should downgrade an ace from 11 to 1 value if player would go over blackjack otherwise',  () => {
-             gameState.addCardToDealer("TEST_5", 5)
-             gameState.addCardToDealer("XA", 1)
-             gameState.addCardToDealer("TEST_4", 8)
-             const state = gameState.getGameState()
-             expect(state.dealerHandValue).toEqual(14)
-         })
- 
-         it('should return 25 on a 10, double seven and ace',  () => {
-             gameState.addCardToDealer("TEST_7", 7)
-             gameState.addCardToDealer("TEST_7", 7)
-             gameState.addCardToDealer("XA", 1)
-             gameState.addCardToDealer("TEST_10", 10)
-             const state = gameState.getGameState()
-             expect(state.dealerHandValue).toEqual(25)
-         })
-     })*/
+        describe("addCardToDealer", () => {
+
+            it("should remove 'card_back' card from dealer hand if third card is added, dealer hand lenght should be 2", () => {
+                const card1 = new Card("X5", 5);
+                const card2 = new Card("card_back", 0);
+                const card3 = new Card("X5", 5);
+                gameState.addCardToDealer(card1)
+                gameState.addCardToDealer(card2)
+                gameState.addCardToDealer(card3)
+                const state = gameState.getGameState();
+                expect(state.dealer.dealerHand.length).toBe(2);
+            })
+
+            it("should add a card of value of 10 to dealer, dealer should have a hand value of 10", () => {
+                const card: Card = new Card("X10", 10);
+                gameState.addCardToDealer(card);
+                const state = gameState.getGameState();
+                expect(state.dealer.dealerHandValue).toBe(10);
+            })
+            it("should return 'TEST' named card after adding it to TEST_PLAYER_ONE", () => {
+                const card: Card = new Card("TEST", 0);
+                gameState.addCardToDealer(card);
+                const state = gameState.getGameState();
+                expect(state.dealer.dealerHand[0].name).toBe("TEST");
+            })
+
+            it("ace should add 11 to dealer instead of 1 if hand value is 10 or under", () => {
+                const card: Card = new Card("XA", 1);
+                gameState.addCardToDealer(card)
+                const state = gameState.getGameState()
+                expect(state.dealer.dealerHandValue).toEqual(11)
+            })
+
+
+            it('ace should add 1 to dealer hand if handvalue is 11 or over', () => {
+                const card1: Card = new Card("TEST", 11);
+                const card2: Card = new Card("XA", 1);
+                gameState.addCardToDealer(card1)
+                gameState.addCardToDealer(card2)
+                const state = gameState.getGameState()
+                expect(state.dealer.dealerHandValue).toEqual(12)
+            })
+
+            it('dealer handvalue should be 12 if dealer gets two aces', () => {
+                const card1: Card = new Card("XA", 1);
+                const card2: Card = new Card("XA", 1);
+                gameState.addCardToDealer(card1);
+                gameState.addCardToDealer(card2);
+                const state = gameState.getGameState()
+                expect(state.dealer.dealerHandValue).toEqual(12)
+            })
+
+            it('should downgrade an ace from 11 to 1 value if dealer would go over 21 otherwise', () => {
+                const card1: Card = new Card("X10", 10);
+                const card2: Card = new Card("XA", 1);
+                const card3: Card = new Card("X4", 4);
+                gameState.addCardToDealer(card1);
+                gameState.addCardToDealer(card2);
+                gameState.addCardToDealer(card3);
+                const state = gameState.getGameState()
+                expect(state.dealer.dealerHandValue).toEqual(15)
+            })
+
+            it('should return 25 on double 7, then ace, then 10', () => {
+                const card1: Card = new Card("X7", 7);
+                const card2: Card = new Card("X7", 7);
+                const card3: Card = new Card("XA", 1);
+                const card4: Card = new Card("X10", 10);
+                gameState.addCardToDealer(card1);
+                gameState.addCardToDealer(card2);
+                gameState.addCardToDealer(card3);
+                gameState.addCardToDealer(card4);
+                const state = gameState.getGameState()
+                expect(state.dealer.dealerHandValue).toEqual(25)
+            })
+
+        })
 
     })
 
