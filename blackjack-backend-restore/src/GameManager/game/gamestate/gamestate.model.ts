@@ -13,11 +13,12 @@ export default class GameState implements IGameState {
         if (cardValue + handValue > 21 && hand.find(c => c.name[1] == 'A' && c.value === 11)) {
             const ace = hand.find(c => c.name[1] == 'A' && c.value === 11)
             ace.value = 1;
+            handValue -= 10;
         }
         if (cardValue === 1 && handValue <= 10) {
             valueToAdd = 11
         }
-        return valueToAdd
+        return { valueToAdd: valueToAdd, handValue: handValue }
     }
 
     addPlayerToState(name: string): boolean {
@@ -38,10 +39,10 @@ export default class GameState implements IGameState {
     addCardToPlayer(card: Card, playerName: string): void {
         const player = this.players.find(p => p.playerName === playerName)
         if (player.bet > 0) {
-            const valueToAdd = this.calculateValueToAdd(card.value, player.playerHandValue, player.playerHand)
-            card.value = valueToAdd
-            player.playerHandValue += valueToAdd
-            player.playerHand.push(card)
+            const result = this.calculateValueToAdd(card.value, player.playerHandValue, player.playerHand);
+            card.value = result.valueToAdd;
+            player.playerHandValue = result.handValue + result.valueToAdd;
+            player.playerHand.push(card);
         }
     }
 
@@ -49,9 +50,11 @@ export default class GameState implements IGameState {
         if (this.dealer.dealerHand.length === 2) {
             this.dealer.dealerHand = this.dealer.dealerHand.filter(c => c.name !== "card_back")
         }
-        const valueToAdd = this.calculateValueToAdd(card.value, this.dealer.dealerHandValue, this.dealer.dealerHand)
+        const result = this.calculateValueToAdd(card.value, this.dealer.dealerHandValue, this.dealer.dealerHand)
+        card.value = result.valueToAdd;
+        this.dealer.dealerHandValue = result.handValue + result.valueToAdd
         this.dealer.dealerHand.push(card)
-        this.dealer.dealerHandValue += valueToAdd
+
     }
 
     placeBet(playerName: string, amount: number) {
